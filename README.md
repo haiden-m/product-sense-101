@@ -13,9 +13,13 @@ npm run dev:dist     # minified build
 
 ## Deploy (Vercel)
 
+**Git (recommended):** Connect [haiden-m/product-sense-101](https://github.com/haiden-m/product-sense-101) to the Vercel project `product-sense-101` on team **heyhaiden's projects**. Vercel runs `npm run build` and serves `dist/` (see `vercel.json`). Pushes to `main` deploy production; other branches get previews.
+
+**CLI (manual):**
+
 ```bash
 vercel login
 npm run deploy
 ```
 
-Project is linked via `.vercel/` (not committed). Build output is uploaded from `dist/`.
+Local CLI link lives in `.vercel/` (not committed).
