@@ -1,0 +1,808 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Market Sizing: TAM/SAM/SOM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@400;500;600;700&display=swap');
+
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --gold: #B8892E;
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --teal-tint: rgba(26,117,106,0.09);
+    --gold-tint: rgba(184,137,46,0.12);
+    --good: #2E7D4F;
+    --good-tint: rgba(46,125,79,0.12);
+    --bad: #B4462E;
+    --bad-tint: rgba(180,70,46,0.12);
+    --shadow: 0 1px 2px rgba(42,39,36,0.06), 0 8px 24px rgba(42,39,36,0.06);
+    --ring-track: #DFDACD;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --gold: #D4A73E;
+      --stone: #7A756C;
+      --chalk: #222120;
+      --teal-tint: rgba(60,181,165,0.12);
+      --gold-tint: rgba(212,167,62,0.14);
+      --good: #4CAF74;
+      --good-tint: rgba(76,175,116,0.14);
+      --bad: #E07856;
+      --bad-tint: rgba(224,120,86,0.14);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+      --ring-track: #2C2A26;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --gold: #D4A73E;
+    --stone: #7A756C;
+    --chalk: #222120;
+    --teal-tint: rgba(60,181,165,0.12);
+    --gold-tint: rgba(212,167,62,0.14);
+    --good: #4CAF74;
+    --good-tint: rgba(76,175,116,0.14);
+    --bad: #E07856;
+    --bad-tint: rgba(224,120,86,0.14);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    --ring-track: #2C2A26;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--teal-tint); }
+
+  h1, h2, h3, .display {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 600;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  header.top {
+    padding: 40px 28px 28px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .course-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .kicker {
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-weight: 500;
+  }
+  .day-pill {
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--teal);
+    background: var(--teal-tint);
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--chalk);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 26.7%;
+    background: var(--teal);
+    border-radius: 4px;
+  }
+  .lesson-title {
+    font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.12;
+    margin: 22px 0 8px;
+  }
+  .lesson-sub {
+    color: var(--stone);
+    font-size: 16px;
+    margin: 0;
+  }
+  .lesson-sub strong { color: var(--ink); font-weight: 500; }
+
+  section { margin-top: 56px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .section-num {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 17px;
+    min-width: 20px;
+  }
+  .section-name {
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone);
+  }
+  .section-time {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: var(--stone);
+  }
+  h2.section-title { font-size: 27px; margin: 0 0 16px; }
+  p { margin: 0 0 15px; font-size: 16.5px; }
+  .lede {
+    font-size: 19px;
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  /* ---- Funnel diagram (TAM/SAM/SOM) ---- */
+  .funnel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 26px 0 20px;
+  }
+  .funnel-tier {
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .funnel-tier .t-label { display: flex; flex-direction: column; gap: 2px; }
+  .funnel-tier .t-name { font-weight: 600; font-size: 14.5px; letter-spacing: 0.02em; }
+  .funnel-tier .t-desc { font-size: 13px; color: var(--stone); max-width: 340px; }
+  .funnel-tier .t-fig { font-family: 'Newsreader', serif; font-weight: 600; font-size: 20px; white-space: nowrap; }
+  .funnel-tier.tam { background: var(--chalk); width: 100%; }
+  .funnel-tier.sam { background: var(--gold-tint); width: 78%; align-self: center; }
+  .funnel-tier.som { background: var(--teal-tint); width: 54%; align-self: center; }
+  .funnel-tier.tam .t-fig { color: var(--stone); }
+  .funnel-tier.sam .t-fig { color: var(--gold); }
+  .funnel-tier.som .t-fig { color: var(--teal); }
+
+  /* ---- Worked example ---- */
+  .example-box {
+    background: var(--chalk);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px 10px 10px 4px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .example-box .co {
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .calc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4px 0 18px;
+    font-size: 15px;
+  }
+  .calc-table td { padding: 9px 4px; border-bottom: 1px solid var(--ring-track); }
+  .calc-table td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .calc-table tr:last-child td { border-bottom: none; }
+  .calc-table tr.total td { font-weight: 600; color: var(--teal); padding-top: 12px; border-top: 1.5px solid var(--ink); border-bottom: none; }
+  .calc-table td.op { color: var(--stone); font-size: 13px; }
+
+  .verdict {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--teal-tint);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 18px;
+  }
+  .verdict .mark {
+    color: var(--teal);
+    font-family: 'Newsreader', serif;
+    font-weight: 600;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .verdict p { margin: 0; font-size: 15.5px; }
+
+  /* ---- Quiz ---- */
+  .quiz-card {
+    background: var(--chalk);
+    border-radius: 14px;
+    padding: 24px 24px 22px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .quiz-q {
+    font-family: 'Newsreader', serif;
+    font-size: 19px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .quiz-opts { display: flex; flex-direction: column; gap: 9px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    background: var(--ground);
+    border: 1.5px solid var(--ring-track);
+    border-radius: 9px;
+    padding: 12px 15px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt .letter { font-weight: 600; color: var(--stone); min-width: 18px; }
+  .opt.correct { background: var(--good-tint); border-color: var(--good); }
+  .opt.correct .letter { color: var(--good); }
+  .opt.incorrect { background: var(--bad-tint); border-color: var(--bad); }
+  .opt.incorrect .letter { color: var(--bad); }
+  .opt:disabled { cursor: default; }
+  .opt:disabled:not(.correct):not(.incorrect) { opacity: 0.55; }
+
+  .quiz-feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 9px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.right { background: var(--good-tint); }
+  .quiz-feedback.wrong { background: var(--bad-tint); }
+  .quiz-feedback .lbl {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .quiz-feedback.right .lbl { color: var(--good); }
+  .quiz-feedback.wrong .lbl { color: var(--bad); }
+
+  .score-wrap {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--chalk);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 8px;
+  }
+  .score-ring-svg { flex-shrink: 0; }
+  .score-ring-track { fill: none; stroke: var(--ring-track); stroke-width: 6; }
+  .score-ring-fill {
+    fill: none;
+    stroke: var(--teal);
+    stroke-width: 6;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .score-text { font-family: 'Newsreader', serif; font-size: 22px; font-weight: 600; fill: var(--ink); }
+  .score-label { font-size: 14.5px; color: var(--stone); }
+  .score-label strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- Scenario drill ---- */
+  .scenario-box { background: var(--chalk); border-radius: 14px; padding: 24px 24px 22px; }
+  .scenario-box .tag {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .scenario-box p:last-of-type { margin-bottom: 0; }
+  .reveal-btn {
+    margin-top: 18px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 100px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.15s ease;
+  }
+  .reveal-btn:hover { opacity: 0.88; }
+  .reveal-arrow { transition: transform 0.25s ease; }
+  .reveal-btn.open .reveal-arrow { transform: rotate(90deg); }
+
+  .analysis { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .analysis.open { max-height: 2200px; }
+  .analysis-inner {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ring-track);
+  }
+  .analysis-inner h4 {
+    font-family: 'Newsreader', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--gold);
+  }
+  .analysis-inner .step { margin-bottom: 16px; }
+  .analysis-inner .step:last-child { margin-bottom: 0; }
+  .analysis-inner p { font-size: 15px; margin-bottom: 0; }
+
+  /* ---- Meeting move ---- */
+  .move-card {
+    background: linear-gradient(135deg, var(--teal-tint), var(--gold-tint));
+    border-radius: 14px;
+    padding: 26px 26px;
+    text-align: left;
+  }
+  .move-quote {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .move-when { font-size: 13.5px; color: var(--stone); }
+  .move-when strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- Glossary ---- */
+  .gloss-list { display: flex; flex-direction: column; gap: 0; }
+  .gloss-item {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 18px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .gloss-item:last-child { border-bottom: none; }
+  .gloss-term { font-family: 'Newsreader', serif; font-weight: 600; font-size: 16.5px; color: var(--teal); }
+  .gloss-def { font-size: 15px; color: var(--ink); }
+  .gloss-def .eg { color: var(--stone); font-size: 13.5px; display: block; margin-top: 4px; }
+
+  footer .next strong { color: var(--ink); }
+  @media (max-width: 560px) {
+    .wrap, header.top, .gloss-item { grid-template-columns: 1fr; gap: 4px; }
+    .score-wrap { flex-direction: column; align-items: flex-start; }
+    .funnel-tier { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .funnel-tier.sam, .funnel-tier.som { width: 100%; }
+    .calc-table td.op { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  button:focus-visible, .opt:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<header class="top">
+  <div class="course-label">
+    <span class="kicker">Product Sense 101 &middot; Week 2, Strategic Frameworks</span>
+    <span class="day-pill">Day 8 / 30</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+  <h1 class="lesson-title">Market Sizing: TAM, SAM, SOM</h1>
+  <p class="lesson-sub">Yesterday you learned to test whether an advantage <strong>compounds</strong> before calling it a moat. Today's framework asks the question that has to come first: is the market behind that advantage even <strong>big enough</strong> to justify building it — and how much of it can you actually reach?</p>
+</header>
+
+<div class="wrap">
+<section id="big-idea">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-name">The Big Idea</span>
+      <span class="section-time">5 min read</span>
+    </div>
+    <h2 class="section-title">A market size isn't one number — it's three, and each one answers a different question</h2>
+
+    <p class="lede">TAM tells you if the category is worth being in at all. SAM tells you what your business model can actually reach. SOM tells you what you can realistically win given who else is competing for it. Conflating them is how a genuinely huge market turns into a genuinely disappointing quarter.</p>
+
+    <p>Every PM has sat through a slide that says "the market is $80B" as if that settles the roadmap debate. It doesn't, because $80B usually describes the <strong>Total Addressable Market</strong> — every dollar spent on the category worldwide, including segments your product will never sell into. The number that should drive a roadmap decision is much narrower, and getting from TAM down to something actionable is the actual skill.</p>
+
+    <div class="funnel">
+      <div class="funnel-tier tam">
+        <div class="t-label">
+          <span class="t-name">TAM — Total Addressable Market</span>
+          <span class="t-desc">Every dollar spent globally on the category, regardless of who could realistically sell it or buy it.</span>
+        </div>
+        <span class="t-fig">All spend</span>
+      </div>
+      <div class="funnel-tier sam">
+        <div class="t-label">
+          <span class="t-name">SAM — Serviceable Addressable Market</span>
+          <span class="t-desc">The slice your business model, geography, deployment, and ICP can actually serve today.</span>
+        </div>
+        <span class="t-fig">Reachable</span>
+      </div>
+      <div class="funnel-tier som">
+        <div class="t-label">
+          <span class="t-name">SOM — Serviceable Obtainable Market</span>
+          <span class="t-desc">What you can realistically capture in a defined window, given sales capacity and competition.</span>
+        </div>
+        <span class="t-fig">Winnable</span>
+      </div>
+    </div>
+
+    <p>The narrowing at each step isn't a rounding error — it's where the real constraints live. TAM &rarr; SAM usually cuts on things like: does the buyer need enterprise-grade compliance you don't have yet, is the deployment model (on-prem vs. cloud) one you support, does the segment run on a channel (retail, gaming, telecom) your ICP work hasn't validated. SAM &rarr; SOM cuts on capacity: how many net-new logos can your sales and CS org actually onboard in a year, and what share of a competitive deal do you realistically win against incumbents. A PM who only ever quotes TAM is skipping both of those conversations — which is exactly why an investment committee's first question is almost always "SAM, not TAM."</p>
+
+    <p>The other reason to run this exercise isn't to produce a defensible number for a slide — it's to force the assumptions behind the number into the open. A bottom-up SAM (count actual target accounts &times; realistic price) and a top-down SAM (industry report &times; your addressable slice) rarely match on the first pass, and reconciling why is where you find out whether your ICP is too narrow, too broad, or priced wrong.</p>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-name">Worked Example</span>
+      <span class="section-time">3 min</span>
+    </div>
+    <h2 class="section-title">Sizing an AI drafting add-on for a B2B workflow product</h2>
+
+    <div class="example-box">
+      <span class="co">The Situation</span>
+      <p>Your team is evaluating whether to build an AI-assisted first-draft generator as a paid add-on to your core product. Before scoping it, you're asked to size the opportunity — bottom-up, using your own install base and pricing, rather than quoting a generic "AI-assisted productivity" industry report.</p>
+    </div>
+
+    <table class="calc-table">
+      <tr><td>Global spend on B2B workflow-software market (industry estimate)</td><td>$28B / yr</td></tr>
+      <tr><td class="op">&darr; narrow to accounts your platform can serve (mid-market/enterprise, cloud-native, English + core EU languages)</td><td></td></tr>
+      <tr><td>Addressable accounts across those segments</td><td>~42,000 accounts</td></tr>
+      <tr><td class="op">&times; realistic attach rate for a new paid add-on in year one (based on comparable add-on launches)</td><td></td></tr>
+      <tr><td>Accounts likely to adopt in year one</td><td>~4,600 accounts</td></tr>
+      <tr><td class="op">&times; add-on price per account per year</td><td>$3,600</td></tr>
+      <tr class="total"><td>Bottom-up SOM, year one</td><td>&asymp; $16.6M</td></tr>
+    </table>
+
+    <p><strong>Where each number actually came from:</strong> the $28B is TAM — pulled straight from an analyst report, useful only for "is this category worth being in." The 42,000 accounts is SAM, built bottom-up from your own CRM: current customer count in mid-market/enterprise tiers, filtered to the languages and regions your model actually supports today. The 4,600-account adoption estimate is SOM, and it's the number that should carry the most scrutiny — it's not "how big is the opportunity," it's "how many of our own existing customers will actually buy this in twelve months," disciplined by attach rates from the last two add-ons you shipped, not by optimism.</p>
+
+    <div class="verdict">
+      <span class="mark">&rarr;</span>
+      <p><strong>The senior PM read:</strong> the number that goes in the roadmap decision is the $16.6M SOM, not the $28B TAM — and even that number is only as good as the attach-rate assumption underneath it. The right follow-up isn't "is $16.6M big enough," it's "what would make the attach rate wrong by 2x in either direction" — because that assumption, not the market size, is what the investment case actually rests on.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-name">Quiz</span>
+      <span class="section-time">5 min</span>
+    </div>
+    <h2 class="section-title">Check your read</h2>
+
+    <div class="quiz-card" data-quiz="1">
+      <p class="quiz-q">1. A colleague pitches a new feature by citing "a $50B TAM." What's the sharpest reaction?</p>
+      <div class="quiz-opts">
+        <button class="opt" data-correct="false"><span class="letter">A</span><span>Accept it — a market that large means the feature is clearly worth building</span></button>
+        <button class="opt" data-correct="true"><span class="letter">B</span><span>Ask for the SAM and SOM — TAM alone says the category exists, not that this business model, ICP, or team can capture any meaningful piece of it</span></button>
+        <button class="opt" data-correct="false"><span class="letter">C</span><span>Ask which analyst firm produced the estimate, since that's the only thing that matters</span></button>
+        <button class="opt" data-correct="false"><span class="letter">D</span><span>Reject the pitch outright — TAM figures are never useful in product decisions</span></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" data-quiz="2">
+      <p class="quiz-q">2. Which pair of numbers, if they disagreed sharply, would be the most useful mismatch to investigate?</p>
+      <div class="quiz-opts">
+        <button class="opt" data-correct="false"><span class="letter">A</span><span>Top-down TAM (analyst report) vs. bottom-up TAM (same report, re-read twice)</span></button>
+        <button class="opt" data-correct="true"><span class="letter">B</span><span>Top-down SAM (industry report &times; estimated addressable slice) vs. bottom-up SAM (actual account count &times; your price) — the gap usually exposes a wrong ICP or pricing assumption</span></button>
+        <button class="opt" data-correct="false"><span class="letter">C</span><span>Last quarter's revenue vs. this quarter's revenue</span></button>
+        <button class="opt" data-correct="false"><span class="letter">D</span><span>Engineering's estimate vs. design's estimate for the same feature</span></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" data-quiz="3">
+      <p class="quiz-q">3. Your bottom-up SOM assumes a 10% attach rate among existing accounts based on one prior add-on launch. What's the biggest risk in that assumption?</p>
+      <div class="quiz-opts">
+        <button class="opt" data-correct="false"><span class="letter">A</span><span>There is no risk — one comparable data point is sufficient to size a market</span></button>
+        <button class="opt" data-correct="true"><span class="letter">B</span><span>A single prior launch may not generalize — different price point, different value prop, or different buyer meant the attach rate could easily be off by 2x in either direction</span></button>
+        <button class="opt" data-correct="false"><span class="letter">C</span><span>The risk is that 10% is too conservative and should be rounded up before presenting</span></button>
+        <button class="opt" data-correct="false"><span class="letter">D</span><span>The risk only matters if the TAM figure is also wrong</span></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="score-wrap" id="scoreWrap" style="display:none;">
+      <svg class="score-ring-svg" width="64" height="64" viewBox="0 0 64 64">
+        <circle class="score-ring-track" cx="32" cy="32" r="26"></circle>
+        <circle class="score-ring-fill" id="scoreRing" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        <text x="32" y="38" text-anchor="middle" class="score-text" id="scoreText">0/3</text>
+      </svg>
+      <div class="score-label" id="scoreLabel"></div>
+    </div>
+  </section>
+
+  <section id="scenario">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-name">Scenario Drill</span>
+      <span class="section-time">8 min</span>
+    </div>
+    <h2 class="section-title">Work through this before revealing the analysis</h2>
+
+    <div class="scenario-box">
+      <span class="tag">Your situation</span>
+      <p>Your CEO wants a market-sizing slide for the board on entering healthcare operations as a new vertical. He's seen a report saying "operations software for mid-market healthcare is a $6B market" and wants to know if it's worth a dedicated go-to-market motion next year. You have three weeks and access to your own CRM (current customers, deal data, win/loss notes) but no budget for custom market research.</p>
+      <p><strong>Before you reveal the analysis:</strong> how would you structure the sizing exercise with what you actually have access to, and what would you tell the board the $6B number does and doesn't tell them?</p>
+
+      <button class="reveal-btn" id="revealBtn">
+        <span>Reveal the senior PM analysis</span>
+        <span class="reveal-arrow">&rarr;</span>
+      </button>
+
+      <div class="analysis" id="analysisPanel">
+        <div class="analysis-inner">
+          <div class="step">
+            <h4>Name what the $6B actually is, out loud, before building on it</h4>
+            <p>That figure is TAM — global spend across every company doing anything resembling CRM or retention work for gaming, including tools your platform has no plausible path to sell (native game-engine SDKs, ad-network retargeting, console-specific analytics). Presenting it unqualified invites the board to anchor on a number three layers removed from the actual decision. The first job is relabeling it correctly, not disproving it.</p>
+          </div>
+          <div class="step">
+            <h4>Build SAM bottom-up from what you already have</h4>
+            <p>Pull two things from your own CRM: how many gaming-industry leads or inbound trials have touched your pipeline in the past two years (even unconverted ones), and how many of your existing mid-market/enterprise customers run any gaming-adjacent vertical (mobile gaming, live-ops) today. Cross-reference against your platform's actual constraints — does it support the messaging channels gaming CRM typically needs (in-app, push at gaming scale), and does pricing work at gaming's typical margin structure. That gives a defensible "addressable accounts" count without new research spend.</p>
+          </div>
+          <div class="step">
+            <h4>Size SOM from win/loss data, not optimism</h4>
+            <p>Your win/loss notes are the highest-signal asset you have for free: how many gaming deals have you actually competed for, what % you won, and why the losses were lost (feature gap, price, incumbent relationship). If you've won zero gaming deals in two years despite inbound interest, that's a SOM-suppressing signal worth surfacing directly — it says the gap isn't awareness, it's product-market fit for that vertical specifically.</p>
+          </div>
+          <div class="step">
+            <h4>What you'd bring back to the board</h4>
+            <p>"The category is real and roughly $6B globally, but our serviceable slice — accounts we can sell to and support today — is a small fraction of that, and our actual obtainable share based on two years of competitive deal data is smaller still. I'd recommend a scoped pilot (3-5 target accounts, using our existing win/loss learnings to pick winnable ones) before a dedicated GTM motion, rather than sizing the investment off the TAM headline." That reframes the ask from "commit to a vertical" to "fund a cheap test of the one assumption — can we actually win these deals — that the whole case depends on."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting-move">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-name">Meeting Move</span>
+      <span class="section-time">2 min</span>
+    </div>
+    <h2 class="section-title">Bring this to your next opportunity review</h2>
+
+    <div class="move-card">
+      <p class="move-quote">"That's the TAM — what's our bottom-up SAM using our own account list, and what does our actual win rate in adjacent deals suggest the real SOM is?"</p>
+      <p class="move-when">Use it when: <strong>a market-size figure is being used to justify an investment decision on its own.</strong> It forces the conversation from a single top-line number down to the two numbers — reachable and winnable — that the roadmap decision should actually rest on.</p>
+    </div>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <span class="section-name">Glossary</span>
+      <span class="section-time">2 min</span>
+    </div>
+    <h2 class="section-title">Say it like a FAANG PM</h2>
+
+    <div class="gloss-list">
+      <div class="gloss-item">
+        <span class="gloss-term">TAM</span>
+        <span class="gloss-def">Total Addressable Market — total global spend on the category if you captured every possible dollar, regardless of your business model's ability to serve it.<span class="eg">"TAM tells us the category's worth being in — it doesn't tell us what we can build for it."</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">SAM</span>
+        <span class="gloss-def">Serviceable Addressable Market — the slice of TAM your product, pricing, geography, and ICP can actually serve today.<span class="eg">"Our SAM excludes on-prem deployments — we don't support that yet."</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">SOM</span>
+        <span class="gloss-def">Serviceable Obtainable Market — what you can realistically capture within a defined time window, constrained by sales capacity and competitive win rate.<span class="eg">"SOM is the number that should size the investment, not SAM."</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">Top-down sizing</span>
+        <span class="gloss-def">Estimating market size starting from an industry-wide figure (an analyst report) and narrowing it by an estimated addressable percentage.<span class="eg">Fast to produce, but only as credible as the percentage narrowing it — often a guess.</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">Bottom-up sizing</span>
+        <span class="gloss-def">Estimating market size by counting actual addressable units (accounts, users) and multiplying by your real price or usage — built from your own data rather than a report.<span class="eg">"Bottom-up SAM from our CRM came in at a third of the top-down estimate — worth reconciling why."</span></span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 8 complete</span>
+    </div>
+    <div class="footer-next"><a href="day09.html">Next lesson → Platform Thinking &amp; Network Effects</a></div>
+  </div>
+</div>
+
+
+<script>
+(function() {
+  var cards = document.querySelectorAll('.quiz-card');
+  var results = {};
+
+  cards.forEach(function(card) {
+    var id = card.getAttribute('data-quiz');
+    var opts = card.querySelectorAll('.opt');
+    var feedback = card.querySelector('.quiz-feedback');
+
+    opts.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        if (card.classList.contains('answered')) return;
+        card.classList.add('answered');
+        var isCorrect = opt.getAttribute('data-correct') === 'true';
+        results[id] = isCorrect;
+
+        opts.forEach(function(o) {
+          o.disabled = true;
+          if (o.getAttribute('data-correct') === 'true') {
+            o.classList.add('correct');
+          } else if (o === opt) {
+            o.classList.add('incorrect');
+          }
+        });
+
+        feedback.classList.add('show');
+        if (isCorrect) {
+          feedback.classList.add('right');
+          feedback.innerHTML = '<span class="lbl">Correct</span>Right — that\'s the TAM/SAM/SOM discipline at work.';
+        } else {
+          feedback.classList.add('wrong');
+          feedback.innerHTML = '<span class="lbl">Not quite</span>The highlighted option above is the one to remember — see why in the explanation.';
+        }
+
+        maybeShowScore();
+      });
+    });
+  });
+
+  function maybeShowScore() {
+    var answered = Object.keys(results).length;
+    if (answered < cards.length) return;
+    var correct = Object.values(results).filter(Boolean).length;
+    var total = cards.length;
+    var wrap = document.getElementById('scoreWrap');
+    var ring = document.getElementById('scoreRing');
+    var text = document.getElementById('scoreText');
+    var label = document.getElementById('scoreLabel');
+    var circumference = 163.4;
+    var offset = circumference - (correct / total) * circumference;
+
+    wrap.style.display = 'flex';
+    text.textContent = correct + '/' + total;
+    requestAnimationFrame(function() {
+      ring.style.strokeDashoffset = offset;
+    });
+
+    var msg;
+    if (correct === total) {
+      msg = '<strong>Clean sweep.</strong> You\'re narrowing from category size to a number an investment decision can actually rest on.';
+    } else if (correct >= total - 1) {
+      msg = '<strong>Solid.</strong> Re-read the one you missed — the distinction usually turns on which layer (TAM, SAM, or SOM) a number actually belongs to.';
+    } else {
+      msg = '<strong>Worth a re-read.</strong> The core test is simple: TAM is the category, SAM is what you can reach, SOM is what you can win. The Big Idea section above has the compact version.';
+    }
+    label.innerHTML = msg;
+  }
+})();
+
+(function() {
+  var btn = document.getElementById('revealBtn');
+  var panel = document.getElementById('analysisPanel');
+  btn.addEventListener('click', function() {
+    var isOpen = panel.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.querySelector('span').textContent = isOpen ? 'Hide the analysis' : 'Reveal the senior PM analysis';
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

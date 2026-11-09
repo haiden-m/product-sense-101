@@ -1,0 +1,571 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>North Star Metrics</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 4, Day 19 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.idea-list{list-style:none; margin:18px 0; padding:0; display:grid; gap:11px; max-width:66ch;}
+.idea-list li{padding-left:26px; position:relative; font-size:.97rem;}
+.idea-list li:before{content:"\2192"; position:absolute; left:0; top:0; color:var(--gold); font-weight:600;}
+.idea-list b{color:var(--ink);}
+
+.compare-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:22px 0;}
+@media (min-width:620px){ .compare-grid{grid-template-columns:1fr 1fr;} }
+.compare-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:20px 22px; background:var(--ground);
+  min-width:0;
+}
+.compare-card .c-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:6px;
+}
+.compare-card.unguarded .c-mark{color:var(--bad);}
+.compare-card.guarded .c-mark{color:var(--teal);}
+.compare-card .c-name{font-weight:600; display:block; margin-bottom:8px; font-size:1.08rem; color:var(--ink);}
+.compare-card .c-ask{
+  display:block; font-family:'Newsreader',serif; font-style:italic; font-size:.95rem; color:var(--stone);
+  margin-bottom:10px;
+}
+.compare-card .c-desc{font-size:.92rem; color:var(--ink); margin:0 0 10px 0; max-width:none;}
+.compare-card .c-fit{font-size:.85rem; color:var(--stone); margin:0; max-width:none;}
+.compare-card .c-fit b{color:var(--ink);}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 4 &middot; PRODUCT SENSE IN PRACTICE <span class="dot"></span> DAY 19 OF 30</div>
+    <h1>North Star Metrics</h1>
+    <p class="sub">Yesterday you learned that a true number can still point you at the wrong decision. Today's framework is how you pick the one number your whole org steers by &mdash; and how you stop that same number from becoming the next thing quietly lying to you.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you got the test for reading a single metric: is it the decision, or one input into it. A North Star Metric is where that test gets applied at the highest stakes in the company &mdash; it's the one number leadership rallies the whole org around, which means it's also the one number everyone has the most incentive to move by any means available. Goodhart's Law, which showed up yesterday almost in passing, is the whole reason today's lesson exists.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">A North Star Metric (NSM) is the single metric that best captures the value your product delivers to customers right now &mdash; chosen so that moving it reliably predicts the business outcomes you actually care about, like retention and revenue, months before those lagging numbers confirm it.</p>
+    <p>A good NSM passes four tests at once. Get any one wrong and the metric stops working as a compass, even though it still looks fine on a dashboard.</p>
+    <ul class="idea-list">
+      <li><b>Reflects customer value, not company convenience.</b> It should go up when customers are genuinely getting more value, not when your team ships more of something.</li>
+      <li><b>Leads, rather than lags.</b> It should move early enough that a team can still act on it &mdash; revenue and churn confirm the story weeks or quarters after it was already decided.</li>
+      <li><b>Is actionable by the teams who own it.</b> Someone building a feature this sprint should be able to point at a lever that moves this number, not just hope it improves.</li>
+      <li><b>Is resistant to being gamed alone.</b> No NSM is un-gameable on its own &mdash; which is exactly why it never travels without a counter-metric.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card unguarded">
+        <span class="c-mark">&mdash;</span>
+        <span class="c-name">North Star, Unguarded</span>
+        <span class="c-ask">"Move the number. Nothing else is being watched."</span>
+        <p class="c-desc">One metric, tracked alone and tied to goals, bonuses, or a board narrative. Whatever moves it fastest &mdash; genuine value or a cheap trick &mdash; looks identical on the dashboard.</p>
+        <p class="c-fit"><b>What happens:</b> the team finds the cheapest path to the number, because that's what every incentive in the room is pointing at.</p>
+      </div>
+      <div class="compare-card guarded">
+        <span class="c-mark">+</span>
+        <span class="c-name">North Star, Guarded</span>
+        <span class="c-ask">"Move the number &mdash; and show the counter-metric didn't move against us."</span>
+        <p class="c-desc">The NSM is reported next to one or two counter-metrics chosen specifically to catch its most likely failure mode, so a cheap win shows up as a win on one line and a loss on the other.</p>
+        <p class="c-fit"><b>What happens:</b> the only path to a win on both lines is the one that was actually supposed to count.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>This is yesterday's Goodhart's Law, made structural</h4>
+      <p style="margin:0;">Day 18 defined Goodhart's Law as what happens once a measure becomes a target: people start optimizing the measure instead of the goal it stood in for. A North Star Metric is a measure that gets made into a target on purpose, company-wide, usually with comp or a board narrative attached. That's not a reason to avoid having one &mdash; it's the reason the counter-metric isn't optional. The counter-metric is Goodhart's Law priced into the system from day one, instead of discovered the hard way in a quarter where the number went up and the business quietly got worse.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>Your product adopts <b>Weekly Active Workflows</b> &mdash; automations actually running and delivering value to end users &mdash; as its North Star. It's a good candidate: it reflects real usage of the platform's core value, and it's a leading indicator of renewal. One team, measured on growing it, ships a feature that auto-duplicates a client's existing workflow across every untouched account segment, with one click. The number jumps. Nobody checked what else moved.</p>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Before</th><th>8 weeks after</th><th>What it signals</th></tr></thead>
+        <tbody>
+          <tr><td>Weekly Active Campaigns</td><td class="num">1,240</td><td class="num win">1,740 (+40%)</td><td>Looks like a clean win on the one metric everyone's watching</td></tr>
+          <tr><td>Avg. engagement rate per campaign</td><td class="num">22%</td><td class="num lose">9%</td><td>The new campaigns are near-duplicates landing on audiences that never asked for them</td></tr>
+          <tr><td>Client support tickets / week</td><td class="num">340</td><td class="num lose">610</td><td>Customers confused by unexplained duplicate campaigns in their own account</td></tr>
+          <tr><td>Net Revenue Retention</td><td class="num">104%</td><td class="num lose">97%</td><td>The earliest real signal that the win wasn't a win &mdash; and the slowest one to arrive</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> every one of these numbers is accurate. The North Star climbed exactly as designed. What was missing wasn't better data &mdash; it was a counter-metric, <i>engagement rate per campaign</i>, reported on the same slide every week. That single second line would have flagged the problem in week one, instead of waiting for NRR to confirm it two quarters later, once renewal conversations were already underway.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Leadership wants to lock in <b>Total Marketing Actions Sent</b> &mdash; every email, SMS, and push notification sent through your platform &mdash; as the company's North Star Metric, company-wide, starting next quarter. It goes to the board as the headline number in two weeks. You have one week to make your case. What do you push back on, and what do you propose instead?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Why this candidate fails the four tests</h4>
+        <ul>
+          <li><b>It rewards volume, not customer value.</b> A client can raise this number by sending more messages to the same audience &mdash; that's easier than doing anything that actually helps their business, and it's exactly the cheap path the unguarded-NSM pattern predicts.</li>
+          <li><b>It can move in a direction that actively harms the business.</b> More sends with no corresponding value raises opt-outs and spam complaints, which hurts deliverability for every client on shared sending infrastructure &mdash; the metric can go up while the platform's core asset quietly degrades.</li>
+        </ul>
+        <h4>What you propose instead</h4>
+        <ul>
+          <li>A North Star closer to <b>audience segments reaching a defined engagement outcome</b> (opened, clicked, converted) &mdash; it only goes up when the send actually worked, not just when it happened.</li>
+          <li>Two counter-metrics reported on the same slide, every time: <b>unsubscribe / spam-complaint rate</b> and <b>90-day client Net Revenue Retention</b>. The first catches gaming within days; the second catches anything subtler within a quarter.</li>
+        </ul>
+        <h4>What you say to leadership with one week left</h4>
+        <ul>
+          <li>"Total sends can go up while we're quietly burning deliverability and trust &mdash; and we won't see it in this number until it shows up in a renewal call. Let's pair whatever we pick with a guardrail metric before the board sees it as the headline, and pilot both for two weeks on a handful of accounts before we lock in company-wide."</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this whenever a metric is proposed as THE metric</h2>
+    <p style="color:var(--chalk); margin-top:14px;">One question that forces the guardrail conversation before anyone locks in a North Star:</p>
+    <div class="move-script" id="moveScript">"What's the cheapest way someone could move this number this week without creating any of the value it's supposed to represent &mdash; and which counter-metric would catch that?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>North Star Metric (NSM)</dt>
+        <dd>The single metric chosen to best capture the core value a product delivers to customers, selected to correlate with long-term business success while staying understandable and actionable across the organization.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Counter-Metric (Guardrail Metric)</dt>
+        <dd>A metric tracked alongside the North Star specifically to catch the way it's most likely to be gamed or over-optimized &mdash; it moves against you exactly when the North Star is being won the wrong way.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Leading Indicator</dt>
+        <dd>A metric that predicts a future outcome early enough to still act on it &mdash; the property that makes a metric useful as a North Star rather than just a report card.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Lagging Indicator</dt>
+        <dd>A metric that confirms an outcome only after it has already happened &mdash; revenue, churn, NRR. Essential for validation, useless for steering week to week.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Metrics Constellation</dt>
+        <dd>The small set of input metrics that feed into and explain movement in the North Star &mdash; giving individual teams a lever they can actually pull without needing to own the whole business outcome.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 19 complete</span>
+    </div>
+    <div class="footer-next"><a href="day20.html">Next lesson → The Art of Saying No</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<19) s.className='done';
+    else if (i===19) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "Which of these is the best North Star Metric candidate for a B2B marketing automation platform?",
+      opts: [
+        "Total logins per week across all accounts",
+        "Number of customer journeys actively running and reaching the end audience",
+        "Total revenue booked last quarter",
+        "Number of features released this quarter"
+      ],
+      correct: 1,
+      why: "Logins are a vanity proxy, revenue is a lagging indicator that confirms the story too late to act on, and feature count measures output rather than outcome. Active journeys reaching real customers is a leading indicator of the value the platform is actually delivering."
+    },
+    {
+      q: "A team's North Star is \"Weekly Active Campaigns.\" They ship a feature that auto-duplicates campaigns across every customer segment, and the metric jumps 40% while engagement per campaign and client retention both fall. What should have caught this before it reached a board deck?",
+      opts: [
+        "A counter-metric, like engagement rate per campaign, reported on the same slide as the North Star",
+        "Switching the North Star to total revenue instead",
+        "Dropping the North Star Metric entirely, since any metric can be gamed",
+        "Setting a higher target so the team tries harder next quarter"
+      ],
+      correct: 0,
+      why: "No single metric is un-gameable, which is exactly why it should never be reported alone. A counter-metric chosen for the North Star's most likely failure mode turns a gamed win into a visible loss on the very same slide, days after it happens instead of a quarter later."
+    },
+    {
+      q: "What's the key difference between a strong North Star candidate and a weak one, such as \"signed contracts\" versus \"customer segments reaching a defined engagement outcome\"?",
+      opts: [
+        "A strong North Star is a lagging indicator, so teams are never blamed for moving it too quickly",
+        "A strong North Star is a leading indicator of business outcomes that also reflects value customers are receiving right now, rather than a downstream result that only confirms success once it's too late to act on",
+        "A strong North Star should be whichever number is already sitting in an existing dashboard",
+        "A strong North Star should be set once by leadership and never revisited"
+      ],
+      correct: 1,
+      why: "Signed contracts confirms a win after the fact — useful for reporting, useless for steering this week's work. A metric tied to real, current customer value gives teams something to act on before the lagging numbers arrive to confirm or deny it."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re picking North Stars the way a senior PM should.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — the four-test checklist is the fastest way to apply this in a metric-naming meeting.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

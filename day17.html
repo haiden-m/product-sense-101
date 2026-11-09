@@ -1,0 +1,588 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>UX Principles for PMs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 4, Day 17 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.heuristic-grid{display:flex; flex-direction:column; gap:12px; margin:22px 0;}
+.heuristic-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:18px 20px; background:var(--ground);
+  display:flex; gap:16px; align-items:flex-start;
+}
+.heuristic-card .h-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.3rem; color:var(--gold); flex-shrink:0; line-height:1.3; min-width:1.6em;
+}
+.heuristic-card .h-name{font-weight:600; display:block; margin-bottom:3px; font-size:1.02rem; color:var(--ink);}
+.heuristic-card .h-ask{
+  display:inline-block; font-family:'Newsreader',serif; font-style:italic; font-size:.92rem; color:var(--teal);
+  margin-bottom:5px;
+}
+.heuristic-card .h-desc{font-size:.92rem; color:var(--ink); margin:0; max-width:none;}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.worked blockquote{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.1rem; color:var(--ink);
+  border-left:3px solid var(--gold); padding-left:16px; margin:14px 0;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+  .heuristic-card{flex-direction:row;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 4 · PRODUCT SENSE IN PRACTICE <span class="dot"></span> DAY 17 OF 30</div>
+    <h1>UX Principles for PMs</h1>
+    <p class="sub">Yesterday you learned to review bottom-up instead of reacting to whatever's most visible. Today hands you the actual toolkit for that bottom layer — five usability heuristics, translated out of design-speak and into questions you can ask in fifteen seconds, with no design degree required.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you built the Critique Stack — Clarity, Consistency, Consequence, Craft — and learned that a review should run bottom-up, catching the load-bearing issue before anyone debates button color. What that lesson didn't give you was a concrete way to test "is this clear?" against something other than gut feel. Today's five heuristics are that test. They're the toolkit for the layer you now know to check first.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">You don't need a design degree to catch most usability problems in a B2B product — you need five questions, asked in the right order, every time. These come from Jakob Nielsen's ten usability heuristics, first published in 1994 and still the closest thing the industry has to a shared standard for what makes an interface usable.</p>
+    <p>Thirty years on, a senior PM doesn't need all ten memorized. Five of them do almost all the work of catching the problems B2B admin tools actually ship with — the other five mostly restate ground the Critique Stack already covers, or matter more for consumer products with less forgiving users. Here's the pocket set.</p>
+
+    <div class="heuristic-grid">
+      <div class="heuristic-card">
+        <span class="h-mark">1</span>
+        <div>
+          <span class="h-name">Visibility of System Status</span>
+          <span class="h-ask">"Does the user know what's happening right now?"</span>
+          <p class="h-desc">The system should always keep the user informed, through feedback that arrives within the time they expect it. A click that produces no visible response for several seconds reads as broken, even when the backend is working exactly as designed.</p>
+        </div>
+      </div>
+      <div class="heuristic-card">
+        <span class="h-mark">2</span>
+        <div>
+          <span class="h-name">Match Between System and the Real World</span>
+          <span class="h-ask">"Is this in the user's language, or the database's?"</span>
+          <p class="h-desc">Speak the user's vocabulary and follow conventions they already know from their job, not the internal field names, status codes, or data model your engineers use to think about the same thing.</p>
+        </div>
+      </div>
+      <div class="heuristic-card">
+        <span class="h-mark">3</span>
+        <div>
+          <span class="h-name">Error Prevention</span>
+          <span class="h-ask">"Can this mistake happen at all, or only be explained after it does?"</span>
+          <p class="h-desc">A well-written error message is a consolation prize. Removing the condition that causes the error — disabling an invalid option, confirming a destructive action before it runs — is worth more than explaining the mistake gracefully after the fact.</p>
+        </div>
+      </div>
+      <div class="heuristic-card">
+        <span class="h-mark">4</span>
+        <div>
+          <span class="h-name">Recognition Rather Than Recall</span>
+          <span class="h-ask">"Does the user have to remember something from another screen?"</span>
+          <p class="h-desc">Minimize how much the user has to hold in working memory. Show options, labels, and prior choices on screen instead of requiring the user to recall an ID, a setting, or a value they saw three steps ago.</p>
+        </div>
+      </div>
+      <div class="heuristic-card">
+        <span class="h-mark">5</span>
+        <div>
+          <span class="h-name">User Control and Freedom</span>
+          <span class="h-ask">"If the user starts this, is there a way out that isn't destructive?"</span>
+          <p class="h-desc">Give users a clearly marked emergency exit — undo, cancel, pause — for actions they didn't mean to take or need to back out of. Forcing a costly, irreversible path just to undo a simple choice punishes exploration.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>Why these five, and not all ten</h4>
+      <p style="margin:0;">Nielsen's other five — aesthetic and minimalist design, help documentation, flexibility for expert users, error recovery, and consistency and standards — are real, but the last one is already Layer 2 of yesterday's Critique Stack, and the rest tend to matter more once a product is mature or its users are less captive than someone using the CRM your company sells them access to. These five are the ones that, left unchecked, turn into support tickets and renewal risk in enterprise software specifically.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>An ops lead at an enterprise customer builds a segment of 40 million records using nested AND/OR logic in a workflow editor, then hits a wall that a thirty-minute usability pass would have caught before it shipped.</p>
+      <blockquote>"I clicked 'Calculate Segment Size' and nothing happened for eleven seconds, so I clicked it two more times. Then it showed me a field called 'cust_eng_score_90d_bucket' and I had no idea if that was the metric I meant. I got pulled into a call, came back twenty minutes later, and the whole thing was gone — no draft, no warning."</blockquote>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>What the marketer experienced</th><th>Heuristic violated</th><th>The fix</th></tr></thead>
+        <tbody>
+          <tr><td>Eleven seconds of silence after clicking Calculate, leading to repeat clicks</td><td class="num">Visibility of System Status</td><td>A progress indicator or live running count, even an approximate one</td></tr>
+          <tr><td>Field shown as "cust_eng_score_90d_bucket" instead of a marketer-facing name</td><td class="num">Match to the Real World</td><td>"Engagement Score (last 90 days)" — keep the raw name in a tooltip for the analysts who want it</td></tr>
+          <tr><td>Twenty minutes of segment logic lost with no save, no warning before navigating away</td><td class="lose">Error Prevention</td><td>Autosave the draft, or at minimum warn before discarding unsaved work</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> none of these three required a redesign — a progress bar, a label rename, and an autosave are each less than a day of engineering work. What they required was someone walking through the flow asking the five questions before it shipped, rather than after a CSM fielded the complaint. The repeated clicks from the first violation are also a quieter risk: three clicks on "Calculate" against a 40-million-row query can be three queued jobs, not one — the kind of cost nobody notices until the infra bill does.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        A junior PM sends you a mock for "Bulk Segment Merge" the night before design review — a tool that lets a marketer combine two existing segments (say, 2 million and 800,000 records) into one new segment. The mock shows two dropdowns listing segment IDs ("seg_44291", "seg_50103"), a "Merge" button, and a success toast once it's done. The merge can't be undone once it runs. The junior PM asks: what should I flag before tomorrow's review?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Run the five heuristics against the mock</h4>
+        <ul>
+          <li><b>Match to the real world:</b> the dropdowns show raw IDs like "seg_44291," not segment names. Nobody building a campaign thinks in segment IDs — they think "VIP churners, Q3" and "lapsed trial users." Fix this before anything else; it's the one thing that makes the whole screen unreadable.</li>
+          <li><b>Visibility of system status:</b> merging 2.8 million records isn't instant. If the mock jumps straight from click to success toast with nothing in between, a marketer who clicks twice because nothing seemed to happen can trigger the merge job twice.</li>
+          <li><b>Error prevention:</b> this is the one that should stop the review cold. The merge is irreversible and the mock has no confirmation step, no preview of the resulting segment size, no dry run. An accidental merge of the wrong two segments is not a five-minute fix — it's a support escalation and a trust problem.</li>
+          <li><b>User control and freedom:</b> directly downstream of the error-prevention gap — once the merge completes, there's no undo. At minimum this needs a confirm-with-preview step; ideally, a brief undo window after the merge, the way an email client lets you unsend.</li>
+          <li><b>Recognition over recall:</b> once names replace IDs, this mostly resolves itself — the marketer can recognize the right segments in the dropdown instead of having to recall which ID was which.</li>
+        </ul>
+        <h4>What you tell the junior PM before the meeting</h4>
+        <ul>
+          <li>"Don't lead with the ID-versus-name issue even though it's the most visible — lead with: this merge is irreversible and there's no confirmation step. Ask the room directly: what happens if someone merges the wrong two segments, and how do they get back to where they were? If the answer is 'they can't,' that's not a review note, that's a blocker."</li>
+        </ul>
+        <h4>The trap this drill is testing</h4>
+        <ul>
+          <li>The mock looks finished — two dropdowns and a button is about as simple as a UI gets. Simple screens are exactly where error prevention gets skipped, because there's no visual complexity to prompt the question. The fewer the elements, the easier it is to forget that one of them is a one-way door.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in any design or spec review</h2>
+    <p style="color:var(--chalk); margin-top:14px;">One question that surfaces most of the five heuristics at once, before the room gets pulled into visual feedback:</p>
+    <div class="move-script" id="moveScript">"Walk me through what the user sees while this is running, and what their way out is if they need to undo it."</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Nielsen's Usability Heuristics</dt>
+        <dd>Ten general principles for interaction design, published by Jakob Nielsen in 1994 and still the industry's most widely used shared standard for evaluating an interface without a formal usability study.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Visibility of System Status</dt>
+        <dd>The principle that a system should keep users informed about what's happening through timely, appropriate feedback — a spinner, a progress bar, a running count — rather than leaving them guessing after an action.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Recognition Rather Than Recall</dt>
+        <dd>Minimizing a user's memory load by making objects, actions, and options visible, instead of requiring them to remember information from an earlier screen or step.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Error Prevention</dt>
+        <dd>Designing so a mistake can't be made in the first place — disabling invalid choices, confirming destructive actions — rather than relying on a well-worded error message after the fact.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Progressive Disclosure</dt>
+        <dd>Showing only what a user needs for the step they're on, and revealing advanced or secondary options only when asked for — a way to serve both new and expert users without overwhelming either.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 17 complete</span>
+    </div>
+    <div class="footer-next"><a href="day18.html">Next lesson → Data-Informed vs Data-Driven</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<17) s.className='done';
+    else if (i===17) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "A marketer sets up a recurring weekly campaign, then needs to pause it for one week because of a product outage. The only way to do this today is to delete the recurring campaign entirely and recreate it from scratch the following week with all the same settings. Which heuristic does this design most directly violate?",
+      opts: [
+        "Visibility of System Status",
+        "User Control and Freedom",
+        "Match Between System and the Real World",
+        "Recognition Rather Than Recall"
+      ],
+      correct: 1,
+      why: "User Control and Freedom is about giving users a clearly marked, non-destructive way out of an action they want to reverse or pause. Forcing a full delete-and-rebuild just to accomplish something as routine as a one-week pause punishes a completely reasonable request with a disproportionately costly path."
+    },
+    {
+      q: "A form lets a marketer schedule a campaign for a date in the past, then shows a red error message after they click Send: \"Error: scheduled date must be in the future.\" What's the stronger fix, and why?",
+      opts: [
+        "Make the error message more detailed, explaining exactly why past dates aren't allowed",
+        "Keep the error message but add a link to documentation about scheduling rules",
+        "Disable past dates directly in the date picker, so the invalid state can't be selected in the first place",
+        "Nothing — a clear, specific error message after the fact is the industry standard"
+      ],
+      correct: 2,
+      why: "Error Prevention ranks above good error messaging: removing the possibility of the mistake is stronger than explaining it well after it happens. A date picker that simply doesn't offer past dates means the marketer never hits the error at all, and never loses the time spent filling out the rest of the form first."
+    },
+    {
+      q: "Using yesterday's Critique Stack, which layer does \"Recognition Rather Than Recall\" most directly support, and why?",
+      opts: [
+        "Craft — it's purely about visual polish",
+        "Clarity — a user who has to remember an ID or recall a setting from a previous screen is, by definition, unsure what to do next, which is exactly what the Clarity layer evaluates",
+        "Consequence — it's about what happens when the system's logic is wrong",
+        "Consistency — it only matters when comparing two different screens to each other"
+      ],
+      correct: 1,
+      why: "Recognition over recall is fundamentally a clarity concern. If a user has to hold information in working memory just to know what to do next — a segment ID, a prior setting, a field name — the interface itself isn't making the next action clear. It's outsourcing clarity to the user's short-term memory instead of providing it on screen."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'ve got the pocket set down cold.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — these five are meant to become reflexive, not memorized.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

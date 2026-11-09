@@ -1,0 +1,623 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Writing Crisp PRDs</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward unchanged from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 5, Day 24 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.idea-list{list-style:none; margin:18px 0; padding:0; display:grid; gap:11px; max-width:66ch;}
+.idea-list li{padding-left:26px; position:relative; font-size:.97rem;}
+.idea-list li:before{content:"\2192"; position:absolute; left:0; top:0; color:var(--gold); font-weight:600;}
+.idea-list b{color:var(--ink);}
+
+.qtype-grid{display:grid; grid-template-columns:1fr; gap:12px; margin:22px 0;}
+@media (min-width:620px){ .qtype-grid{grid-template-columns:1fr 1fr;} }
+.qtype-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:18px 20px; background:var(--ground); min-width:0;
+}
+.qtype-card .q-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:600; display:block; margin-bottom:6px;}
+.qtype-card .q-ask{display:block; font-family:'Newsreader',serif; font-style:italic; font-size:1.02rem; color:var(--ink); margin-bottom:8px;}
+.qtype-card .q-use{font-size:.88rem; color:var(--stone); margin:0; max-width:none;}
+
+.compare-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:22px 0;}
+@media (min-width:620px){ .compare-grid{grid-template-columns:1fr 1fr;} }
+.compare-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:20px 22px; background:var(--ground);
+  min-width:0;
+}
+.compare-card .c-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:6px;
+}
+.compare-card.unguarded .c-mark{color:var(--bad);}
+.compare-card.guarded .c-mark{color:var(--teal);}
+.compare-card .c-name{font-weight:600; display:block; margin-bottom:8px; font-size:1.08rem; color:var(--ink);}
+.compare-card .c-ask{
+  display:block; font-family:'Newsreader',serif; font-style:italic; font-size:.95rem; color:var(--stone);
+  margin-bottom:10px;
+}
+.compare-card .c-desc{font-size:.92rem; color:var(--ink); margin:0 0 10px 0; max-width:none;}
+.compare-card .c-fit{font-size:.85rem; color:var(--stone); margin:0; max-width:none;}
+.compare-card .c-fit b{color:var(--ink);}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.drill-prompt ul{margin:10px 0 0 0; padding-left:20px;}
+.drill-prompt li{margin-bottom:4px;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+.analysis .final-msg{
+  background:var(--teal-10); border-radius:10px; padding:16px 18px; font-size:.93rem; margin-top:4px;
+  border-left:3px solid var(--teal);
+}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 5 &middot; COMMUNICATION &amp; INFLUENCE <span class="dot"></span> DAY 24 OF 30</div>
+    <h1>Writing Crisp PRDs</h1>
+    <p class="sub">Yesterday you learned to name a single Accountable owner so a decision has somewhere to land. Today's lesson is the document you hand that owner &mdash; one built to get a yes or no in one meeting, not one that quietly reopens the scope fight you already won.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you learned that most stalled launches don't fail from a bad plan &mdash; they fail because no single person was named Accountable for the call. <b>Today</b> addresses what you put in front of that person. A RACI chart tells the room who decides. A crisp PRD is what lets them actually decide fast, instead of re-litigating scope across six Slack threads before they can.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">A PRD has exactly one job: let someone who wasn't in any of your discovery conversations &mdash; an engineer joining the project, a VP seeing it for the first time, the Accountable owner from yesterday's lesson &mdash; read it and know precisely what's being built, why, and how you'll know it worked, without you in the room to explain it. Most PRDs fail that test not because they're too short, but because they're too long: every stakeholder's request gets added rather than triaged, until the document is a requirements warehouse instead of a decision.</p>
+    <p>The fix isn't a template. It's accepting that a crisp PRD commits to two things equally: what you're building, and what you deliberately aren't. A problem statement names one customer and one measurable pain. A success metric is a number with a target and a date, falsifiable before launch rather than describable after it. And the section most PRDs skip &mdash; Non-Goals &mdash; is the one doing the real work: it's where scope fights get settled in writing, before engineering starts, instead of negotiated live in a sprint planning meeting where nobody can see the whole tradeoff at once.</p>
+
+    <div class="qtype-grid">
+      <div class="qtype-card">
+        <span class="q-label">Problem Statement</span>
+        <span class="q-ask">Who hurts, and how badly</span>
+        <p class="q-use">One paragraph: the customer, the pain, and the evidence it's real &mdash; a number, a ticket volume, a churn rate. Not "customers want better X."</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Success Metric</span>
+        <span class="q-ask">How you'll know it worked</span>
+        <p class="q-use">A single number that moves, with a target and a date. "Improve the experience" can't be wrong, which is exactly why it convinces no one.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Non-Goals</span>
+        <span class="q-ask">What this deliberately won't do</span>
+        <p class="q-use">The scope fight happens here, in writing, before the sprint starts &mdash; not three weeks in, after half the team already assumed otherwise.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Open Questions</span>
+        <span class="q-ask">What's unresolved, and who owns it</span>
+        <p class="q-use">Named, assigned, and dated &mdash; never a bare "TBD" that quietly becomes nobody's job and everybody's assumption.</p>
+      </div>
+    </div>
+
+    <ul class="idea-list">
+      <li><b>A PRD is a decision document, not a requirements warehouse.</b> Its job is to get the Accountable owner from Day 23 to a yes or no &mdash; not to catalog every idea anyone raised during discovery.</li>
+      <li><b>Non-Goals do more work than Goals.</b> A sharp Non-Goals section is what stops a frequency-capping feature from quietly growing into a full campaign-orchestration rebuild six weeks into the build.</li>
+      <li><b>A success metric has to be falsifiable before it ships, not describable after.</b> "Cut duplicate-send tickets by 40% in 60 days" is a bet you can be wrong about. "Improve the customer experience" is a bet you can't lose &mdash; which is exactly why it decides nothing.</li>
+      <li><b>Open Questions aren't an admission of weakness.</b> Listing what you genuinely don't know yet, with a named owner and a date to resolve it, is what separates a PRD a VP will sign off on from one that just looks finished.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card unguarded">
+        <span class="c-mark">&mdash;</span>
+        <span class="c-name">The Everything PRD</span>
+        <span class="c-ask">Fourteen pages: frequency capping, send-time A/B testing, a new audience builder, and a reporting redesign &mdash; because every stakeholder's ask got added instead of triaged.</span>
+        <p class="c-desc">No single decision is being asked for, so there's nothing a VP can approve in one sitting. Each new request quietly expands scope instead of getting routed to its own, later PRD.</p>
+        <p class="c-fit"><b>What happens:</b> the doc sits unsigned for a month while engineering tries to estimate five projects as one.</p>
+      </div>
+      <div class="compare-card guarded">
+        <span class="c-mark">+</span>
+        <span class="c-name">The One-Decision PRD</span>
+        <span class="c-ask">Frequency capping only, with the other four ideas named and explicitly parked under Non-Goals for separate, future PRDs.</span>
+        <p class="c-desc">One scoped decision, one owner who can actually approve it, one metric that proves it worked. The parked ideas aren't lost &mdash; they're next quarter's backlog instead of this quarter's scope creep.</p>
+        <p class="c-fit"><b>What happens:</b> engineering scopes it in a day, and the Accountable owner signs off in the meeting it's first presented.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>This is where yesterday's name gets a document to act on</h4>
+      <p style="margin:0;">RACI gives you a single Accountable person empowered to say yes. A crisp PRD is the only artifact that lets them actually do it in one sitting &mdash; because the problem, the metric, and the boundaries are already decided, and all that's left is the call.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>Your team is building cross-channel frequency capping &mdash; a single view of how many messages a customer gets across email, SMS, and push, so VIP segments stop getting buried. The first draft PRD took five weeks of revisions and still hadn't been signed. Here's what changed between that draft and the one that got approved in one meeting.</p>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>PRD section</th><th>Bloated first draft</th><th>Crisp revision</th></tr></thead>
+        <tbody>
+          <tr><td>Problem statement</td><td class="lose">"Customers want better control over messaging frequency"</td><td class="win">"Customers running 3+ active campaigns can't see combined send volume per recipient &mdash; VIP segments get 11+ messages/week across channels and churn at 2.3&times; the rate of lower-volume segments (support data, Q3)"</td></tr>
+          <tr><td>Success metric</td><td class="lose">"Improve customer satisfaction with messaging cadence"</td><td class="win">"Cut the share of customers receiving 8+ cross-channel messages/week from 14% to under 5%, measured 60 days post-launch"</td></tr>
+          <tr><td>Non-Goals</td><td class="lose">Not written &mdash; every related idea stayed "in scope for now"</td><td class="win">Per-channel capping (exists already), AI-recommended optimal frequency, and capping on transactional or triggered sends are explicitly out</td></tr>
+          <tr><td>Open questions</td><td class="lose">Buried across 40 Slack messages in three different channels</td><td class="win">"Does capping apply retroactively to already-scheduled sends? Owner: eng lead, due before Thursday's sprint planning"</td></tr>
+          <tr><td class="num">Time to sign-off</td><td class="num lose">5 weeks of revisions</td><td class="num win">1 meeting</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> the underlying feature never changed. What changed is that the PRD stopped trying to justify four adjacent ideas at once and committed, in writing, to exactly one problem, one metric, and three explicit Non-Goals &mdash; which is what let the Accountable owner actually read it and decide.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        You're writing the PRD for "Smart Suppression Lists" &mdash; a feature that recalculates who should <i>not</i> receive a campaign, based on recent engagement. Leadership wants it live in six weeks to honor a renewal commitment made to one customer. In discovery, you've heard:
+        <ul>
+          <li>Sales wants per-channel suppression rules (email vs. SMS vs. push).</li>
+          <li>Marketing wants a UI letting them manually override the algorithm per campaign.</li>
+          <li>Your eng lead suggests integrating it with the frequency-capping feature from Day 1 of the roadmap.</li>
+          <li>Nobody can say who decided it, but everyone's been assuming real-time, sub-second recalculation rather than a nightly batch job.</li>
+        </ul>
+        Write the opening problem statement and the Non-Goals section you'd put in this PRD, and name the one open question you'd flag before anyone starts building.
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>The assignment to avoid</h4>
+        <ul>
+          <li>Writing a problem statement broad enough to justify all four asks at once. Once that happens, nothing in it is falsifiable, and the Non-Goals section ends up empty &mdash; because everything stayed "maybe in scope" rather than getting a real decision.</li>
+        </ul>
+        <h4>Problem statement that matches the real deadline</h4>
+        <ul>
+          <li>"[Renewal customer]'s contract renews in six weeks contingent on suppressing stale leads from campaigns; today's suppression logic only checks list membership, not recent engagement, so 18% of this customer's sends go to contacts who haven't engaged in 90+ days."</li>
+        </ul>
+        <h4>Non-Goals for this release</h4>
+        <ul>
+          <li>Per-channel suppression rules &mdash; parked for a v2 PRD once the core engagement model ships.</li>
+          <li>Manual per-campaign override UI &mdash; parked; the algorithm can run without it, and it doesn't block the renewal.</li>
+          <li>Integration with frequency capping &mdash; noted as a dependency to monitor, not a requirement for this release.</li>
+        </ul>
+        <h4>The one open question to flag</h4>
+        <ul>
+          <li>Real-time vs. nightly batch recalculation. This is the one assumption that actually changes the architecture &mdash; it needs a named owner and a date to resolve before a single line of code gets written, not a discovery made mid-sprint when the batch job turns out to be half-built.</li>
+        </ul>
+        <div class="final-msg">"This PRD covers engagement-based suppression only, scoped to this renewal's six-week deadline. Per-channel rules and manual overrides are explicitly out &mdash; they don't block the commitment and can ship as a v2. One thing has to be settled before sprint planning: real-time or nightly recalculation. Eng lead owns an answer by Thursday, because it changes which architecture we build."</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this before a PRD goes out for review</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Ask it of yourself, and then of the room, before the doc is called final:</p>
+    <div class="move-script" id="moveScript">"If this PRD only had to get a yes or no on one thing, what would that one thing be &mdash; and can everything else move to Non-Goals?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>PRD (Product Requirements Document)</dt>
+        <dd>A decision document, not a requirements catalog &mdash; its job is to let an Accountable owner approve a single scoped change, and let an engineer build it correctly without you in the room.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Non-Goals</dt>
+        <dd>What a release deliberately won't include, named explicitly so scope fights get resolved in writing before a sprint starts instead of negotiated mid-build.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Success Metric</dt>
+        <dd>A single measurable number with a target and a date, falsifiable before launch. "Improve the experience" isn't one, because it can't be proven wrong.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Open Questions</dt>
+        <dd>Genuinely unresolved decisions listed with a named owner and a due date &mdash; distinct from a vague "TBD" that quietly becomes an unowned assumption.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Scope Creep</dt>
+        <dd>The gradual, unauthorized growth of a PRD as adjacent requests get folded in rather than triaged into their own future document &mdash; the exact failure Non-Goals exists to prevent.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 24 complete</span>
+    </div>
+    <div class="footer-next"><a href="day25.html">Next lesson → Presenting Roadmaps</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<24) s.className='done';
+    else if (i===24) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "What is the primary job of a PRD's Non-Goals section?",
+      opts: [
+        "To list every feature that got cut for budget reasons",
+        "To explicitly name what's out of scope, so scope fights get resolved in writing before engineering starts, rather than negotiated mid-sprint",
+        "To apologize for what the team couldn't build in time",
+        "To list competitor features the team chose not to copy"
+      ],
+      correct: 1,
+      why: "Non-Goals aren't an apology or a competitive note &mdash; they're the mechanism that stops adjacent requests from quietly becoming scope. Writing \"not building X\" in the PRD settles that fight before the sprint starts, instead of in a standup three weeks in."
+    },
+    {
+      q: "Which of these is a well-formed success metric for a PRD?",
+      opts: [
+        "\"Make the onboarding experience smoother\"",
+        "\"Reduce time-to-first-value from signup to first campaign sent, from a median of 9 days to under 3, within 60 days of launch\"",
+        "\"Ship a faster onboarding flow\"",
+        "\"Get positive feedback from the sales team\""
+      ],
+      correct: 1,
+      why: "A real success metric is a number, with a target and a date, that can turn out to be wrong. \"Smoother\" and \"faster\" describe outputs, not outcomes, and neither one can ever be disproven &mdash; which is exactly why they don't function as a metric."
+    },
+    {
+      q: "A PRD has grown to 14 pages covering five loosely related features because each stakeholder's request got added as it came in. What's the senior PM move?",
+      opts: [
+        "Keep everything in one PRD so nothing falls through the cracks",
+        "Split it: scope one PRD to the single highest-priority decision, and explicitly park the other four ideas in its Non-Goals for separate, future PRDs",
+        "Ask engineering to build whichever parts they can within the current sprint",
+        "Remove the Non-Goals section since it's causing debate among stakeholders"
+      ],
+      correct: 1,
+      why: "A document covering five features has no single decision for anyone to approve. Scoping to one and naming the rest as Non-Goals for later doesn't lose those ideas &mdash; it turns them into next quarter's roadmap instead of this quarter's unsignable PRD."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.innerHTML = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep &mdash; you already write Non-Goals before anyone asks you to.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before your next PRD goes out for review.' :
+                'Worth rereading the Big Idea section &mdash; the rule that fixes most unsignable PRDs: one decision, one metric, explicit Non-Goals.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> &mdash; ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

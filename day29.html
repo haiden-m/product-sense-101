@@ -1,0 +1,937 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Product Sense 101 · Day 29</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --teal-soft: rgba(26, 117, 106, 0.08);
+    --teal-mid: rgba(26, 117, 106, 0.15);
+    --gold: #B8892E;
+    --gold-soft: rgba(184, 137, 46, 0.10);
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --correct: #3A7D44;
+    --correct-soft: rgba(58, 125, 68, 0.08);
+    --incorrect: #B94A35;
+    --incorrect-soft: rgba(185, 74, 53, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --teal-soft: rgba(60, 181, 165, 0.10);
+      --teal-mid: rgba(60, 181, 165, 0.18);
+      --gold: #D4A73E;
+      --gold-soft: rgba(212, 167, 62, 0.12);
+      --stone: #7A756C;
+      --chalk: #222120;
+      --correct: #5CB86A;
+      --correct-soft: rgba(92, 184, 106, 0.10);
+      --incorrect: #D4604A;
+      --incorrect-soft: rgba(212, 96, 74, 0.10);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --teal-soft: rgba(60, 181, 165, 0.10);
+    --teal-mid: rgba(60, 181, 165, 0.18);
+    --gold: #D4A73E;
+    --gold-soft: rgba(212, 167, 62, 0.12);
+    --stone: #7A756C;
+    --chalk: #222120;
+    --correct: #5CB86A;
+    --correct-soft: rgba(92, 184, 106, 0.10);
+    --incorrect: #D4604A;
+    --incorrect-soft: rgba(212, 96, 74, 0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 2rem max(16px, env(safe-area-inset-right, 0px)) 5rem max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  /* — Progress bar — */
+  .progress-strip {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--ground);
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .progress-day {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--chalk);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 96.7%;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* — Header — */
+  .lesson-header {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .lesson-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .lesson-title {
+    font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .lesson-subtitle {
+    font-size: 1.05rem;
+    color: var(--stone);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 540px;
+  }
+
+  /* — Sections — */
+  .section {
+    margin-top: 3rem;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--chalk);
+  }
+  .section h2 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    text-wrap: balance;
+  }
+  .section p {
+    margin-bottom: 1rem;
+  }
+  .section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* — Lenses — */
+  .lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 500px) {
+    .lenses { grid-template-columns: 1fr; }
+  }
+  .lens {
+    padding: 1rem 1.15rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    border-left: 3px solid var(--teal);
+  }
+  .lens-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.25rem;
+  }
+  .lens-desc {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Callout — */
+  .callout {
+    background: var(--teal-soft);
+    border-left: 3px solid var(--teal);
+    padding: 1.1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .callout-warn {
+    background: var(--gold-soft);
+    border-left-color: var(--gold);
+  }
+
+  /* — Worked example — */
+  .example-box {
+    background: var(--chalk);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .example-box h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+  .example-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .example-option {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    font-size: 0.92rem;
+  }
+  .example-option .opt-letter {
+    font-weight: 600;
+    color: var(--teal);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* — Quiz — */
+  .quiz-q {
+    margin-bottom: 2rem;
+  }
+  .quiz-q:last-child {
+    margin-bottom: 0;
+  }
+  .quiz-stem {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.6;
+  }
+  .quiz-stem .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--ground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+    vertical-align: text-bottom;
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .quiz-opt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .quiz-opt:hover:not(.answered) {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+  .quiz-opt:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .quiz-opt .opt-letter {
+    font-weight: 600;
+    color: var(--stone);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
+  }
+  .quiz-opt:hover:not(.answered) .opt-letter {
+    color: var(--teal);
+  }
+  .quiz-opt.correct {
+    border-color: var(--correct);
+    background: var(--correct-soft);
+  }
+  .quiz-opt.correct .opt-letter { color: var(--correct); }
+  .quiz-opt.incorrect {
+    border-color: var(--incorrect);
+    background: var(--incorrect-soft);
+  }
+  .quiz-opt.incorrect .opt-letter { color: var(--incorrect); }
+  .quiz-opt.answered {
+    cursor: default;
+    opacity: 0.5;
+  }
+  .quiz-opt.correct.answered, .quiz-opt.incorrect.answered {
+    opacity: 1;
+  }
+  .quiz-explanation {
+    margin-top: 0.6rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    border-radius: 6px;
+    display: none;
+  }
+  .quiz-explanation.visible {
+    display: block;
+  }
+  .quiz-explanation.correct-expl {
+    background: var(--correct-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation.incorrect-expl {
+    background: var(--incorrect-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation strong {
+    font-weight: 600;
+  }
+
+  /* — Scenario — */
+  .scenario-prompt {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    color: var(--ink);
+  }
+  .scenario-lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 500px) {
+    .scenario-lenses { grid-template-columns: 1fr; }
+  }
+  .scenario-lens-prompt {
+    padding: 0.7rem 0.85rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .scenario-lens-prompt strong {
+    display: block;
+    color: var(--ink);
+    font-size: 0.88rem;
+    margin-bottom: 0.15rem;
+  }
+  .scenario-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .scenario-textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .scenario-textarea::placeholder {
+    color: var(--stone);
+    opacity: 0.6;
+  }
+  .scenario-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--teal-soft);
+    color: var(--teal);
+    border: 1.5px solid var(--teal-mid);
+    border-radius: 6px;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reveal-btn:hover {
+    background: var(--teal-mid);
+  }
+  .reveal-btn:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .scenario-answer {
+    margin-top: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: var(--teal-soft);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    display: none;
+  }
+  .scenario-answer.visible { display: block; }
+
+  /* — Meeting move — */
+  .meeting-move-quote {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--teal);
+    margin: 1rem 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--teal);
+    text-wrap: balance;
+  }
+
+  /* — Glossary — */
+  .glossary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .glossary-item {
+    padding: 0.85rem 1rem;
+    background: var(--chalk);
+    border-radius: 6px;
+  }
+  .glossary-term {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+  .glossary-def {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Score summary — */
+  .score-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--chalk);
+    border-radius: 8px;
+    margin-top: 2.5rem;
+  }
+  .score-ring {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .score-ring circle {
+    fill: none;
+    stroke-width: 4;
+  }
+  .score-ring .track { stroke: var(--ground); }
+  .score-ring .fill {
+    stroke: var(--teal);
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .score-ring text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .score-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .score-text strong { font-weight: 600; }
+
+  /* — Animations — */
+  @media (prefers-reduced-motion: no-preference) {
+    .section {
+      animation: fadeUp 0.4s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<!-- Progress -->
+  <div class="progress-strip">
+    <div class="progress-meta">
+      <span class="progress-label">Product Sense 101</span>
+      <span class="progress-day">Day 29 of 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <div class="lesson-eyebrow">Week 6 · Synthesis &amp; Advanced</div>
+    <h1 class="lesson-title">AI-Era Product Thinking</h1>
+    <p class="lesson-subtitle">Every framework so far assumed a feature either works or it doesn't. Generative AI breaks that assumption — and the PM's job shifts from specifying correct behavior to managing a distribution of outcomes.</p>
+  </div>
+
+  <!-- The Big Idea -->
+  <div class="section">
+    <div class="section-label">The Big Idea</div>
+    <p>Every lesson in this course, even yesterday's on APIs, assumed deterministic software: same input, same output, every time. A button either submits the form or it doesn't. An endpoint either returns the record or throws an error. When something breaks, it breaks loudly, and a test suite can prove it won't happen again.</p>
+    <p>Generative AI features don't work that way. Feed the same prompt into a model twice and you can get two different answers — both plausible, one wrong. A traditional bug announces itself with a stack trace; a bad AI output announces itself by sounding exactly as confident as a good one. This is the core shift of the AI era: the PM's job moves from specifying <em>correct</em> behavior to managing a <em>distribution</em> of outcomes, and from writing requirements to designing for the cases where the system is confidently wrong.</p>
+
+    <div class="lenses">
+      <div class="lens">
+        <div class="lens-name">User Lens → Trust calibration</div>
+        <div class="lens-desc">The user must land on the right amount of trust — not so much that they rubber-stamp a hallucinated output, not so little that they ignore a genuinely good suggestion. That calibration is a design problem, not a model problem.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Business Lens → Marginal cost per use</div>
+        <div class="lens-desc">A traditional feature costs almost nothing to run once built. An AI feature costs real money per inference, scaling with usage — "ship it to everyone" is now a pricing and margin decision, not just an engineering one.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Technical Lens → Non-determinism</div>
+        <div class="lens-desc">The same input can legitimately produce different outputs. Testing shifts from exact-match assertions to acceptable ranges, eval sets, and continuous production monitoring — QA habits from deterministic software don't transfer as-is.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Market Lens → Capability vs. proprietary data</div>
+        <div class="lens-desc">Raw model capability is commoditizing fast. Day 7's moats still apply: the defensible edge is your proprietary data and workflow integration, not whichever foundation model you've wired up this quarter.</div>
+      </div>
+    </div>
+
+    <p>The practical tool here is <strong>the AI Feature Checklist</strong> — three questions to ask before any generative capability ships:</p>
+
+    <div class="callout">
+      <strong>1. What happens when it's wrong?</strong> Every AI feature will be wrong sometimes. If there's no defined failure mode, that's not a detail to fill in later — it's the feature not being ready.<br><br>
+      <strong>2. Is a human in the loop, on the loop, or out of the loop?</strong> In-the-loop approves every instance before it takes effect. On-the-loop monitors and can intervene. Out-of-the-loop means the system acts alone. Pick deliberately — don't let it default to "out" because nobody specified otherwise.<br><br>
+      <strong>3. Does this actually need generative AI, or would a deterministic rule do the job better?</strong> Not every "smart" feature needs a model. A fixed rule is auditable, free to run, and never hallucinates.
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>The Technical PM Trap, AI edition.</strong> A technical background makes prompt engineering genuinely fun — tightening a system prompt, watching eval scores tick up, chasing the last few points of accuracy. None of that is the product. The product question is whether the feature's failure mode is one your user's workflow can absorb. A model that's 95% accurate is a great demo and a bad product if the other 5% is a confidently wrong recommendation sent to a customer with no one checking it first.</div>
+  </div>
+
+  <!-- B2B Context -->
+  <div class="section">
+    <div class="section-label">The B2B SaaS Angle</div>
+    <p>In many B2B products, this shift is already underway and mostly invisible to the user. Predictive scheduling, AI-generated summaries, and auto-drafted templates are all probabilistic systems wearing the same clean UI as the deterministic rule engines they sit beside. The marketer can't tell, from the interface alone, which parts of the product are guaranteed and which are a best guess — which means that distinction is now your job to design, not theirs to intuit.</p>
+    <p>The sharpest version of this shows up as <strong>the deterministic sandwich</strong>: wrapping a probabilistic core (the model that drafts the subject line, scores the segment, writes the brief) in deterministic guardrails on both sides — required-field checks, banned-term lists, pricing-math validation, brand rules — so that the model's mistakes get caught by code that can't itself hallucinate. The generative core gets you fluency and speed; the deterministic shell around it gets you a feature you can actually ship to an enterprise customer's legal and compliance team.</p>
+    <p>And because a single bad campaign can reach hundreds of thousands of a customer's customers in one send, the blast radius of an AI miss in this domain is larger than in most consumer software — which is exactly why "autonomous mode" is a trust milestone a customer earns over time, not a launch default.</p>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="section">
+    <div class="section-label">Worked Example</div>
+    <div class="example-box">
+      <h3>The Generative Subject Line Feature</h3>
+      <p>Your team ships a feature that drafts three subject line variants for a campaign, each with a predicted open-rate score. Three ways to ship the "choose one" step land on your desk:</p>
+      <div class="example-options">
+        <div class="example-option">
+          <span class="opt-letter">A</span>
+          <span>Auto-select the highest-predicted variant and send it with no review</span>
+        </div>
+        <div class="example-option">
+          <span class="opt-letter">B</span>
+          <span>Show all three with scores, require the marketer to click one, but lock the text — no editing allowed</span>
+        </div>
+        <div class="example-option">
+          <span class="opt-letter">C</span>
+          <span>Show all three with scores, pre-select the top one, allow full edit before send, and log every override as training signal</span>
+        </div>
+      </div>
+      <p><strong>The product sense read:</strong> A treats a prediction as a fact and removes the human entirely — fine once the model has a long, proven track record with this customer, reckless as a default. B keeps a human in the loop but strips their expertise out of the process; a marketer who knows their brand voice better than the model has no way to fix a tone that's close but not quite right, so they'll abandon the feature rather than fight it.</p>
+      <p>C passes the checklist: the failure mode is bounded (a human always sees the draft before it sends), the human sits in-the-loop by default with a clear path to on-the-loop once trust is earned, and every override becomes a labeled example that improves the next prediction. Pre-selecting the top variant keeps the convenience that made the feature worth building in the first place — it's a default, not a mandate.</p>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <div class="section-label">Quiz · Test Your Thinking</div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">1</span> Why does traditional QA — write a test case, assert the exact expected output — break down for a generative AI feature?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>It doesn't break down — you just need to write more test cases</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>The output is non-deterministic, so testing has to shift from exact-match assertions to acceptable-range evaluation and ongoing production monitoring</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Generative AI features don't need testing at all</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Non-determinism is a bug that engineering should fix before the feature ships</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> The Technical Lens here is specific: a model can give two different, individually reasonable answers to the identical input. "Did it match the expected string" stops being a meaningful test. The replacement is an eval set judged on acceptable ranges and failure categories, plus live monitoring once it's in production — because some failure modes only show up at real-world scale.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">2</span> A marketer discovers an AI-drafted email left out the legal disclaimer their brand always includes. What's the real product lesson?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>The model needs better training data — nothing else to fix</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>A confidently wrong output reached production with no safety net — the feature was missing a deterministic guardrail wrapping the probabilistic core</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>This is a legal team problem, not a product one</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Marketers should proofread every AI draft, so it doesn't matter</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> Asking a model to "remember" the disclaimer every time is asking a probabilistic system to guarantee a deterministic outcome — it will eventually fail. The fix is the deterministic sandwich: a hard-coded check that a required field exists before send is allowed, sitting outside the model entirely. That rule can't hallucinate, because it isn't guessing.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <div class="quiz-stem"><span class="q-num">3</span> Leadership wants to fully automate send-time and subject-line selection with zero human review, citing efficiency. Using Day 14's one-way vs. two-way doors framework, what should you ask first?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>What's the blast radius if one bad auto-send decision goes out — is that single send reversible, even if the automation setting itself is adjustable?</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Whether automation is always the more efficient choice</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Whether a competitor has already shipped full automation</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Whether engineering has the sprint capacity to build it</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: A.</strong> The automation toggle is reversible, but one bad send to a customer's full list is not — the email is already in 500,000 inboxes. The one-way door isn't the feature setting, it's each individual action the feature takes while that setting is on. The PM move is a gradual autonomy ramp — staged rollout, a kill switch, a trust threshold — before removing the human entirely, not a binary "manual vs. automated" decision.
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario Drill -->
+  <div class="section">
+    <div class="section-label">Scenario Drill</div>
+    <p class="scenario-prompt">Your platform's new AI assistant can generate a full campaign brief — audience, offer, copy angle, send schedule — from a single one-line prompt. Leadership wants to launch it to every customer next week as the company's flagship AI feature, with "autonomous mode" switched on by default. Internal testing shows it's right about 75% of the time. Some of the wrong 25% is obviously bad — a nonsensical offer. Some of it is subtly bad — correct-sounding, but off-brand tone that a careful reader would catch and a skimming one wouldn't.</p>
+    <p>Apply all four lenses before deciding. Use the prompts below:</p>
+    <div class="scenario-lenses">
+      <div class="scenario-lens-prompt">
+        <strong>User Lens</strong>
+        What does a marketer need to see or control to catch the subtly-wrong 25% before it goes live?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Business Lens</strong>
+        What's the cost of a visible AI failure on launch week versus the cost of a two-week delay to add guardrails?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Technical Lens</strong>
+        Can a deterministic sandwich catch the obviously-bad cases automatically, even if it can't catch the subtle ones?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Market Lens</strong>
+        Is being first to ship "autonomous" worth more than being right, given this is the moment every customer forms their opinion of your AI at once?
+      </div>
+    </div>
+    <textarea class="scenario-textarea" placeholder="Write your analysis here. What would you do and why? Think through the trade-offs…"></textarea>
+    <div class="scenario-hint">No wrong answers — this is about practicing the lens discipline.</div>
+    <button class="reveal-btn" id="revealBtn">Show a senior PM's take ▾</button>
+    <div class="scenario-answer" id="scenarioAnswer">
+      <p><strong>A strong answer touches all four:</strong></p>
+      <p><strong>User:</strong> Default to human-in-the-loop with full edit rights on every field, and surface a visible confidence or "why" indicator on whichever fields get overridden most often. "Autonomous mode" becomes a setting the customer dials up themselves after a trust-building period — never a launch default they didn't ask for.</p>
+      <p style="margin-top:0.5rem"><strong>Business:</strong> One viral screenshot of a nonsensical AI-generated offer, on the week you're asking the whole market to trust your AI, costs more in renewal and reputation risk than a two-week delay. The Business Lens says slow the launch down to add the guardrail, not ship the fast path and hope.</p>
+      <p style="margin-top:0.5rem"><strong>Technical:</strong> Yes for the obvious failures — wrap the generative core in a deterministic sandwich (pricing-math checks, banned-term lists, required-field validation) so the clearly-broken 25% never reaches a human at all. That doesn't catch the subtle off-brand-tone misses, but it changes the failure distribution from "catastrophic and public" to "merely annoying and caught in review."</p>
+      <p style="margin-top:0.5rem"><strong>Market:</strong> Being first with "autonomous" is a weaker long-term position than being first with "trustworthy," in a category still this early. Launch the assisted mode broadly — fast, safe, and it generates exactly the override data you need to improve the model — and earn full autonomy as a milestone a customer unlocks, rather than betting the entire launch narrative on a model that's wrong one time in four.</p>
+      <p style="margin-top:0.5rem">The decision isn't "ship the AI" versus "don't" — it's choosing where the human sits in the loop on day one, and designing the path to move them out of it deliberately, on evidence.</p>
+    </div>
+  </div>
+
+  <!-- Meeting Move -->
+  <div class="section">
+    <div class="section-label">Meeting Move of the Day</div>
+    <p>Next time an AI or "smart" feature comes up in a roadmap or design review, ask:</p>
+    <div class="meeting-move-quote">"What does this do when it's wrong — and who finds out first, the customer or us?"</div>
+    <p>This question forces the room to specify a failure mode and a detection mechanism before anyone gets to celebrate the demo's happy path. If the honest answer is "the customer finds out first," that's not a detail to fix later — it's the reason the feature isn't ready to ship without a human in the loop.</p>
+    <p>Practice it once this week. Notice how many "AI feature" conversations have genuinely never considered the answer.</p>
+  </div>
+
+  <!-- Glossary -->
+  <div class="section">
+    <div class="section-label">Glossary</div>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">Probabilistic Feature</div>
+        <div class="glossary-def">A feature whose output can vary between runs on the identical input. Correctness is a distribution to be managed, not a pass/fail state to be tested once and trusted forever.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">In-the-loop / On-the-loop / Out-of-the-loop</div>
+        <div class="glossary-def">A spectrum of human oversight: in-the-loop approves every individual instance before it acts, on-the-loop monitors a running system and can intervene, out-of-the-loop means the system acts with no review at all.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Deterministic Sandwich</div>
+        <div class="glossary-def">Fixed, rule-based validation that wraps a generative model's output on both sides — catching failures a probabilistic system can't be trusted to catch in itself, without needing to fix the model.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Hallucination</div>
+        <div class="glossary-def">A model stating something false with exactly the same confident tone it uses for something true, with no built-in signal that distinguishes the two to the person reading it.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Autonomy Ramp</div>
+        <div class="glossary-def">Deliberately increasing a feature's independence as trust is earned through track record — start supervised and reversible, remove the guardrail only once the evidence justifies it. Builds directly on Day 14's one-way vs. two-way doors.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-strip" id="scoreStrip" style="display: none;">
+    <svg class="score-ring" viewBox="0 0 52 52">
+      <circle class="track" cx="26" cy="26" r="22" />
+      <circle class="fill" id="scoreArc" cx="26" cy="26" r="22"
+              stroke-dasharray="138.23" stroke-dashoffset="138.23" />
+      <text x="26" y="26" id="scoreText">0/3</text>
+    </svg>
+    <div class="score-text" id="scoreMsg"><strong>Quiz score</strong><br>Answer all three questions to see your result.</div>
+  </div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 29 complete</span>
+    </div>
+    <div class="footer-next"><a href="day30.html">Next lesson → The Decision Spine (Capstone)</a></div>
+  </div>
+</div>
+
+<script>
+  // — Quiz logic —
+  const quizState = { answered: 0, correct: 0, total: 3 };
+
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const correctIdx = parseInt(q.dataset.correct);
+    const opts = q.querySelectorAll('.quiz-opt');
+    const expl = q.querySelector('.quiz-explanation');
+
+    function answer(selectedIdx) {
+      if (q.classList.contains('done')) return;
+      q.classList.add('done');
+
+      const isCorrect = selectedIdx === correctIdx;
+      quizState.answered++;
+      if (isCorrect) quizState.correct++;
+
+      opts.forEach((opt, i) => {
+        opt.classList.add('answered');
+        if (i === correctIdx) opt.classList.add('correct');
+        if (i === selectedIdx && !isCorrect) opt.classList.add('incorrect');
+      });
+
+      expl.classList.add('visible', isCorrect ? 'correct-expl' : 'incorrect-expl');
+      updateScore();
+    }
+
+    opts.forEach((opt, i) => {
+      opt.addEventListener('click', () => answer(i));
+      opt.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); answer(i); }
+      });
+    });
+  });
+
+  function updateScore() {
+    const strip = document.getElementById('scoreStrip');
+    strip.style.display = 'flex';
+
+    const pct = quizState.correct / quizState.total;
+    const circumference = 138.23;
+    const arc = document.getElementById('scoreArc');
+    arc.style.strokeDashoffset = circumference * (1 - pct);
+
+    document.getElementById('scoreText').textContent =
+      quizState.correct + '/' + quizState.total;
+
+    const msg = document.getElementById('scoreMsg');
+    if (quizState.answered === quizState.total) {
+      if (quizState.correct === quizState.total) {
+        msg.innerHTML = '<strong>Perfect.</strong><br>You\'re thinking in failure modes, not just happy paths. Tomorrow — the capstone, where all thirty days come together.';
+      } else if (quizState.correct >= 2) {
+        msg.innerHTML = '<strong>Solid.</strong><br>You caught the key patterns. Review the one you missed — the deterministic-sandwich idea is worth having cold going into the capstone.';
+      } else {
+        msg.innerHTML = '<strong>Room to grow.</strong><br>That\'s exactly why you\'re here. Re-read the AI Feature Checklist and try applying it to an AI feature you\'ve seen shipped recently.';
+      }
+    }
+  }
+
+  // — Scenario reveal —
+  document.getElementById('revealBtn').addEventListener('click', function() {
+    const answer = document.getElementById('scenarioAnswer');
+    const isVisible = answer.classList.contains('visible');
+    answer.classList.toggle('visible');
+    this.textContent = isVisible ? 'Show a senior PM\'s take ▾' : 'Hide ▴';
+  });
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

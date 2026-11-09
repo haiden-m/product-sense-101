@@ -1,0 +1,621 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>B2B SaaS Pricing Strategy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward unchanged from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 6, Day 27 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.idea-list{list-style:none; margin:18px 0; padding:0; display:grid; gap:11px; max-width:66ch;}
+.idea-list li{padding-left:26px; position:relative; font-size:.97rem;}
+.idea-list li:before{content:"\2192"; position:absolute; left:0; top:0; color:var(--gold); font-weight:600;}
+.idea-list b{color:var(--ink);}
+
+.qtype-grid{display:grid; grid-template-columns:1fr; gap:12px; margin:22px 0;}
+@media (min-width:620px){ .qtype-grid{grid-template-columns:1fr 1fr;} }
+.qtype-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:18px 20px; background:var(--ground); min-width:0;
+}
+.qtype-card .q-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:600; display:block; margin-bottom:6px;}
+.qtype-card .q-ask{display:block; font-family:'Newsreader',serif; font-style:italic; font-size:1.02rem; color:var(--ink); margin-bottom:8px;}
+.qtype-card .q-use{font-size:.88rem; color:var(--stone); margin:0; max-width:none;}
+
+.compare-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:22px 0;}
+@media (min-width:620px){ .compare-grid{grid-template-columns:1fr 1fr;} }
+.compare-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:20px 22px; background:var(--ground);
+  min-width:0;
+}
+.compare-card .c-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:6px;
+}
+.compare-card.unguarded .c-mark{color:var(--bad);}
+.compare-card.guarded .c-mark{color:var(--teal);}
+.compare-card .c-name{font-weight:600; display:block; margin-bottom:8px; font-size:1.08rem; color:var(--ink);}
+.compare-card .c-ask{
+  display:block; font-family:'Newsreader',serif; font-style:italic; font-size:.95rem; color:var(--stone);
+  margin-bottom:10px;
+}
+.compare-card .c-desc{font-size:.92rem; color:var(--ink); margin:0 0 10px 0; max-width:none;}
+.compare-card .c-fit{font-size:.85rem; color:var(--stone); margin:0; max-width:none;}
+.compare-card .c-fit b{color:var(--ink);}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.drill-prompt ul{margin:10px 0 0 0; padding-left:20px;}
+.drill-prompt li{margin-bottom:4px;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+.analysis .final-msg{
+  background:var(--teal-10); border-radius:10px; padding:16px 18px; font-size:.93rem; margin-top:4px;
+  border-left:3px solid var(--teal);
+}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 6 &middot; SYNTHESIS &amp; ADVANCED <span class="dot"></span> DAY 27 OF 30</div>
+    <h1>B2B SaaS Pricing Strategy</h1>
+    <p class="sub">Yesterday's lesson said Net Revenue Retention is the clearest proof a growth loop is compounding on its own. Today is the decision that actually produces that number: how you price and package the product decides whether expansion happens automatically as customers succeed, or has to be re-won by hand at every renewal.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you learned that retention is the multiplier on every growth loop, and that NRR above 100% is the clearest sign a B2B business is compounding without new logos. <b>Today</b> is the lever that makes that possible in the first place: pricing and packaging decide whether a customer's growing success turns into growing revenue by itself, or whether every bit of expansion has to be negotiated into existence.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Most pricing mistakes aren't about the number &mdash; they're about the <b>unit</b> the number is attached to. That unit is the <b>value metric</b>: the thing you charge per, whether that's a seat, a thousand API calls, a contact in a database, or a message sent. A price built on the wrong value metric is disconnected from the value the customer actually gets, which means two customers getting wildly different amounts of value can end up paying the same amount &mdash; and a customer who grows ten times over gets ten times the benefit while paying the company nothing more for it.</p>
+    <p><b>Packaging</b> is the second half of the decision: how features and capability are bundled into tiers, usually some version of Good &middot; Better &middot; Best. Good packaging makes the upgrade path obvious exactly when a customer is outgrowing their tier &mdash; the gate they hit is the capability they actually need next. Bad packaging gates arbitrary features behind arbitrary tiers, so an upgrade conversation feels like a negotiation instead of something the customer already expected. Pricing and packaging together are what make land-and-expand work: price low enough to win the first use case, then let usage growth or tier upgrades carry the account upward without a renegotiation at every step.</p>
+
+    <div class="qtype-grid">
+      <div class="qtype-card">
+        <span class="q-label">Per-Seat</span>
+        <span class="q-ask">Does value scale with how many people are logged in?</span>
+        <p class="q-use">Price tracks headcount using the product. Clean to quote, but flat if usage per seat varies wildly &mdash; a power user and a casual one cost the same.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Usage-Based</span>
+        <span class="q-ask">Does value scale with volume consumed, not headcount?</span>
+        <p class="q-use">Price tracks a consumption unit &mdash; API calls, contacts, messages sent, data processed. Expansion happens automatically as the customer's own activity grows.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Flat-Rate / Tiered</span>
+        <span class="q-ask">Is value mostly about which capabilities you can access?</span>
+        <p class="q-use">A fixed price per tier bundles a set of features. Simple and predictable, but blind to how intensively a customer actually uses what's inside the tier.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Hybrid (Platform + Usage)</span>
+        <span class="q-ask">Do you need a revenue floor plus upside as usage grows?</span>
+        <p class="q-use">A base platform fee covers access and implementation cost; a usage component on top captures expansion as the account scales.</p>
+      </div>
+    </div>
+
+    <ul class="idea-list">
+      <li><b>Price the value metric, not the feature count.</b> The unit you charge on should move in the same direction as the value the customer receives &mdash; if it doesn't, pricing and value have quietly come apart.</li>
+      <li><b>Packaging's job is to make the next tier obvious, not to gate arbitrary features.</b> A customer should hit a wall exactly where they actually need more capability, never somewhere unrelated to why they're growing.</li>
+      <li><b>Land low enough to win the first use case; expand through usage growth, not renegotiation.</b> The best expansion revenue is the kind that shows up on the invoice automatically because the customer is succeeding.</li>
+      <li><b>A pricing model that doesn't move with customer success is a growth loop with nothing feeding it.</b> It's the same leak Day 26 described &mdash; except here the leak isn't churn, it's value the company delivered and never captured.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card unguarded">
+        <span class="c-mark">&mdash;</span>
+        <span class="c-name">Feature-Gated Packaging</span>
+        <span class="c-ask">"Our Enterprise tier unlocks SSO, custom branding, and API access for $50K a year flat &mdash; same price whether you send 10K or 10M messages."</span>
+        <p class="c-desc">Price is disconnected from the value metric. A customer who scales usage twenty-fold pays exactly what they paid on day one, so expansion revenue has nowhere to come from except a renewal renegotiation.</p>
+        <p class="c-fit"><b>What happens:</b> growth stalls between renewals; every bit of expansion has to be argued for instead of arriving on its own.</p>
+      </div>
+      <div class="compare-card guarded">
+        <span class="c-mark">+</span>
+        <span class="c-name">Value-Metric Packaging</span>
+        <span class="c-ask">"We charge a platform fee plus a per-message rate, with volume breakpoints that unlock orchestration automatically as a customer's program grows."</span>
+        <p class="c-desc">Price tracks the value metric directly. As a customer's campaigns scale, so does revenue &mdash; without a single upsell call.</p>
+        <p class="c-fit"><b>What happens:</b> expansion revenue compounds on its own, feeding exactly the NRR loop from yesterday's lesson.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>Pricing is a product decision, not a late finance exercise</h4>
+      <p style="margin:0;">A PM who treats pricing and packaging as something finance bolts on near launch ships a product that under-monetizes its best customers and over-charges its smallest ones. The value metric is as much a product design choice as any feature on the roadmap &mdash; it belongs in discovery, not in a spreadsheet after the fact.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>A B2B SaaS company is evaluating whether to reprice from three flat per-seat tiers to usage-based pricing metered on monthly active API calls. Here's how the two compare.</p>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Dimension</th><th>Per-seat (current)</th><th>Usage-based on contacts (proposed)</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue vs. customer value</td><td class="lose">Weak &mdash; a 3-person team managing 50K contacts pays the same as a 3-person team managing 2M</td><td class="win">Strong &mdash; price scales directly with contacts actively marketed to</td></tr>
+          <tr><td>Expansion trigger</td><td class="lose">Requires adding headcount, or a renewal negotiation</td><td class="win">Happens automatically as the customer's contact base grows</td></tr>
+          <tr><td>Sales cycle impact</td><td class="lose">Simple to quote, but customers negotiate seat count down</td><td class="win">Slightly more setup, but anchors price to ROI the customer already sees</td></tr>
+          <tr><td>Main risk</td><td class="lose">Customers maximize seats-per-dollar by sharing logins</td><td class="lose">Customers may dispute what counts as "active"; needs clean usage metering</td></tr>
+          <tr><td class="num">Best fit</td><td class="num">Early-stage, low usage variance across customers</td><td class="num">Platforms where usage varies hugely customer to customer</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The catch:</b> usage-based pricing only works if the value metric is something customers already track and trust. If "active contacts marketed to" feels ambiguous or manipulable, customers will dispute the bill every month instead of seeing it as fair &mdash; the metering has to be as transparent as the pricing itself.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Your platform prices on three flat tiers (Starter, Growth, Enterprise) gated by features &mdash; number of channels, number of integrations, SSO. None of the tiers meter contact volume. Before your next pricing review:
+        <ul>
+          <li>Your biggest Growth-tier customer has scaled their active contact list from 200K to 4M in 18 months, with zero price increase, since the tier doesn't meter contacts.</li>
+          <li>Customer Success reports this account is now your single heaviest infrastructure consumer &mdash; it costs more to serve than it pays.</li>
+          <li>Sales says "don't touch pricing on this account, we'll lose them if we try to charge more."</li>
+        </ul>
+        Identify what's wrong with the current value metric, propose how you'd fix pricing and packaging going forward for new and existing customers without triggering a renewal crisis, and write the one question you'd ask Sales before any conversation with the customer.
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>The assignment to avoid</h4>
+        <ul>
+          <li>Quietly accepting the margin erosion because "we'll lose them if we try to charge more" is a sales objection to a conversation that hasn't happened yet, not evidence from one that has.</li>
+        </ul>
+        <h4>What's wrong with the value metric</h4>
+        <ul>
+          <li>The tier gates features, not usage, so it's disconnected from the actual cost and value driver: contact volume. A customer can scale usage twenty-fold with zero corresponding price increase &mdash; the company is quietly subsidizing its best customer's growth.</li>
+        </ul>
+        <h4>The fix going forward</h4>
+        <ul>
+          <li>Introduce a usage-based component, priced per contact-volume band, on all new contracts and new tiers from day one. Grandfather existing customers at current terms through the life of their current contract &mdash; don't open with a surprise price increase mid-term.</li>
+          <li>Walk the next renewal in with a value story, not an invoice: show the account what they've achieved going from 200K to 4M contacts, then introduce the new metered structure as the model that scales with them going forward, not a penalty for having grown.</li>
+        </ul>
+        <h4>The question for Sales</h4>
+        <ul>
+          <li>"Have we actually asked this customer how the platform's value to them has changed since they went from 200K to 4M contacts &mdash; or are we assuming they'd leave before having that conversation?"</li>
+        </ul>
+        <div class="final-msg">"We don't fix this by raising the existing customer's price overnight &mdash; we fix it by making every new contract scale with contacts from day one, and by walking this renewal in with a value story instead of a bill."</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in your next pricing or packaging review</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Redirect the conversation from the price point to the metric underneath it:</p>
+    <div class="move-script" id="moveScript">"What's our value metric here, and does it move in the same direction as the value the customer is getting &mdash; or did we pick it because it was the easiest thing to bill?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Value Metric (Pricing Metric)</dt>
+        <dd>The unit a company charges on &mdash; seats, contacts, API calls, messages sent &mdash; that should scale with the value delivered to the customer. Widely considered the single most consequential pricing decision in B2B SaaS.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Packaging</dt>
+        <dd>How features and capabilities are bundled into tiers, commonly Good &middot; Better &middot; Best, designed so that upgrading happens naturally when a customer needs more value, not through arbitrary feature gates.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Land and Expand</dt>
+        <dd>A go-to-market motion that prices an initial, low-friction use case to win the account, then grows revenue over time through usage growth, seat growth, or tier upgrades rather than one large upfront deal.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Willingness to Pay (WTP)</dt>
+        <dd>The maximum price a customer segment will accept for a given level of value, usually estimated through customer interviews, van Westendorp pricing surveys, or competitive anchoring &mdash; the ceiling good packaging is designed to approach without crossing.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Price Anchoring</dt>
+        <dd>Presenting a higher-priced option, even one few customers choose, alongside others so the middle tier reads as the reasonable, expected choice &mdash; a packaging tactic, not a pricing metric.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 27 complete</span>
+    </div>
+    <div class="footer-next"><a href="day28.html">Next lesson → API &amp; Platform PM</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<27) s.className='done';
+    else if (i===27) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "What makes a good pricing value metric in B2B SaaS?",
+      opts: [
+        "Whatever's easiest for finance to track internally",
+        "It should scale with the value the customer receives, so price grows naturally as the customer gets more value",
+        "A flat fee regardless of usage, for maximum predictability",
+        "Whatever the closest competitor already charges"
+      ],
+      correct: 1,
+      why: "A value metric should track value delivered, so pricing scales naturally with customer success &mdash; not be set purely for internal billing convenience or by copying a competitor."
+    },
+    {
+      q: "A company sells seat-based pricing but sees huge usage variance between customers on the same tier &mdash; some send 10K messages a month, others 10M. What's the likely consequence?",
+      opts: [
+        "Nothing; seat-based pricing always scales fine",
+        "The heaviest users are hugely under-priced relative to the value they receive, and expansion revenue is capped by headcount instead of usage",
+        "It simplifies the sales process with no real downside",
+        "It automatically grows Net Revenue Retention over time"
+      ],
+      correct: 1,
+      why: "When the value metric doesn't track usage, the account generating the most value pays no more than one generating a fraction of it &mdash; and because price is tied to seats, not volume, expansion can't happen as usage grows."
+    },
+    {
+      q: "Why is feature-gated packaging risky when the gates don't track the value metric?",
+      opts: [
+        "It makes upgrading so predictable that customers always pick the top tier",
+        "Customers hit a wall where the gated feature doesn't match why they're actually growing, so upgrading feels like a negotiation instead of something expected",
+        "It carries no risk; feature gating is always the right call",
+        "It's a legal requirement for all SaaS pricing"
+      ],
+      correct: 1,
+      why: "Good packaging makes the next tier obvious exactly when a customer needs it. If the gate is arbitrary relative to how the customer is actually growing, the upgrade conversation turns into friction instead of a natural next step."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.innerHTML = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep &mdash; you already think in value metrics before you think in price points.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before your next pricing conversation.' :
+                'Worth rereading the Big Idea section &mdash; the rule that separates good pricing from bad: the value metric has to move with customer value, not against it.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> &mdash; ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

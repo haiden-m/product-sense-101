@@ -1,0 +1,620 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Stakeholder Management</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward unchanged from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 5, Day 23 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.idea-list{list-style:none; margin:18px 0; padding:0; display:grid; gap:11px; max-width:66ch;}
+.idea-list li{padding-left:26px; position:relative; font-size:.97rem;}
+.idea-list li:before{content:"\2192"; position:absolute; left:0; top:0; color:var(--gold); font-weight:600;}
+.idea-list b{color:var(--ink);}
+
+.qtype-grid{display:grid; grid-template-columns:1fr; gap:12px; margin:22px 0;}
+@media (min-width:620px){ .qtype-grid{grid-template-columns:1fr 1fr;} }
+.qtype-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:18px 20px; background:var(--ground); min-width:0;
+}
+.qtype-card .q-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:600; display:block; margin-bottom:6px;}
+.qtype-card .q-ask{display:block; font-family:'Newsreader',serif; font-style:italic; font-size:1.02rem; color:var(--ink); margin-bottom:8px;}
+.qtype-card .q-use{font-size:.88rem; color:var(--stone); margin:0; max-width:none;}
+
+.compare-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:22px 0;}
+@media (min-width:620px){ .compare-grid{grid-template-columns:1fr 1fr;} }
+.compare-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:20px 22px; background:var(--ground);
+  min-width:0;
+}
+.compare-card .c-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:6px;
+}
+.compare-card.unguarded .c-mark{color:var(--bad);}
+.compare-card.guarded .c-mark{color:var(--teal);}
+.compare-card .c-name{font-weight:600; display:block; margin-bottom:8px; font-size:1.08rem; color:var(--ink);}
+.compare-card .c-ask{
+  display:block; font-family:'Newsreader',serif; font-style:italic; font-size:.95rem; color:var(--stone);
+  margin-bottom:10px;
+}
+.compare-card .c-desc{font-size:.92rem; color:var(--ink); margin:0 0 10px 0; max-width:none;}
+.compare-card .c-fit{font-size:.85rem; color:var(--stone); margin:0; max-width:none;}
+.compare-card .c-fit b{color:var(--ink);}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.drill-prompt ul{margin:10px 0 0 0; padding-left:20px;}
+.drill-prompt li{margin-bottom:4px;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+.analysis .final-msg{
+  background:var(--teal-10); border-radius:10px; padding:16px 18px; font-size:.93rem; margin-top:4px;
+  border-left:3px solid var(--teal);
+}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 5 &middot; COMMUNICATION &amp; INFLUENCE <span class="dot"></span> DAY 23 OF 30</div>
+    <h1>Stakeholder Management</h1>
+    <p class="sub">Yesterday's templates get you a sharp answer to a vague claim. But a sharp answer still has to land on someone who can act on it &mdash; and in a cross-functional B2B SaaS org, that person rarely reports to you. Today's lesson is about naming who actually owns the decision, and moving people who don't take direction from your title.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you built five question templates for unpacking a vague or urgent claim before you agree to anything. That skill assumes you're in the room with the right people. <b>Today</b> addresses what happens when you're not &mdash; when a decision needs sign-off from Legal, Security, Sales, and Engineering, none of whom you manage, and no one has said out loud who's actually in charge of saying yes.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Almost none of the authority a senior PM exercises comes from a reporting line. You don't manage Legal, Security, Support, or Sales &mdash; yet a typical B2B SaaS launch needs all four to move, on your timeline, without you ever being able to tell any of them what to do. Stakeholder management is the discipline that replaces "I'll just ask nicely and hope" with a repeatable structure for who decides what, and a set of moves for actually influencing people who owe you nothing.</p>
+    <p>The structural half of that discipline is RACI &mdash; a way of naming, for any decision or deliverable, exactly four roles: who's <b>Responsible</b> for doing the work, who's <b>Accountable</b> for the outcome, who's <b>Consulted</b> before the decision is made, and who's merely <b>Informed</b> after it is. Most stalled cross-functional work in B2B SaaS doesn't fail because the plan was bad &mdash; it fails because nobody assigned a single, named Accountable, so every function treats itself as equally entitled to weigh in, and the decision drifts until it quietly misses its date.</p>
+
+    <div class="qtype-grid">
+      <div class="qtype-card">
+        <span class="q-label">Responsible</span>
+        <span class="q-ask">Does the work</span>
+        <p class="q-use">Can be several people at once &mdash; engineers writing the code, legal counsel drafting the clause. Sharing the "R" is normal and often necessary.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Accountable</span>
+        <span class="q-ask">Owns whether it happens</span>
+        <p class="q-use">Exactly one person per decision. The moment two people are both Accountable for the same call, neither is fully on the hook, and the decision stalls.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Consulted</span>
+        <span class="q-ask">Asked before the decision</span>
+        <p class="q-use">A two-way exchange with enough lead time to actually shape the outcome &mdash; not a courtesy ping sent the day before it ships.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Informed</span>
+        <span class="q-ask">Told after the decision</span>
+        <p class="q-use">One-way, after the fact. Treating a Consulted stakeholder like an Informed one is the single most common way a sign-off turns into a blocker.</p>
+      </div>
+    </div>
+
+    <ul class="idea-list">
+      <li><b>RACI is a staffing tool, not a courtesy list.</b> Assign one Accountable per decision, even when three other functions are doing real work on it. If you can't name the one person who answers for the outcome, the decision doesn't have an owner yet.</li>
+      <li><b>"Consulted" is a promise, not a CC line.</b> Someone marked Consulted gets asked early enough to actually change the plan &mdash; not notified the week before launch and expected to be fine with it.</li>
+      <li><b>Influence rides on what you've synthesized, not what you can command.</b> The PM who walks in having already asked the sharp Evidence and Boundary questions from Day 22 has more leverage in the room than the one who just has the title "Product Manager" on their badge.</li>
+      <li><b>Match the ask to the stakeholder's own incentive.</b> "This unblocks your Q4 renewal number" moves a Sales leader faster than "this is good for the product" ever will &mdash; because it is, from where they sit, actually true and actually theirs.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card unguarded">
+        <span class="c-mark">&mdash;</span>
+        <span class="c-name">Everyone's Invited</span>
+        <span class="c-ask">"Loop in Legal, Security, and Support &mdash; let's all align."</span>
+        <p class="c-desc">No one is named as the person who can actually say yes. Every function treats its input as equally weighted, so the thread grows, the meeting grows, and the decision has nowhere to land.</p>
+        <p class="c-fit"><b>What happens:</b> three weeks later, the same four people are still "aligning," and the launch date has quietly slipped twice.</p>
+      </div>
+      <div class="compare-card guarded">
+        <span class="c-mark">+</span>
+        <span class="c-name">One Name on the Decision</span>
+        <span class="c-ask">"[Name] is Accountable for the ship call. Legal and Security are Consulted, with sign-off due Thursday."</span>
+        <p class="c-desc">One person owns the outcome and is empowered to decide once the Consulted functions have weighed in. Everyone else knows exactly what's expected of them and by when.</p>
+        <p class="c-fit"><b>What happens:</b> the decision gets made in a single meeting, because there's a person in the room whose job it is to make it.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>This is what gives your case somewhere to land</h4>
+      <p style="margin:0;">Day 21 taught you to lead with the governing thought. Day 22 taught you to pressure-test the claims underneath it. Neither one matters if the room you're presenting to has no named Accountable &mdash; a perfectly structured, well-evidenced case can still drift for weeks with no one empowered to act on it. RACI is how you make sure the work from the last two days actually reaches a person who can say yes.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>Your team built "Smart Send Time," a feature that times campaign sends per-recipient. It's been code-complete for three weeks. Legal, Security, Support, and Marketing have all been "looped in" the whole time &mdash; and the launch still hasn't happened, because no one has been willing to say "ship it" without everyone else nodding first.</p>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Decision or deliverable</th><th>Before RACI was assigned</th><th>After RACI was assigned</th></tr></thead>
+        <tbody>
+          <tr><td>Who can actually say "we ship Friday"</td><td class="num lose">No one &mdash; four functions weighing in with equal, undefined authority</td><td class="num win">VP Engineering named Accountable; the call gets made in one meeting</td></tr>
+          <tr><td>Legal's data-handling sign-off</td><td class="num lose">Three weeks of follow-up emails nobody owned chasing</td><td class="num win">Logged as Consulted with a 48-hour response SLA; a missed SLA becomes visible immediately</td></tr>
+          <tr><td>Support's training materials</td><td class="num lose">Discovered missing the Monday before launch</td><td class="num win">Marked Informed on a fixed trigger date, two weeks ahead of launch</td></tr>
+          <tr><td>Time from "code-complete" to ship</td><td class="num lose">5 weeks of circling back for input</td><td class="num win">6 days</td></tr>
+          <tr><td>The PM's role in the process</td><td class="num lose">Individually chasing four functions for status</td><td class="num win">Running one decision meeting with named owners and dates</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> nothing about the underlying work changed. Legal still had to review the same data-handling question; Support still needed the same training window. What changed is that exactly one person was named Accountable for the ship decision, and everyone else's role &mdash; Consulted or Informed &mdash; came with a deadline instead of an open invitation to keep weighing in.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        You're launching a data-residency feature required to close a $2M EU renewal. You have authority over none of the people involved.
+        <ul>
+          <li>Legal wants a full compliance review &mdash; estimated three weeks.</li>
+          <li>Security wants to run a separate audit &mdash; estimated two weeks, could run in parallel with Legal's review.</li>
+          <li>Sales Engineering wants early access to demo on this Friday's renewal call.</li>
+          <li>Your own engineering lead says the feature is code-complete, but "nobody's told me who actually signs off."</li>
+        </ul>
+        How do you assign RACI for this launch, and what's the one influence move you make before the next cross-functional sync?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>The assignment to avoid</h4>
+        <ul>
+          <li>Marking yourself Accountable for Legal's or Security's sign-off. You don't have the authority to actually make that call, so doing this just creates false ownership &mdash; you'll be the one holding the blame when the real decision-maker overrides you later, having never actually been consulted on your terms.</li>
+        </ul>
+        <h4>RACI that matches the authority actually in the room</h4>
+        <ul>
+          <li><b>Accountable:</b> whoever already owns the compliance risk if this goes wrong &mdash; most likely the Head of Security or a VP of Engineering, not the PM.</li>
+          <li><b>Responsible:</b> the feature engineers (the code), Legal counsel (the review itself), the Security team (the audit).</li>
+          <li><b>Consulted:</b> Sales Engineering &mdash; asked what Friday's call actually needs before you promise them anything, not after.</li>
+          <li><b>Informed:</b> the account team, once a real timeline exists to tell them.</li>
+        </ul>
+        <h4>The influence move</h4>
+        <ul>
+          <li>Since Legal and Security don't report to you, the lever isn't urgency &mdash; everyone already claims urgency. It's specificity: bring the Head of Security a scoped, concrete ask ("can your two-week audit start today, in parallel with Legal's review, given the renewal closes on the 2nd?") instead of a vague "can we move faster." A named date and a parallel-path option are something they can actually say yes to.</li>
+        </ul>
+        <div class="final-msg">"Legal's review and Security's audit don't have to be sequential &mdash; could the audit start today, in parallel, given the renewal closes on the 2nd? And for Friday's call, can Sales Engineering demo in a sandboxed environment rather than production, so we're not promising a ship date before the review and audit are both done?"</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in any kickoff or status meeting where ownership is unclear</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Ask it before the meeting ends, not in a follow-up email:</p>
+    <div class="move-script" id="moveScript">"Who is the one person accountable for saying yes or no on this, and by when?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>RACI Matrix</dt>
+        <dd>A table assigning, for each decision or deliverable, who is Responsible, Accountable, Consulted, and Informed &mdash; the grammar of decision rights, not a status report.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Accountable (the "A")</dt>
+        <dd>The single person who owns whether an outcome happens and answers for it if it doesn't. RACI breaks the moment more than one person holds this for the same decision.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Consulted</dt>
+        <dd>Someone whose input is sought before a decision, with enough lead time to actually shape it &mdash; treating a Consulted stakeholder like an Informed one is how sign-offs turn into blockers.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Influence Without Authority</dt>
+        <dd>Moving a decision forward across a function you don't manage, by trading on shared incentives and synthesized information instead of positional power.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Decision Owner</dt>
+        <dd>The person in the room empowered to say yes or no right now. Naming one out loud is often the single highest-leverage move available in a stalled cross-functional meeting.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 23 complete</span>
+    </div>
+    <div class="footer-next"><a href="day24.html">Next lesson → Writing Crisp PRDs</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<23) s.className='done';
+    else if (i===23) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "In RACI, what's the practical difference between Responsible and Accountable?",
+      opts: [
+        "They're interchangeable terms for \"doing the work\"",
+        "Responsible is whoever does the work; Accountable is the single person who answers for the outcome &mdash; there can be many Responsible, but only one Accountable",
+        "Accountable always refers to whoever is most senior in the room, regardless of the decision",
+        "Responsible applies only to engineering tasks; Accountable applies only to business decisions"
+      ],
+      correct: 1,
+      why: "The \"R\" can be shared across everyone doing the work &mdash; engineers, legal counsel, a security analyst. The \"A\" breaks the moment it's split across more than one person, since no one can be fully answerable for an outcome they only partly own."
+    },
+    {
+      q: "A launch has four different people marked \"Accountable\" for parts of the same ship decision. What does this usually produce in practice?",
+      opts: [
+        "Faster decisions, because more people are empowered to act",
+        "No measurable effect &mdash; RACI assignments don't change how fast decisions get made",
+        "Diffusion of ownership: when a single decision has more than one Accountable, no one is fully on the hook, and the call stalls waiting for informal consensus",
+        "It automatically defaults to whichever person is most senior"
+      ],
+      correct: 2,
+      why: "RACI only works when the \"A\" is singular. Splitting accountability across several people for one decision feels inclusive, but in practice it means every one of them can wait for someone else to make the call &mdash; which is exactly how the Smart Send Time launch lost five weeks."
+    },
+    {
+      q: "In the scenario drill, why is it a mistake for the PM to mark themselves \"Accountable\" for Legal's compliance sign-off?",
+      opts: [
+        "Because PMs should never be Accountable for anything, on any decision",
+        "It creates false ownership of a call the PM doesn't actually have the authority to make, leaving them holding the blame if the real decision-maker later overrides it",
+        "Because Legal should always be marked Informed instead of Consulted",
+        "Because a RACI matrix can only ever have engineers listed as Accountable"
+      ],
+      correct: 1,
+      why: "Accountability has to sit with whoever actually has the authority to make the call &mdash; here, the Head of Security or a VP of Engineering, not the PM. Claiming the \"A\" without the authority to back it up just sets the PM up to be overruled and blamed at the same time."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.innerHTML = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep &mdash; you already know who needs to be the single Accountable before a meeting starts.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before you next walk into a cross-functional kickoff.' :
+                'Worth rereading the Big Idea section &mdash; the one rule that fixes most stalled launches: exactly one Accountable per decision.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> &mdash; ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

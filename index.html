@@ -1,0 +1,303 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="description" content="A free 30-day course in product judgment — frameworks, quizzes, and the decision spine.">
+<meta property="og:title" content="Product Sense 101">
+<meta property="og:description" content="A free 30-day course in product judgment — frameworks, quizzes, and the decision spine.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<title>Product Sense 101</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — same system as the daily lessons
+   Type: Newsreader (display) / Outfit (body) — carried over for series continuity
+   Layout: header + overall progress, then 6 week sections, each a card grid of 5 day tiles
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding:0 20px; padding-block:40px 70px;
+  line-height:1.6;
+}
+.wrap{max-width:900px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+
+header.top{padding-bottom:26px; border-bottom:1px solid var(--chalk); margin-bottom:34px;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600;
+}
+header.top h1{font-size:2.1rem; font-weight:600; margin-top:10px;}
+header.top p.sub{font-size:1rem; color:var(--stone); margin-top:10px; max-width:62ch;}
+
+.overview{
+  display:flex; align-items:center; gap:22px; margin-top:24px; padding:18px 22px;
+  background:var(--chalk); border-radius:14px; flex-wrap:wrap;
+}
+.ring{position:relative; width:72px; height:72px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:7;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:7; stroke-linecap:round;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:.95rem; font-variant-numeric:tabular-nums;
+}
+.overview-copy{font-size:.92rem; color:var(--stone); flex:1; min-width:200px;}
+.overview-copy b{color:var(--ink); font-size:1.05rem; font-family:'Newsreader',serif; font-weight:600;}
+.legend{display:flex; gap:16px; font-size:.78rem; color:var(--stone); flex-wrap:wrap;}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.legend i{width:9px; height:9px; border-radius:50%; display:inline-block;}
+.legend .done i{background:var(--teal);}
+.legend .pending i{background:var(--gold);}
+.legend .locked i{background:var(--stone); opacity:.5;}
+
+.week{margin-bottom:40px;}
+.week-head{display:flex; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap;}
+.week-num{font-family:'Newsreader',serif; font-style:italic; font-size:1.3rem; color:var(--gold); font-weight:500;}
+.week-head h2{font-size:1.3rem; font-weight:600;}
+.week-status{font-size:.78rem; color:var(--stone); margin-left:auto;}
+.week-sub{color:var(--stone); font-size:.9rem; margin-bottom:16px;}
+
+.grid{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+@media (max-width:760px){ .grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:420px){ .grid{grid-template-columns:1fr;} }
+
+.tile{
+  display:flex; flex-direction:column; gap:8px; padding:16px 14px; border-radius:12px;
+  border:1px solid var(--chalk); background:var(--ground); text-decoration:none; color:inherit;
+  min-height:120px; position:relative; transition:border-color .15s, transform .12s, box-shadow .15s;
+}
+.tile.done{border-color:var(--teal-18); background:var(--teal-10);}
+.tile.done:hover{transform:translateY(-2px); box-shadow:0 6px 16px rgba(26,117,106,.15); border-color:var(--teal);}
+.tile.pending{border-style:dashed; opacity:.75; cursor:default;}
+.tile.locked{opacity:.45; cursor:default;}
+.tile-day{
+  font-family:'Newsreader',serif; font-weight:600; font-size:.82rem; color:var(--teal);
+}
+.tile.locked .tile-day, .tile.pending .tile-day{color:var(--stone);}
+.tile-title{font-size:.88rem; font-weight:500; line-height:1.3; flex:1;}
+.tile-badge{
+  align-self:flex-start; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em;
+  padding:2px 8px; border-radius:20px; font-weight:600;
+}
+.tile.done .tile-badge{background:var(--teal); color:var(--ground);}
+.tile.pending .tile-badge{background:var(--gold-14); color:var(--gold);}
+.tile.locked .tile-badge{background:var(--chalk); color:var(--stone);}
+
+.grad-banner{
+  margin-top:4px; margin-bottom:40px; padding:22px 26px; border-radius:14px;
+  background:var(--teal); color:var(--ground); text-align:center;
+}
+.grad-banner .grad-emoji{font-size:1.6rem; margin-bottom:6px;}
+.grad-banner h3{font-size:1.25rem; font-weight:600;}
+.grad-banner p{font-size:.92rem; line-height:1.6; opacity:.92; max-width:56ch; margin:8px auto 0;}
+
+footer{
+  text-align:center; margin-top:50px; padding-top:26px; border-top:1px solid var(--chalk);
+  color:var(--stone); font-size:.85rem;
+}
+footer .brain{font-size:1.3rem; margin-bottom:8px;}
+footer .note{max-width:50ch; margin:10px auto 0; font-size:.8rem;}
+</style>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">DAILY COACHING SERIES</div>
+    <h1>Product Sense 101</h1>
+    <p class="sub">Every lesson in the 30-day course, in one place. Click a tile to open that day's lesson.</p>
+    <div class="overview">
+      <div class="ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle class="ring-bg" cx="36" cy="36" r="29"></circle>
+          <circle class="ring-fg" cx="36" cy="36" r="29" stroke-dasharray="182.2" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="ring-text">30/30</div>
+      </div>
+      <div class="overview-copy">
+        <b>Course complete.</b> All six weeks done, ending with the Day 30 capstone &#8212; The Decision Spine. Revisit any day whenever a real decision calls for it.
+      </div>
+      <div class="legend">
+        <span class="done"><i></i>Completed</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- WEEK 1 -->
+  <div class="week">
+    <div class="week-head"><span class="week-num">01</span><h2>The PM Mental Model</h2><span class="week-status">Complete</span></div>
+    <div class="week-sub">Days 1&#8211;5</div>
+    <div class="grid">
+      <a class="tile done" href="day01.html">
+        <span class="tile-day">Day 01</span><span class="tile-title">What Is Product Sense</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day02.html">
+        <span class="tile-day">Day 02</span><span class="tile-title">First Principles Thinking</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day03.html">
+        <span class="tile-day">Day 03</span><span class="tile-title">Jobs-to-be-Done</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day04.html">
+        <span class="tile-day">Day 04</span><span class="tile-title">Customer Segmentation &amp; ICPs</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day05.html">
+        <span class="tile-day">Day 05</span><span class="tile-title">Problem Space vs Solution Space</span><span class="tile-badge">Open</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week">
+    <div class="week-head"><span class="week-num">02</span><h2>Strategic Frameworks</h2><span class="week-status">Complete</span></div>
+    <div class="week-sub">Days 6&#8211;10</div>
+    <div class="grid">
+      <a class="tile done" href="day06.html">
+        <span class="tile-day">Day 06</span><span class="tile-title">Porter's Five Forces for SaaS</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day07.html">
+        <span class="tile-day">Day 07</span><span class="tile-title">Competitive Moats</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day08.html">
+        <span class="tile-day">Day 08</span><span class="tile-title">Market Sizing (TAM/SAM/SOM)</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day09.html">
+        <span class="tile-day">Day 09</span><span class="tile-title">Platform Thinking &amp; Network Effects</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day10.html">
+        <span class="tile-day">Day 10</span><span class="tile-title">Product&#8211;Market Fit</span><span class="tile-badge">Open</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week">
+    <div class="week-head"><span class="week-num">03</span><h2>Prioritization &amp; Decisions</h2><span class="week-status">Complete</span></div>
+    <div class="week-sub">Days 11&#8211;15</div>
+    <div class="grid">
+      <a class="tile done" href="day11.html">
+        <span class="tile-day">Day 11</span><span class="tile-title">RICE, ICE &amp; MoSCoW</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day12.html">
+        <span class="tile-day">Day 12</span><span class="tile-title">Opportunity Sizing &amp; Cost of Delay</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day13.html">
+        <span class="tile-day">Day 13</span><span class="tile-title">The Kano Model</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day14.html">
+        <span class="tile-day">Day 14</span><span class="tile-title">One-Way vs Two-Way Doors</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day15.html">
+        <span class="tile-day">Day 15</span><span class="tile-title">Technical Debt as Product Strategy</span><span class="tile-badge">Open</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week">
+    <div class="week-head"><span class="week-num">04</span><h2>Product Sense in Practice</h2><span class="week-status">Complete</span></div>
+    <div class="week-sub">Days 16&#8211;20</div>
+    <div class="grid">
+      <a class="tile done" href="day16.html">
+        <span class="tile-day">Day 16</span><span class="tile-title">Product Critique</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day17.html">
+        <span class="tile-day">Day 17</span><span class="tile-title">UX Principles for PMs</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day18.html">
+        <span class="tile-day">Day 18</span><span class="tile-title">Data-Informed vs Data-Driven</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day19.html">
+        <span class="tile-day">Day 19</span><span class="tile-title">North Star Metrics</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day20.html">
+        <span class="tile-day">Day 20</span><span class="tile-title">The Art of Saying No</span><span class="tile-badge">Open</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week">
+    <div class="week-head"><span class="week-num">05</span><h2>Communication &amp; Influence</h2><span class="week-status">Complete</span></div>
+    <div class="week-sub">Days 21&#8211;25</div>
+    <div class="grid">
+      <a class="tile done" href="day21.html">
+        <span class="tile-day">Day 21</span><span class="tile-title">The Pyramid Principle</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day22.html">
+        <span class="tile-day">Day 22</span><span class="tile-title">Asking Sharper Questions</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day23.html">
+        <span class="tile-day">Day 23</span><span class="tile-title">Stakeholder Management</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day24.html">
+        <span class="tile-day">Day 24</span><span class="tile-title">Writing Crisp PRDs</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day25.html">
+        <span class="tile-day">Day 25</span><span class="tile-title">Presenting Roadmaps</span><span class="tile-badge">Open</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week">
+    <div class="week-head"><span class="week-num">06</span><h2>Synthesis &amp; Advanced</h2><span class="week-status">Complete</span></div>
+    <div class="week-sub">Days 26&#8211;30</div>
+    <div class="grid">
+      <a class="tile done" href="day26.html">
+        <span class="tile-day">Day 26</span><span class="tile-title">Growth Loops &amp; Retention</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day27.html">
+        <span class="tile-day">Day 27</span><span class="tile-title">B2B SaaS Pricing Strategy</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day28.html">
+        <span class="tile-day">Day 28</span><span class="tile-title">API &amp; Platform PM</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day29.html">
+        <span class="tile-day">Day 29</span><span class="tile-title">AI-Era Product Thinking</span><span class="tile-badge">Open</span>
+      </a>
+      <a class="tile done" href="day30.html">
+        <span class="tile-day">Day 30</span><span class="tile-title">The Decision Spine (Capstone)</span><span class="tile-badge">Open</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="grad-banner">
+    <div class="grad-emoji">&#127891;</div>
+    <h3>Thirty days, done.</h3>
+    <p>From the Four Lenses on Day 1 to the full Decision Spine on Day 30 &#8212; that's the whole toolkit. Come back to any day whenever a real decision calls for it.</p>
+  </div>
+
+  <footer>
+    <div class="brain">&#129504;</div>
+    Product Sense 101 &#8212; course complete, 30 of 30
+    <div class="note">A free 30-day course in product judgment. Share freely.</div>
+  </footer>
+
+</div>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

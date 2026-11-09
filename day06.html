@@ -1,0 +1,848 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Porter's Five Forces for SaaS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@400;500;600;700&display=swap');
+
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --gold: #B8892E;
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --teal-tint: rgba(26,117,106,0.09);
+    --gold-tint: rgba(184,137,46,0.12);
+    --good: #2E7D4F;
+    --good-tint: rgba(46,125,79,0.12);
+    --bad: #B4462E;
+    --bad-tint: rgba(180,70,46,0.12);
+    --shadow: 0 1px 2px rgba(42,39,36,0.06), 0 8px 24px rgba(42,39,36,0.06);
+    --ring-track: #DFDACD;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --gold: #D4A73E;
+      --stone: #7A756C;
+      --chalk: #222120;
+      --teal-tint: rgba(60,181,165,0.12);
+      --gold-tint: rgba(212,167,62,0.14);
+      --good: #4CAF74;
+      --good-tint: rgba(76,175,116,0.14);
+      --bad: #E07856;
+      --bad-tint: rgba(224,120,86,0.14);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+      --ring-track: #2C2A26;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --gold: #D4A73E;
+    --stone: #7A756C;
+    --chalk: #222120;
+    --teal-tint: rgba(60,181,165,0.12);
+    --gold-tint: rgba(212,167,62,0.14);
+    --good: #4CAF74;
+    --good-tint: rgba(76,175,116,0.14);
+    --bad: #E07856;
+    --bad-tint: rgba(224,120,86,0.14);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
+    --ring-track: #2C2A26;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--teal-tint); }
+
+  h1, h2, h3, .display {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 600;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+
+  /* ---- Header / progress ---- */
+  header.top {
+    padding: 40px 28px 28px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .course-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .kicker {
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--stone);
+    font-weight: 500;
+  }
+  .day-pill {
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--teal);
+    background: var(--teal-tint);
+    padding: 5px 12px;
+    border-radius: 100px;
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--chalk);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 20%;
+    background: var(--teal);
+    border-radius: 4px;
+  }
+  .lesson-title {
+    font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.12;
+    margin: 22px 0 8px;
+  }
+  .lesson-sub {
+    color: var(--stone);
+    font-size: 16px;
+    margin: 0;
+  }
+  .lesson-sub strong { color: var(--ink); font-weight: 500; }
+
+  /* ---- Section chrome ---- */
+  section {
+    margin-top: 56px;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .section-num {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 17px;
+    min-width: 20px;
+  }
+  .section-name {
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--stone);
+  }
+  .section-time {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: var(--stone);
+  }
+  h2.section-title {
+    font-size: 27px;
+    margin: 0 0 16px;
+  }
+  p { margin: 0 0 15px; font-size: 16.5px; }
+  .lede {
+    font-size: 19px;
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  /* ---- Five forces diagram ---- */
+  .forces-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 24px 0 28px;
+  }
+  .force-card {
+    background: var(--chalk);
+    border-radius: 10px;
+    padding: 16px 18px;
+    border: 1px solid transparent;
+  }
+  .force-card.center {
+    grid-column: 1 / -1;
+    background: var(--teal-tint);
+    border: 1px solid rgba(26,117,106,0.25);
+  }
+  .force-num {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: var(--teal);
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .force-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 4px;
+    display: block;
+  }
+  .force-ex {
+    color: var(--stone);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  /* ---- Worked example ---- */
+  .example-box {
+    background: var(--chalk);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px 10px 10px 4px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .example-box .co {
+    font-weight: 600;
+    color: var(--gold);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .verdict {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--teal-tint);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 18px;
+  }
+  .verdict .mark {
+    color: var(--teal);
+    font-family: 'Newsreader', serif;
+    font-weight: 600;
+    font-size: 17px;
+    flex-shrink: 0;
+  }
+  .verdict p { margin: 0; font-size: 15.5px; }
+
+  /* ---- Quiz ---- */
+  .quiz-card {
+    background: var(--chalk);
+    border-radius: 14px;
+    padding: 24px 24px 22px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .quiz-q {
+    font-family: 'Newsreader', serif;
+    font-size: 19px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+  .quiz-opts { display: flex; flex-direction: column; gap: 9px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    text-align: left;
+    background: var(--ground);
+    border: 1.5px solid var(--ring-track);
+    border-radius: 9px;
+    padding: 12px 15px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--teal); }
+  .opt .letter {
+    font-weight: 600;
+    color: var(--stone);
+    min-width: 18px;
+  }
+  .opt.correct { background: var(--good-tint); border-color: var(--good); }
+  .opt.correct .letter { color: var(--good); }
+  .opt.incorrect { background: var(--bad-tint); border-color: var(--bad); }
+  .opt.incorrect .letter { color: var(--bad); }
+  .opt:disabled { cursor: default; }
+  .opt:disabled:not(.correct):not(.incorrect) { opacity: 0.55; }
+
+  .quiz-feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 9px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.right { background: var(--good-tint); }
+  .quiz-feedback.wrong { background: var(--bad-tint); }
+  .quiz-feedback .lbl {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .quiz-feedback.right .lbl { color: var(--good); }
+  .quiz-feedback.wrong .lbl { color: var(--bad); }
+
+  .score-wrap {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--chalk);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 8px;
+  }
+  .score-ring-svg { flex-shrink: 0; }
+  .score-ring-track { fill: none; stroke: var(--ring-track); stroke-width: 6; }
+  .score-ring-fill {
+    fill: none;
+    stroke: var(--teal);
+    stroke-width: 6;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .score-text {
+    font-family: 'Newsreader', serif;
+    font-size: 22px;
+    font-weight: 600;
+    fill: var(--ink);
+  }
+  .score-label {
+    font-size: 14.5px;
+    color: var(--stone);
+  }
+  .score-label strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- Scenario drill ---- */
+  .scenario-box {
+    background: var(--chalk);
+    border-radius: 14px;
+    padding: 24px 24px 22px;
+  }
+  .scenario-box .tag {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .scenario-box p:last-of-type { margin-bottom: 0; }
+  .reveal-btn {
+    margin-top: 18px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 100px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.15s ease;
+  }
+  .reveal-btn:hover { opacity: 0.88; }
+  .reveal-arrow { transition: transform 0.25s ease; }
+  .reveal-btn.open .reveal-arrow { transform: rotate(90deg); }
+
+  .analysis {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  .analysis.open { max-height: 2200px; }
+  .analysis-inner {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--ring-track);
+  }
+  .analysis-inner h4 {
+    font-family: 'Newsreader', serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: var(--gold);
+  }
+  .analysis-inner .step { margin-bottom: 16px; }
+  .analysis-inner .step:last-child { margin-bottom: 0; }
+  .analysis-inner p { font-size: 15px; margin-bottom: 0; }
+
+  /* ---- Meeting move ---- */
+  .move-card {
+    background: linear-gradient(135deg, var(--teal-tint), var(--gold-tint));
+    border-radius: 14px;
+    padding: 26px 26px;
+    text-align: left;
+  }
+  .move-quote {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 14px;
+  }
+  .move-when {
+    font-size: 13.5px;
+    color: var(--stone);
+  }
+  .move-when strong { color: var(--ink); font-weight: 600; }
+
+  /* ---- Glossary ---- */
+  .gloss-list { display: flex; flex-direction: column; gap: 0; }
+  .gloss-item {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 18px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .gloss-item:last-child { border-bottom: none; }
+  .gloss-term {
+    font-family: 'Newsreader', serif;
+    font-weight: 600;
+    font-size: 16.5px;
+    color: var(--teal);
+  }
+  .gloss-def { font-size: 15px; color: var(--ink); }
+  .gloss-def .eg { color: var(--stone); font-size: 13.5px; display: block; margin-top: 4px; }
+
+  footer .next strong { color: var(--ink); }
+  @media (max-width: 560px) {
+    .wrap, header.top, .forces-grid { grid-template-columns: 1fr; }
+    .gloss-item { grid-template-columns: 1fr; gap: 4px; }
+    .score-wrap { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  button:focus-visible, .opt:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<header class="top">
+  <div class="course-label">
+    <span class="kicker">Product Sense 101 &middot; Week 2, Strategic Frameworks</span>
+    <span class="day-pill">Day 6 / 30</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+  <h1 class="lesson-title">Porter's Five Forces for SaaS</h1>
+  <p class="lesson-sub">Yesterday you learned to hold off on solutions until the problem was diagnosed. Today's lens zooms out one more level: <strong>even the right solution can sit in a bad neighborhood.</strong> Five Forces tells you how much of the value you create you'll actually get to keep.</p>
+</header>
+
+<div class="wrap">
+<section id="big-idea">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-name">The Big Idea</span>
+      <span class="section-time">5 min read</span>
+    </div>
+    <h2 class="section-title">Why "we built a great product" isn't the whole story</h2>
+
+    <p class="lede">A feature can be well-built, well-loved by users, and still generate no durable value — because the market structure around it lets someone else capture the upside.</p>
+
+    <p>Michael Porter's framing, adapted for B2B SaaS: your product doesn't compete in a vacuum. Five structural pressures decide how much of the value you create you get to keep as revenue, margin, and retention — versus how much leaks away to competitors, customers, vendors, or new challengers. Product sense means reading these forces before you commit a roadmap quarter, not after a renewal call goes sideways.</p>
+
+    <div class="forces-grid">
+      <div class="force-card">
+        <span class="force-num">1</span>
+        <span class="force-name">Competitive Rivalry</span>
+        <span class="force-ex">How many vendors chase the same buyer, and how hard do they compete on price vs. differentiation? (Braze, Iterable, Salesforce Marketing Cloud, moEngage)</span>
+      </div>
+      <div class="force-card">
+        <span class="force-num">2</span>
+        <span class="force-name">Threat of New Entrants</span>
+        <span class="force-ex">How easily can an AI-native startup with a thin wedge feature take a foothold? What's actually stopping them?</span>
+      </div>
+      <div class="force-card center">
+        <span class="force-num">Center</span>
+        <span class="force-name">Your Product's Value Capture</span>
+        <span class="force-ex">The margin, pricing power, and retention you actually get to keep — squeezed from all four sides</span>
+      </div>
+      <div class="force-card">
+        <span class="force-num">3</span>
+        <span class="force-name">Buyer Power</span>
+        <span class="force-ex">Can your enterprise customer credibly threaten to leave, multi-source, or beat your price down at renewal?</span>
+      </div>
+      <div class="force-card">
+        <span class="force-num">4</span>
+        <span class="force-name">Supplier Power</span>
+        <span class="force-ex">Can AWS, a deliverability network, or a foundation-model API raise your costs or degrade your product on a whim?</span>
+      </div>
+      <div class="force-card" style="grid-column: 1 / -1;">
+        <span class="force-num">5</span>
+        <span class="force-name">Threat of Substitutes</span>
+        <span class="force-ex">Not a direct competitor — a different way to solve the same job. A marketing team stitching together Segment + a generic ESP + a BI dashboard instead of buying your platform. "Build it ourselves with an internal team + OpenAI's API" is a substitute, not a competitor.</span>
+      </div>
+    </div>
+
+    <p>The forces don't operate independently — they compound. A B2B platform facing low switching costs (weak rivalry defense) <em>and</em> a buyer base of sophisticated enterprise marketing teams (high buyer power) <em>and</em> a wave of AI-native entrants undercutting on price is in a structurally different position than one facing just a single pressure. Your job as PM isn't to memorize the five boxes — it's to ask, for any initiative: <strong>which force does this actually move, and by how much?</strong></p>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-name">Worked Example</span>
+      <span class="section-time">3 min</span>
+    </div>
+    <h2 class="section-title">Should a B2B platform build its own AI content generator?</h2>
+
+    <div class="example-box">
+      <span class="co">The Situation</span>
+      <p>A mid-market B2B SaaS product is deciding whether to build a native "AI drafts customer-facing content" feature in-house, versus partnering with an existing AI writing tool via API, versus doing nothing and letting customers use ChatGPT on the side.</p>
+    </div>
+
+    <p><strong>Run it through the forces:</strong></p>
+    <p><strong>Rivalry</strong> — three direct competitors already shipped a version of this in the last two quarters. It's becoming table stakes, not a differentiator. Building it defends against losing deals, but doesn't win new ones.</p>
+    <p><strong>New entrants</strong> — near zero. Any AI copywriting startup can wrap the same foundation model API in a weekend. This capability alone creates no barrier to entry for anyone.</p>
+    <p><strong>Buyer power</strong> — customers increasingly expect this bundled free, not priced as an add-on. Asking them to pay separately invites exactly the price pushback that erodes margin.</p>
+    <p><strong>Supplier power</strong> — building in-house means depending on a foundation-model vendor whose pricing and rate limits you don't control. That's a new supplier dependency, not a new moat.</p>
+    <p><strong>Substitutes</strong> — customers already generate copy in ChatGPT and paste it in. The real substitute isn't a competitor's tool — it's the customer's own workflow outside your product entirely.</p>
+
+    <div class="verdict">
+      <span class="mark">&rarr;</span>
+      <p><strong>The senior PM read:</strong> build it — but budget it as a retention/parity cost, not a growth bet, and don't expect a price premium for it. The actual differentiation opportunity here isn't the copy generator itself; it's what only your platform has — behavioral and campaign performance data that no generic AI tool can see. That data-conditioning is the one thing rivals can't trivially copy. That's where the real moat question sits, and it's exactly what Day 7 is about.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-name">Quiz</span>
+      <span class="section-time">5 min</span>
+    </div>
+    <h2 class="section-title">Check your read</h2>
+
+    <div class="quiz-card" data-quiz="1">
+      <p class="quiz-q">1. Your platform's biggest enterprise customer starts every renewal conversation by naming a specific competitor's quote. Which force is putting pressure on you, and what's the underlying driver?</p>
+      <div class="quiz-opts">
+        <button class="opt" data-correct="false"><span class="letter">A</span><span>Threat of new entrants — the competitor they're citing is a startup that didn't exist last year</span></button>
+        <button class="opt" data-correct="true"><span class="letter">B</span><span>Buyer power — the customer has low switching costs and enough scale to credibly threaten to walk, so they can extract price concessions</span></button>
+        <button class="opt" data-correct="false"><span class="letter">C</span><span>Supplier power — your data vendor's pricing is being passed through to the customer</span></button>
+        <button class="opt" data-correct="false"><span class="letter">D</span><span>Threat of substitutes — the customer is considering building the capability in-house instead</span></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" data-quiz="2">
+      <p class="quiz-q">2. A competitor announces a nearly identical feature to one you shipped last quarter, at a lower price. Under Five Forces, what does this tell you about the feature you shipped?</p>
+      <div class="quiz-opts">
+        <button class="opt" data-correct="false"><span class="letter">A</span><span>Nothing — competitors copying you is proof the feature was valuable</span></button>
+        <button class="opt" data-correct="true"><span class="letter">B</span><span>It likely wasn't a source of durable value capture — low barriers to imitation mean rivalry will compress its price toward zero</span></button>
+        <button class="opt" data-correct="false"><span class="letter">C</span><span>It means your buyer power just increased, since customers now have more options</span></button>
+        <button class="opt" data-correct="false"><span class="letter">D</span><span>It's irrelevant to your roadmap — Five Forces only applies at the company level, not the feature level</span></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="quiz-card" data-quiz="3">
+      <p class="quiz-q">3. Which of these is a "substitute" in Five Forces terms for a B2B SaaS product — as opposed to a direct competitor?</p>
+      <div class="quiz-opts">
+        <button class="opt" data-correct="false"><span class="letter">A</span><span>A rival B2B platform targeting the same enterprise segment</span></button>
+        <button class="opt" data-correct="false"><span class="letter">B</span><span>A cheaper B2B platform targeting mid-market instead of enterprise</span></button>
+        <button class="opt" data-correct="true"><span class="letter">C</span><span>A team using a spreadsheet, a generic point tool, and a BI dashboard stitched together instead of buying your platform at all</span></button>
+        <button class="opt" data-correct="false"><span class="letter">D</span><span>A B2B platform's freemium tier undercutting its own enterprise tier</span></button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="score-wrap" id="scoreWrap" style="display:none;">
+      <svg class="score-ring-svg" width="64" height="64" viewBox="0 0 64 64">
+        <circle class="score-ring-track" cx="32" cy="32" r="26"></circle>
+        <circle class="score-ring-fill" id="scoreRing" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        <text x="32" y="38" text-anchor="middle" class="score-text" id="scoreText">0/3</text>
+      </svg>
+      <div class="score-label" id="scoreLabel"></div>
+    </div>
+  </section>
+
+  <section id="scenario">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-name">Scenario Drill</span>
+      <span class="section-time">8 min</span>
+    </div>
+    <h2 class="section-title">Work through this before revealing the analysis</h2>
+
+    <div class="scenario-box">
+      <span class="tag">Your situation</span>
+      <p>You're the senior PM on a B2B SaaS product. Mid-market renewal rates have dropped six points over two quarters. Sales flags that a well-funded AI-native competitor is winning mid-market deals with a single pitch: "one-click automated workflows, at a third of your price, live in a week." Your platform is deeper and more configurable, but has a notoriously long implementation cycle for mid-market accounts. Your VP asks you to walk the exec team through this using Five Forces before proposing a response.</p>
+      <p><strong>Before you reveal the analysis:</strong> which force(s) are actually shifting here — and is the right response a pricing move, a product move, or a segmentation move? Write down your own answer first.</p>
+
+      <button class="reveal-btn" id="revealBtn">
+        <span>Reveal the senior PM analysis</span>
+        <span class="reveal-arrow">&rarr;</span>
+      </button>
+
+      <div class="analysis" id="analysisPanel">
+        <div class="analysis-inner">
+          <div class="step">
+            <h4>Name the force precisely</h4>
+            <p>This isn't really rivalry increasing in the abstract — it's a <strong>new entrant</strong> lowering the entry barrier that used to protect you (implementation complexity, integration depth) by targeting the segment where that barrier matters least. Mid-market buyers don't need your enterprise-grade configurability; they need speed. The entrant found the segment where your moat is actually a liability.</p>
+          </div>
+          <div class="step">
+            <h4>Resist the obvious move</h4>
+            <p>The tempting response is a price cut — but that fights the entrant on the one dimension where they're structurally advantaged (lower cost base, no legacy enterprise architecture to maintain). Cutting price without cutting anything else just compresses your own margin while confirming their comparison holds.</p>
+          </div>
+          <div class="step">
+            <h4>The senior PM framing</h4>
+            <p>This is a <strong>segmentation</strong> problem wearing a pricing costume. Your depth and configurability are real value — but only to accounts complex enough to need them. The fix isn't matching the entrant's speed platform-wide; it's building (or packaging) a fast, opinionated, lower-configuration onboarding path specifically for mid-market, so you're not asking a mid-market buyer to pay for enterprise depth they don't want. That directly targets the entry barrier the entrant exploited, without racing to the bottom on price for your core enterprise base.</p>
+          </div>
+          <div class="step">
+            <h4>What you'd bring to the exec team</h4>
+            <p>"We're not losing on product quality — we're losing on time-to-value for a segment that doesn't need our depth. Recommend a lightweight mid-market onboarding tier, not a price cut, with a 90-day pilot before we consider any core pricing changes." That's a Five Forces read translated into a decision, not a framework recited for its own sake.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting-move">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-name">Meeting Move</span>
+      <span class="section-time">2 min</span>
+    </div>
+    <h2 class="section-title">Bring this to your next roadmap review</h2>
+
+    <div class="move-card">
+      <p class="move-quote">"Before we commit this — which of the five forces does it actually strengthen, and how long before a competitor can copy it in a single sprint?"</p>
+      <p class="move-when">Use it when: <strong>a roadmap item is pitched purely on customer requests or competitive parity</strong>, without anyone naming which structural pressure it's meant to relieve. It forces the room to separate "customers will like this" from "this changes how much value we get to keep" — and it surfaces low-moat, easily-copied features before you spend a quarter building them.</p>
+    </div>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <span class="section-name">Glossary</span>
+      <span class="section-time">2 min</span>
+    </div>
+    <h2 class="section-title">Say it like a FAANG PM</h2>
+
+    <div class="gloss-list">
+      <div class="gloss-item">
+        <span class="gloss-term">Value capture</span>
+        <span class="gloss-def">The share of the value a product creates that the company actually keeps as margin or pricing power, as opposed to value that leaks to customers, competitors, or suppliers.<span class="eg">Distinct from "value creation" — a feature can create real value and still capture none of it.</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">Switching cost</span>
+        <span class="gloss-def">Everything a customer must give up or redo to leave your product for a competitor's — data migration, retraining, integration rework, contract penalties.<span class="eg">"Their switching cost is mostly the CRM workflow rebuild, not the data export."</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">Barrier to entry</span>
+        <span class="gloss-def">A structural reason a new competitor can't easily replicate your position — regulatory approval, data network effects, integration depth, capital requirements.<span class="eg">"Feature parity isn't a barrier to entry if it ships in a sprint."</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">Substitute</span>
+        <span class="gloss-def">A different category of solution to the same underlying job — not a rival product, but an alternative way to get the job done, including "do nothing" or "build it internally."<span class="eg">Spreadsheets are a substitute for the platform, not a competing CRM.</span></span>
+      </div>
+      <div class="gloss-item">
+        <span class="gloss-term">Commoditization</span>
+        <span class="gloss-def">The process by which a once-differentiating feature becomes an expected baseline across a market, eliminating any price premium for having it.<span class="eg">"AI copy generation commoditized within two quarters — nobody pays extra for it now."</span></span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 6 complete</span>
+    </div>
+    <div class="footer-next"><a href="day07.html">Next lesson → Competitive Moats</a></div>
+  </div>
+</div>
+
+
+<script>
+(function() {
+  var cards = document.querySelectorAll('.quiz-card');
+  var results = {};
+
+  cards.forEach(function(card) {
+    var id = card.getAttribute('data-quiz');
+    var opts = card.querySelectorAll('.opt');
+    var feedback = card.querySelector('.quiz-feedback');
+
+    opts.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        if (card.classList.contains('answered')) return;
+        card.classList.add('answered');
+        var isCorrect = opt.getAttribute('data-correct') === 'true';
+        results[id] = isCorrect;
+
+        opts.forEach(function(o) {
+          o.disabled = true;
+          if (o.getAttribute('data-correct') === 'true') {
+            o.classList.add('correct');
+          } else if (o === opt) {
+            o.classList.add('incorrect');
+          }
+        });
+
+        feedback.classList.add('show');
+        if (isCorrect) {
+          feedback.classList.add('right');
+          feedback.innerHTML = '<span class="lbl">Correct</span>Right — that\'s the force at work here.';
+        } else {
+          feedback.classList.add('wrong');
+          feedback.innerHTML = '<span class="lbl">Not quite</span>The highlighted option above is the one to remember — see why in the explanation.';
+        }
+
+        maybeShowScore();
+      });
+    });
+  });
+
+  function maybeShowScore() {
+    var answered = Object.keys(results).length;
+    if (answered < cards.length) return;
+    var correct = Object.values(results).filter(Boolean).length;
+    var total = cards.length;
+    var wrap = document.getElementById('scoreWrap');
+    var ring = document.getElementById('scoreRing');
+    var text = document.getElementById('scoreText');
+    var label = document.getElementById('scoreLabel');
+    var circumference = 163.4;
+    var offset = circumference - (correct / total) * circumference;
+
+    wrap.style.display = 'flex';
+    text.textContent = correct + '/' + total;
+    requestAnimationFrame(function() {
+      ring.style.strokeDashoffset = offset;
+    });
+
+    var msg;
+    if (correct === total) {
+      msg = '<strong>Clean sweep.</strong> You\'re reading market structure, not just features.';
+    } else if (correct >= total - 1) {
+      msg = '<strong>Solid.</strong> Re-read the one you missed — the distinction usually turns on which force is really moving.';
+    } else {
+      msg = '<strong>Worth a re-read.</strong> The five forces blur together at first; the Big Idea section above has the compact version.';
+    }
+    label.innerHTML = msg;
+  }
+})();
+
+(function() {
+  var btn = document.getElementById('revealBtn');
+  var panel = document.getElementById('analysisPanel');
+  btn.addEventListener('click', function() {
+    var isOpen = panel.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.querySelector('span').textContent = isOpen ? 'Hide the analysis' : 'Reveal the senior PM analysis';
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

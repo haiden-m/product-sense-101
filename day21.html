@@ -1,0 +1,617 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Pyramid Principle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 5, Day 21 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.idea-list{list-style:none; margin:18px 0; padding:0; display:grid; gap:11px; max-width:66ch;}
+.idea-list li{padding-left:26px; position:relative; font-size:.97rem;}
+.idea-list li:before{content:"\2192"; position:absolute; left:0; top:0; color:var(--gold); font-weight:600;}
+.idea-list b{color:var(--ink);}
+
+.pyramid{
+  display:grid; gap:0; margin:24px 0; max-width:560px;
+}
+.pyramid .tier{
+  border:1px solid var(--chalk); border-radius:10px; padding:14px 18px; margin:0 auto 8px auto;
+  background:var(--ground); text-align:center;
+}
+.pyramid .tier .t-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:600; display:block; margin-bottom:4px;}
+.pyramid .tier .t-desc{font-size:.9rem; color:var(--ink);}
+.pyramid .tier.top{width:72%; background:var(--teal-10); border-color:var(--teal);}
+.pyramid .tier.top .t-label{color:var(--teal);}
+.pyramid .tier.mid{width:92%;}
+.pyramid .tier.bottom{width:100%;}
+
+.compare-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:22px 0;}
+@media (min-width:620px){ .compare-grid{grid-template-columns:1fr 1fr;} }
+.compare-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:20px 22px; background:var(--ground);
+  min-width:0;
+}
+.compare-card .c-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:6px;
+}
+.compare-card.unguarded .c-mark{color:var(--bad);}
+.compare-card.guarded .c-mark{color:var(--teal);}
+.compare-card .c-name{font-weight:600; display:block; margin-bottom:8px; font-size:1.08rem; color:var(--ink);}
+.compare-card .c-ask{
+  display:block; font-family:'Newsreader',serif; font-style:italic; font-size:.95rem; color:var(--stone);
+  margin-bottom:10px;
+}
+.compare-card .c-desc{font-size:.92rem; color:var(--ink); margin:0 0 10px 0; max-width:none;}
+.compare-card .c-fit{font-size:.85rem; color:var(--stone); margin:0; max-width:none;}
+.compare-card .c-fit b{color:var(--ink);}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.drill-prompt ul{margin:10px 0 0 0; padding-left:20px;}
+.drill-prompt li{margin-bottom:4px;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+.analysis .final-msg{
+  background:var(--teal-10); border-radius:10px; padding:16px 18px; font-size:.93rem; margin-top:4px;
+  border-left:3px solid var(--teal);
+}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 5 &middot; COMMUNICATION &amp; INFLUENCE <span class="dot"></span> DAY 21 OF 30</div>
+    <h1>The Pyramid Principle</h1>
+    <p class="sub">Yesterday's reasoned no had a structure you didn't name: the decision first, the reasons after. That's not a coincidence &mdash; it's the same architecture Barbara Minto built for McKinsey consultants, and it's the one structural habit that upgrades every PRD, Slack update, and stakeholder email you write from here on. Today you name it and start building it on purpose.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you learned that a reasoned no works because it leads with the decision and backs it with specific, structured reasons &mdash; trade-off, standard, door. Strip away the context of "saying no" and what's left is a pyramid: one conclusion at the top, a small set of reasons underneath it. Today's lesson is the general-purpose version of that same shape, so you can build it deliberately into anything you write, not just declines.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Most people think by gathering evidence and building up to a conclusion &mdash; and then they write the same way, in the order they figured it out. That's backwards for anyone reading you on a phone between meetings. The Pyramid Principle doesn't change how you think; it changes the order you present it in. Think bottom-up. Write top-down.</p>
+    <p>A pyramid has three tiers, and skipping the order breaks the whole thing:</p>
+
+    <div class="pyramid">
+      <div class="tier top">
+        <span class="t-label">Governing Thought</span>
+        <span class="t-desc">The single sentence that answers "so what" &mdash; stated first, before any reason appears</span>
+      </div>
+      <div class="tier mid">
+        <span class="t-label">Key Line</span>
+        <span class="t-desc">2&ndash;4 grouped arguments that support the governing thought, each a complete reason, not a topic label</span>
+      </div>
+      <div class="tier bottom">
+        <span class="t-label">Supporting Data</span>
+        <span class="t-desc">The evidence, examples, and detail underneath each key-line argument &mdash; read only by whoever wants to verify it</span>
+      </div>
+    </div>
+
+    <ul class="idea-list">
+      <li><b>Governing Thought first.</b> State the answer or recommendation in the first sentence, before the reader has any reasons to evaluate it against. Burying it rewards skimming with the wrong takeaway.</li>
+      <li><b>MECE groupings.</b> The key-line arguments should be <b>M</b>utually <b>E</b>xclusive, <b>C</b>ollectively <b>E</b>xhaustive &mdash; no two reasons overlapping, and nothing relevant left standing outside the list. A reader who senses a gap starts doubting the whole recommendation.</li>
+      <li><b>SCQA opens the runway.</b> <b>S</b>ituation (shared context), <b>C</b>omplication (what changed), <b>Q</b>uestion (the one your reader is now implicitly asking), <b>A</b>nswer (your governing thought). Four sentences, and the reader arrives at your conclusion instead of being told to accept it.</li>
+      <li><b>Detail is opt-in, not mandatory reading.</b> Supporting data belongs under its key-line argument, not ahead of it &mdash; so a reader who trusts your groupings can stop after the key line, and one who doesn't can drill down exactly where their doubt is.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card unguarded">
+        <span class="c-mark">&mdash;</span>
+        <span class="c-name">The Narrative Draft</span>
+        <span class="c-ask">"So I wanted to walk you through what we found this week..."</span>
+        <p class="c-desc">Written in discovery order &mdash; the order the PM learned things, not the order the reader needs them. The recommendation, if there is one, shows up in the last paragraph, after the reader has already formed their own.</p>
+        <p class="c-fit"><b>What happens:</b> busy readers skim to the end, or stop partway and reply with a question your third paragraph already answered.</p>
+      </div>
+      <div class="compare-card guarded">
+        <span class="c-mark">+</span>
+        <span class="c-name">The Pyramid Draft</span>
+        <span class="c-ask">"We should delay the EU launch three weeks. Three reasons:"</span>
+        <p class="c-desc">Opens with the governing thought, then three MECE reasons, each with its own evidence underneath for anyone who wants to check it.</p>
+        <p class="c-fit"><b>What happens:</b> the reader has the decision in one sentence and chooses, themselves, how deep to read.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>Yesterday's reasoned no was a pyramid you'd already built</h4>
+      <p style="margin:0;">Day 20's four-part no had a governing thought (the decision) and a key line underneath it (the trade-off, the standard, the door) &mdash; you just hadn't named the shape. The Pyramid Principle is that same architecture applied everywhere else: Slack updates, PRDs, exec summaries, roadmap narratives. Once you can name the governing thought and check your reasons for MECE, you stop discovering your point mid-paragraph and start deciding it before you type the first word.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>Your team's Salesforce sync integration &mdash; promised for a flagship account's go-live &mdash; is going to slip two weeks. You need to tell the VP of Sales today. Two ways to write that Slack message:</p>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>What happened</th><th>Bottom-up message</th><th>Pyramid-structured message</th></tr></thead>
+        <tbody>
+          <tr><td>Time for the VP to find the actual ask</td><td class="num lose">~45 sec, scrolling through 6 paragraphs</td><td class="num win">Immediate &mdash; first sentence</td></tr>
+          <tr><td>Clarifying replies needed</td><td class="num lose">4 ("wait, so are we delayed or not?")</td><td class="num win">0</td></tr>
+          <tr><td>VP's next action</td><td class="num lose">Forwarded the thread to their boss: "what's going on here?"</td><td class="num win">Replied in 2 minutes: "approved, use the extra engineer"</td></tr>
+          <tr><td>How the PM came across</td><td class="num lose">Buried in details, unclear on the ask</td><td class="num win">In command of the situation</td></tr>
+          <tr><td>Time the PM spent writing it</td><td class="num lose">25 min, three rewrites, still a little murky</td><td class="num win">12 min, once the governing thought was decided first</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> the pyramid version wasn't just easier to read &mdash; it was faster to write. Deciding the governing thought first ("we need two weeks and one borrowed engineer") forces the hard thinking before you type a word. Writing bottom-up feels natural because you're discovering your own point as you go, which is exactly why those drafts run long, circle back, and still leave the reader guessing at the end.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        You're about to message your VP of Product with three findings from this week, in the order you found them:
+        <ul>
+          <li>Mid-market churn is up 2 points quarter-over-quarter, concentrated in accounts on the legacy pricing tier.</li>
+          <li>Support ticket volume for those same accounts is up 40%, mostly complaints about a UI change shipped last quarter.</li>
+          <li>Three of the top five churned accounts never completed onboarding into the new reporting dashboard.</li>
+        </ul>
+        Before you send anything: what's the governing thought, what are the MECE key-line arguments underneath it, and what does the actual message say?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>The governing thought to avoid</h4>
+        <ul>
+          <li>"Mid-market churn is up 2 points" is a fact, not a governing thought &mdash; it doesn't tell the VP what to believe or do. A governing thought is a claim with a direction attached.</li>
+          <li>"We should reprice the legacy tier" jumps to a solution before the data supports it &mdash; nothing here shows a pricing problem specifically.</li>
+        </ul>
+        <h4>The governing thought that fits the evidence</h4>
+        <ul>
+          <li>"Mid-market churn is concentrated in under-onboarded, legacy-tier accounts hit hardest by last quarter's UI change &mdash; this is a support and onboarding fix, not a pricing or fit problem."</li>
+        </ul>
+        <h4>MECE key line underneath it</h4>
+        <ul>
+          <li><b>Where it's concentrated:</b> legacy-tier accounts specifically, not the broader mid-market segment &mdash; rules out a general fit problem.</li>
+          <li><b>Why those accounts:</b> the UI change hit their existing workflows hardest, visible directly in the 40% ticket spike.</li>
+          <li><b>What's different about the ones who left:</b> they skipped onboarding into the new reporting dashboard, so they never saw the value that would have offset the UI friction.</li>
+        </ul>
+        <h4>The actual message</h4>
+        <div class="final-msg">"Mid-market churn this quarter is concentrated in legacy-tier accounts, and it's an onboarding and support problem, not a pricing one &mdash; here's why. First, it's isolated to the legacy tier, not the broader segment. Second, those accounts' ticket volume is up 40%, almost entirely tied to last quarter's UI change. Third, 3 of the top 5 churned accounts never finished onboarding into the new reporting dashboard, so they never got the value that would've offset the friction. Proposing a targeted onboarding push plus updated support docs for the legacy tier before we touch pricing &mdash; can scope that by Friday."</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this before you send any update, PRD section, or Slack message longer than three sentences</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Ask it of your own draft, or of a teammate's, before it goes out:</p>
+    <div class="move-script" id="moveScript">"What's your governing thought &mdash; the one sentence that would still be true and still be useful if I deleted everything else in this message?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Governing Thought</dt>
+        <dd>The single top-level conclusion or recommendation that answers "so what" for the reader, stated before any supporting reason appears &mdash; the apex of the pyramid.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Key Line</dt>
+        <dd>The 2&ndash;4 grouped arguments directly beneath the governing thought. Each one is a complete reason that could stand on its own, not a vague topic label like "data" or "risks."</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>MECE</dt>
+        <dd>Mutually Exclusive, Collectively Exhaustive &mdash; the test for a well-formed grouping of arguments or categories: no two overlap, and nothing relevant is left uncovered.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>SCQA</dt>
+        <dd>Situation, Complication, Question, Answer &mdash; a four-part opening that walks the reader from shared context to your governing thought, so they arrive at your conclusion instead of being asked to simply accept it.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Top-Down Communication</dt>
+        <dd>Presenting the answer first and the reasoning after, as distinct from bottom-up (chronological, discovery-order) writing, which makes the reader rebuild your thinking before they can find your point.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 21 complete</span>
+    </div>
+    <div class="footer-next"><a href="day22.html">Next lesson → Asking Sharper Questions</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<21) s.className='done';
+    else if (i===21) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "What is the \"governing thought\" in the Pyramid Principle?",
+      opts: [
+        "The first paragraph of background and context before you get to the ask",
+        "The single top-level answer or recommendation, stated before any supporting reason appears",
+        "The most detailed data point among the supporting evidence",
+        "A recap written only after all the key-line arguments have been listed"
+      ],
+      correct: 1,
+      why: "The governing thought is the apex of the pyramid — the one sentence that answers \"so what\" for the reader. Everything else exists to support it, and it has to appear before the reasons, not after them."
+    },
+    {
+      q: "What does MECE ensure in a key line's supporting arguments?",
+      opts: [
+        "That there are exactly three bullet points, since three is the ideal number of reasons",
+        "That each argument is phrased in the past tense",
+        "That the arguments don't overlap with each other and, together, cover the relevant ground — so the reader trusts nothing important is missing",
+        "That each argument includes a number or metric"
+      ],
+      correct: 2,
+      why: "MECE stands for Mutually Exclusive, Collectively Exhaustive. It isn't about hitting a magic count — it's about avoiding reasons that repeat each other and avoiding a gap a sharp reader will notice and use to doubt the whole recommendation."
+    },
+    {
+      q: "In the worked example, why did writing the pyramid-structured Slack message take less time than the bottom-up version, even though it also included evidence?",
+      opts: [
+        "It skipped the supporting evidence entirely",
+        "Deciding the governing thought first forced the hard thinking before any typing started, instead of discovering the point mid-draft — which is what made the bottom-up version long and required rewrites",
+        "It was shorter, so there was simply less to type",
+        "It no longer needed to be checked for gaps in the reasoning"
+      ],
+      correct: 1,
+      why: "The bottom-up draft took 25 minutes and three rewrites because the PM was discovering their own point while writing. Committing to the governing thought first did the hard thinking upfront, which is why the pyramid version took only 12."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re already leading with the answer instead of the evidence.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — governing thought first, then MECE reasons, is the fastest way to apply this to your next message.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

@@ -1,0 +1,574 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Kano Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 3, Day 13 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding:0 20px; padding-block:40px 80px;
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone);}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.framework-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px; margin:20px 0; background:var(--ground);
+}
+
+.kano-chart-wrap{background:var(--ground); border:1px solid var(--chalk); border-radius:10px; padding:16px 18px 10px; margin:18px 0;}
+.kano-legend{display:flex; gap:18px; flex-wrap:wrap; margin-top:10px; font-size:.84rem;}
+.kano-legend .item{display:flex; align-items:center; gap:7px;}
+.kano-legend .swatch{width:14px; height:3px; border-radius:2px; flex-shrink:0;}
+
+.category-grid{display:flex; flex-direction:column; gap:12px; margin:18px 0;}
+.cat-row{display:flex; gap:14px; align-items:flex-start; border:1px solid var(--chalk); border-radius:12px; padding:16px 18px; background:var(--ground);}
+.cat-row .cat-mark{width:10px; height:10px; border-radius:50%; margin-top:6px; flex-shrink:0;}
+.cat-row .cat-name{font-weight:600; display:block; margin-bottom:3px;}
+.cat-row .cat-desc{font-size:.92rem; color:var(--ink); margin:0;}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.worked blockquote{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.1rem; color:var(--ink);
+  border-left:3px solid var(--gold); padding-left:16px; margin:14px 0;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone);}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+  .cat-row{flex-direction:row;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 3 · PRIORITIZATION &amp; DECISIONS <span class="dot"></span> DAY 13 OF 30</div>
+    <h1>The Kano Model</h1>
+    <p class="sub">Yesterday answered <i>when</i> to ship. Today answers a question that sits underneath every score you've ever put in a RICE sheet: when you ship it, what shape does the satisfaction actually take?</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you separated how big an opportunity is from how fast it's leaking value — Cost of Delay gave urgency its own axis instead of burying it inside "impact." Today adds a second axis Cost of Delay doesn't touch: <i>what kind of satisfaction curve does this feature even have?</i> Not every feature converts investment into happiness the same way, and scoring them as if they do is how roadmaps end up overbuilding things customers already stopped noticing.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Noriaki Kano, a Japanese quality researcher, noticed in 1984 that customer satisfaction isn't one straight line from "didn't build it" to "built a lot of it." Different attributes follow completely different curves — and a prioritization framework that treats them all as the same slope will keep misallocating a team's time.</p>
+    <p>Kano sorted product attributes into three working categories, by plotting how much you've built against how satisfied it makes customers:</p>
+
+    <div class="category-grid">
+      <div class="cat-row">
+        <span class="cat-mark" style="background:var(--bad);"></span>
+        <div><span class="cat-name" style="color:var(--bad);">Must-be (threshold / table stakes)</span><p class="cat-desc">Absence causes real anger. Presence causes no credit at all — it just gets you back to neutral. SSO for an enterprise buyer, 99.9% uptime, SOC 2. Nobody ever says "wow, it logged me in correctly." They only ever say something when it doesn't.</p></div>
+      </div>
+      <div class="cat-row">
+        <span class="cat-mark" style="background:var(--teal);"></span>
+        <div><span class="cat-name" style="color:var(--teal);">Performance (linear / one-dimensional)</span><p class="cat-desc">Satisfaction tracks investment in a fairly straight line. Faster segment builds, more supported channels, higher send throughput. More genuinely is better, and customers will tell you so directly when you ask.</p></div>
+      </div>
+      <div class="cat-row">
+        <span class="cat-mark" style="background:var(--gold);"></span>
+        <div><span class="cat-name" style="color:var(--gold);">Attractive (delighter)</span><p class="cat-desc">Absence isn't missed — nobody was asking for it. Presence creates disproportionate delight relative to the effort it took. An AI that quietly suggests the best send time per recipient, surfaced without being asked.</p></div>
+      </div>
+    </div>
+
+    <div class="kano-chart-wrap">
+      <svg viewBox="0 0 340 210" width="100%" height="210" role="img" aria-label="Kano chart: must-be rises steeply from frustrated then flattens near neutral; performance rises in a straight diagonal from frustrated to delighted; attractive stays flat near neutral then rises steeply to delighted only at full implementation.">
+        <line x1="20" y1="18" x2="20" y2="192" stroke="var(--stone)" stroke-width="1"/>
+        <line x1="20" y1="105" x2="326" y2="105" stroke="var(--chalk)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="20" y1="192" x2="326" y2="192" stroke="var(--stone)" stroke-width="1"/>
+        <text x="24" y="28" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">delighted</text>
+        <text x="24" y="188" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">frustrated</text>
+        <text x="20" y="206" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">not built</text>
+        <text x="282" y="206" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">fully built</text>
+        <path d="M24,185 C 90,178 140,112 180,108 C 230,104 280,102 322,101" fill="none" stroke="var(--bad)" stroke-width="2.5"/>
+        <path d="M24,178 L322,30" fill="none" stroke="var(--teal)" stroke-width="2.5"/>
+        <path d="M24,106 C 110,105 190,104 240,95 C 270,88 300,45 322,24" fill="none" stroke="var(--gold)" stroke-width="2.5"/>
+      </svg>
+      <div class="kano-legend">
+        <span class="item"><span class="swatch" style="background:var(--bad);"></span>Must-be</span>
+        <span class="item"><span class="swatch" style="background:var(--teal);"></span>Performance</span>
+        <span class="item"><span class="swatch" style="background:var(--gold);"></span>Attractive</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>The trap RICE and Cost of Delay both fall into</h4>
+      <p style="margin:0;">Both frameworks score "impact" as a single number, which quietly assumes a straight-line relationship between effort and satisfaction — the Performance curve. Must-be attributes break that assumption on one side: you can't out-satisfy a customer by having "more" uptime than 100%, so investment past the threshold is close to wasted, no matter how high you'd score its "impact." Attractive attributes break it on the other side: a small, clever investment can produce satisfaction wildly out of proportion to its RICE score, because nobody was modeling it as having any floor to clear at all. And every attribute migrates over time — today's delighter is next year's must-be, as competitors copy it and customers start expecting it. The AI send-time suggestion that delights this year is the checkbox item every RFP asks about in three years.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>A B2B SaaS product is scoring three backlog items with the same RICE template, and all three come back with similar total scores.</p>
+      <blockquote>"They're all roughly an 8 out of 10 on impact. Let's just sequence by effort, cheapest first."</blockquote>
+      <p>Running a short Kano questionnaire against each — asking customers both a functional question ("how do you feel if this is present?") and a dysfunctional question ("how do you feel if this is absent?") — produces a very different picture:</p>
+      <table class="data-table">
+        <thead><tr><th>Item</th><th>If absent</th><th>If present</th><th>Category</th></tr></thead>
+        <tbody>
+          <tr><td>Enterprise SSO</td><td class="num">Furious, deal blocked</td><td class="num">Shrug, expected</td><td class="win">Must-be</td></tr>
+          <tr><td>Faster segment builds</td><td class="num">Mildly annoyed</td><td class="num">Noticeably happier</td><td class="win">Performance</td></tr>
+          <tr><td>AI send-time suggestion</td><td class="num">Doesn't notice</td><td class="num">Delighted, tells peers</td><td class="win">Attractive</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-bottom:0;"><b>The reframe:</b> a single "impact" number flattened three completely different jobs into one shape. SSO isn't competing for satisfaction at all — it's a cost of entry, and shipping it doesn't win anything, it just stops losing enterprise deals that are already in motion. The segment-build speedup is the one place "more effort, more satisfaction" genuinely holds, so it's the right candidate for the kind of linear scoring RICE was built for. And the AI suggestion is where a modest build can produce a disproportionate, story-worthy reaction — exactly the kind of bet a flat RICE score would never surface as the standout. Same backlog, same effort estimates, three different reasons to build each one.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Your VP of Product just came out of three calls with power-user customers — senior power users who live in the workflow editor every day. All three independently asked for more configuration options: custom field logic, conditional branching, a scripting layer for segment rules. "Our most engaged customers are asking for this by name. Let's prioritize it for next quarter." Support data shows a different story: for the broader base of marketing generalists who make up most of the account list, the builder's current flexibility already generates the single highest volume of support tickets and the lowest onboarding completion rate of any screen in the product. What do you tell the VP?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Step 1 — Notice whose Kano curve you're looking at</h4>
+        <ul>
+          <li>"Our customers are asking for it" is true, but it's true of one segment. Kano categories aren't universal properties of a feature — they're properties of a feature <i>for a given user segment</i>. More configuration options may be a genuine Performance attribute for power users and an Indifferent-to-Reverse attribute for generalists, who experience additional flexibility as additional ways to get it wrong.</li>
+        </ul>
+        <h4>Step 2 — Weigh the evidence you already have, not just the loudest evidence</h4>
+        <ul>
+          <li>Three calls with your most vocal, most engaged customers is a real signal, but it's a sample that self-selects for people who already push the tool hard. The support-ticket and onboarding data is a signal from the segment that doesn't call you — the quiet majority, whose satisfaction curve this change could push the wrong way if the added complexity lands on the default experience instead of behind an opt-in.</li>
+        </ul>
+        <h4>Step 3 — Reframe the decision for the VP</h4>
+        <ul>
+          <li>"This is a real request, but it's a Performance attribute for maybe 15% of our base and a likely Reverse attribute for the rest — the complexity that would delight power users is the same complexity that's already driving our highest ticket volume for generalists. I don't want to say no to this; I want to scope it as an advanced mode those power users can opt into, instead of a change to the default builder everyone else has to navigate around. Let's size both: the advanced-mode build, and what it would take to fix the onboarding drop-off we already know about."</li>
+        </ul>
+        <h4>The trap this drill is testing</h4>
+        <ul>
+          <li>The dangerous move isn't ignoring customer requests — it's generalizing one segment's Kano curve onto the whole base because that segment happened to be the one in the room. The senior move is asking "attractive or performance for whom, and what does it do to everyone else's curve" before committing the quarter.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in your next roadmap or backlog review</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Next time a feature gets scored only on effort and impact, redirect with:</p>
+    <div class="move-script" id="moveScript">"If we didn't build this, would customers be upset, indifferent, or relieved — and if we tripled the investment, would satisfaction keep climbing or flatten out? Which Kano category are we actually betting on here, and for which segment?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Kano Model</dt>
+        <dd>A framework, from Noriaki Kano's 1984 research, that classifies product attributes by the shape of the curve between how much is built and how satisfied customers are, rather than by a single linear impact score.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Must-be (Threshold) Attribute</dt>
+        <dd>An attribute whose absence causes strong dissatisfaction but whose presence earns no extra credit — it only restores a baseline. Also called table stakes or basic requirements.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Performance (One-Dimensional) Attribute</dt>
+        <dd>An attribute where satisfaction rises roughly linearly with how much is built — customers will state this preference directly when asked, and more genuinely is better.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Attractive (Delighter) Attribute</dt>
+        <dd>An attribute whose absence isn't noticed or missed, but whose presence produces satisfaction disproportionate to the investment — the surprise nobody asked for.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Feature Migration (Kano Drift)</dt>
+        <dd>The tendency of attributes to move down-curve over time — an attractive delighter becomes a performance feature as customers start to expect it, then a must-be once every competitor has matched it.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 13 complete</span>
+    </div>
+    <div class="footer-next"><a href="day14.html">Next lesson → One-Way vs Two-Way Doors</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<13) s.className='done';
+    else if (i===13) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "Your team debates whether to invest further in 99.99% uptime, since customers consistently rate reliability as 'very important' in surveys. Why might more investment here fail to raise satisfaction further, if it's already solidly in must-be territory?",
+      opts: [
+        "Because must-be attributes have a ceiling — once the threshold is cleared, customers stop noticing further improvement; it only shows up again if it regresses",
+        "Because uptime is actually an attractive attribute, so satisfaction should keep rising the more you invest",
+        "Because customers never rate must-be attributes as important in surveys, so the survey data must be wrong",
+        "Because must-be attributes should be deprioritized entirely once any level of investment has been made"
+      ],
+      correct: 0,
+      why: "Must-be attributes work like a floor, not a slope: below the threshold, satisfaction craters; above it, additional investment is close to invisible to the customer. Importance ratings in a survey don't distinguish 'important because its absence is catastrophic' from 'important because more of it makes me happier' — that distinction is exactly what the Kano questionnaire's paired functional/dysfunctional questions are designed to separate out."
+    },
+    {
+      q: "Two years ago, a competitor's AI-powered send-time optimization was a genuine delighter that won deals. Today, every major competitor in the category has shipped something similar, and prospects now ask 'does it have AI send-time optimization?' as a checklist item during evaluation. What's happened to this attribute's Kano category?",
+      opts: [
+        "Nothing — delighters stay delighters permanently once customers have experienced them once",
+        "It has migrated from attractive toward must-be — what once produced delight now produces dissatisfaction if absent and little extra credit if present, because the market has normalized the expectation",
+        "It became a reverse attribute, since customers are now indifferent to send-time optimization",
+        "It's still a performance attribute, since it was never truly a delighter to begin with"
+      ],
+      correct: 1,
+      why: "This is feature migration (Kano drift): as a delighter gets copied across a category, it stops being a surprise and starts being an expectation. The tell is in the complaint: 'no AI send-time optimization' now sounds like a disqualifier in an RFP rather than a shrug, which is the signature of a must-be attribute, not an attractive one."
+    },
+    {
+      q: "A PM runs a Kano questionnaire on 'more customization options in the workflow editor' and finds the results split sharply: power users score it as performance or attractive, while the broader generalist base scores it as indifferent-to-reverse (some even report it would make the product harder to use). What does this split imply for how the team should treat 'Kano category' as a concept?",
+      opts: [
+        "The data is contradictory and should be discarded — a feature can only have one true Kano category",
+        "Kano category is a property of a feature for a specific segment, not a universal property of the feature itself — the same change can be a delighter for one audience and a dissatisfier for another",
+        "The generalist segment's answers should be ignored, since power users are more valuable customers",
+        "This means the feature is a must-be, since it generated the strongest reactions overall"
+      ],
+      correct: 1,
+      why: "Kano results are segment-dependent by design — that's the entire reason the questionnaire asks a representative sample rather than a single customer type. Treating a single Kano label as true for 'the feature' rather than 'this feature, for this segment' is how a request from the loudest or most engaged customers quietly overrides what the broader base actually needs."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re sorting by satisfaction curve, not just impact score.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — not every feature converts effort into happiness the same way.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

@@ -1,0 +1,534 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>RICE, ICE &amp; MoSCoW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 3, Day 11 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding:0 20px; padding-block:40px 80px;
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone);}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.framework-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px; margin:20px 0; background:var(--ground);
+}
+.fb-row{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:4px; flex-wrap:wrap;}
+.fb-row .fb-name{font-weight:600;}
+.fb-row .fb-score{font-family:'Newsreader',serif; font-weight:600; color:var(--teal); font-variant-numeric:tabular-nums;}
+.gauge-row{display:flex; flex-direction:column; gap:14px; margin-top:16px;}
+.gauge{display:flex; align-items:center; gap:14px;}
+.gauge-label{width:150px; flex-shrink:0; font-size:.88rem; font-weight:500;}
+.gauge-bar{flex:1; height:10px; background:var(--chalk); border-radius:6px; overflow:hidden; min-width:0;}
+.gauge-fill{height:100%; background:var(--teal); border-radius:6px;}
+.gauge-val{width:64px; text-align:right; font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--stone); flex-shrink:0;}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.worked blockquote{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.1rem; color:var(--ink);
+  border-left:3px solid var(--gold); padding-left:16px; margin:14px 0;
+}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone);}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .gauge-label{width:110px; font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 3 · PRIORITIZATION &amp; DECISIONS <span class="dot"></span> DAY 11 OF 30</div>
+    <h1>RICE, ICE &amp; MoSCoW</h1>
+    <p class="sub">Three well-known prioritization frameworks. Most of the damage they do isn't from being used badly &#8212; it's from being used on the wrong kind of decision.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you learned that product&#8211;market fit is never a company-wide yes/no &#8212; it's segment-specific, and the discipline is weighting real pull evidence over vanity metrics. Once you know <i>which</i> segment is pulling, the next question is what to build for them first. That's a prioritization decision &#8212; and this week starts with the tool selection problem underneath every roadmap debate: which framework actually fits the decision you're making.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">RICE, ICE, and MoSCoW are not three flavors of the same thing. They encode different assumptions about what data you have and what kind of decision you're actually making &#8212; and the single most common prioritization failure in B2B SaaS teams isn't a bad framework, it's the right framework applied to the wrong decision.</p>
+    <p><b>RICE</b> &#8212; Reach &#215; Impact &#215; Confidence &#247; Effort &#8212; is a scoring formula built for ranking a backlog of reasonably well-understood items against each other, where you have or can estimate real numbers: how many accounts a change touches per quarter, how big the effect is, how sure you are, how much it costs to build. It produces a precise-looking number, which is exactly why it's dangerous when the inputs are guesses &#8212; the formula doesn't know the difference between a measured reach and a hopeful one.</p>
+    <p><b>ICE</b> &#8212; Impact &#215; Confidence &#215; Ease, usually averaged on a 1&#8211;10 scale rather than multiplied into a big number &#8212; trades RICE's precision for speed. It's built for exactly the moment RICE is premature: a pile of raw, early-stage ideas with no usage data yet, where you need a rough ranking fast, not a defensible one. The looseness is the point, not a flaw.</p>
+    <p><b>MoSCoW</b> &#8212; Must have, Should have, Could have, Won't have &#8212; isn't a scoring framework at all. It doesn't rank; it categorizes. It exists for a specific, different decision: you already know what's in a committed scope, capacity just got constrained, and you need stakeholders to agree on what moves to Won't &#8212; a negotiation tool, not a ranking one.</p>
+    <div class="callout">
+      <h4>The failure mode to watch for</h4>
+      <p style="margin:0;">Teams rarely pick a bad framework. They pick a reasonable one and apply it to every decision in the room, because switching frameworks mid-meeting feels inconsistent. The result: RICE-scoring a strategic bet with no usage data (false precision laundering a guess as a fact), or ICE-ranking a backlog you already have hard reach numbers for (leaving real data on the table), or trying to MoSCoW-rank forty uncommitted ideas (a categorization tool has no mechanism for telling you which three Shoulds are better than the other nine).</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>A B2B SaaS product is heading into quarterly planning with 40 backlog items &#8212; everything from a one-week CSV export fix to an unproven "AI Workflow Orchestrator" nobody has built a prototype of yet. The VP of Product asks for one ranked list so leadership can review priorities in a single meeting.</p>
+      <blockquote>"Just RICE-score all forty and send me the ranked list."</blockquote>
+      <p><b>What happens when the team complies, literally:</b></p>
+      <div class="framework-box">
+        <div class="fb-row"><span class="fb-name">AI Journey Orchestrator <span style="color:var(--stone); font-weight:400;">(no prototype, no usage data)</span></span><span class="fb-score">Score: 3,600</span></div>
+        <div class="gauge-row">
+          <div class="gauge"><div class="gauge-label">Reach <span style="color:var(--stone);">(guessed)</span></div><div class="gauge-bar"><div class="gauge-fill" style="width:90%"></div></div><div class="gauge-val">6,000/qtr</div></div>
+          <div class="gauge"><div class="gauge-label">Impact <span style="color:var(--stone);">(guessed)</span></div><div class="gauge-bar"><div class="gauge-fill" style="width:100%; background:var(--gold);"></div></div><div class="gauge-val">3.0</div></div>
+          <div class="gauge"><div class="gauge-label">Confidence <span style="color:var(--stone);">(optimistic)</span></div><div class="gauge-bar"><div class="gauge-fill" style="width:100%; background:var(--gold);"></div></div><div class="gauge-val">100%</div></div>
+        </div>
+        <p style="margin-top:16px; margin-bottom:0;">Compare that to <b>CSV Export for Scheduled Reports</b> &#8212; a mature, fully-scoped item with real usage data behind every input: Reach 1,400/qtr, Impact 1.0, Confidence 90%, Effort 0.5 &#8212; score <b>2,520</b>. On paper, the unproven orchestrator outranks the proven fix. In practice, the orchestrator's numbers are three guesses wearing a formula's clothing, and the CSV fix's numbers are measured. The ranked list looks equally confident about both. It isn't.</p>
+      </div>
+      <p style="margin-bottom:0;"><b>The actual fix:</b> split the 40 items by decision type before scoring anything. The dozen early-stage, no-data ideas (including the orchestrator) get a fast <b>ICE</b> pass to find the two or three worth a real discovery spike &#8212; explicitly provisional, not ranked against the mature backlog. The remaining mature items, where reach and impact are measurable, get <b>RICE</b>, and that ranking is trustworthy because every input means what it claims to mean. Only once capacity for the quarter is fixed and something has to give does <b>MoSCoW</b> enter, to negotiate with Sales and Engineering which already-ranked items move from Should to Won't.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Your B2B SaaS product, quarterly business review in two days. Your VP of Product wants a single master-ranked list spanning three strategic bets with zero usage data, eighteen mature backlog items with solid usage data, and a known fact: Engineering just lost 30% of next quarter's capacity to an infra migration, so something already committed has to be cut. "One list, ranked top to bottom, that's all I need for the QBR deck." What do you actually hand back?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Step 1 &#8212; Name the three different decisions hiding inside "one list"</h4>
+        <ul>
+          <li>The three strategic bets need a rough triage decision (worth exploring further, or not yet). The eighteen mature items need a ranking decision (what order, given real data). The capacity cut needs a scope decision (what moves out, given what's already committed). One number cannot answer all three honestly.</li>
+        </ul>
+        <h4>Step 2 &#8212; Apply the matching framework to each group</h4>
+        <ul>
+          <li><b>Strategic bets &#8594; ICE.</b> Score them fast on impact, confidence, and ease, explicitly labeled as provisional estimates. The output is "worth a two-week discovery spike," not a backlog rank.</li>
+          <li><b>Mature backlog &#8594; RICE.</b> These have real reach and usage data, so a multiplicative score is trustworthy here and produces a defensible rank order.</li>
+          <li><b>Capacity cut &#8594; MoSCoW.</b> Take the already-RICE-ranked list, draw the capacity line, and run a short MoSCoW conversation with Sales, Support, and Engineering about which items just above the line are genuinely Must versus negotiable Should &#8212; this is a conversation about trade-offs the data alone can't settle, not another scoring pass.</li>
+        </ul>
+        <h4>Step 3 &#8212; Give the VP three short lists and one sentence tying them together</h4>
+        <ul>
+          <li>"Here's the ranked mature backlog by RICE, here's which strategic bets earn a discovery spike next quarter by ICE, and here's the MoSCoW line showing what the capacity cut forces us to drop from already-committed work &#8212; three different questions, three honest answers, instead of one number that would have hidden which items were measured and which were guessed."</li>
+        </ul>
+        <h4>The trap this drill is testing</h4>
+        <ul>
+          <li>The pressure to produce "one list" for a deck is real, and the junior move is complying literally. The senior move is recognizing that forcing three decision types through one scoring pass doesn't simplify the QBR &#8212; it just hides the guesswork inside a number that looks as rigorous as the real data next to it.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in your next prioritization or planning meeting</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Next time someone asks for "one ranked list" across a mixed backlog, redirect with:</p>
+    <div class="move-script" id="moveScript">"Before we score this, what kind of decision are we actually making &#8212; ranking items we have real data on, triaging raw ideas fast, or negotiating what's in versus out of a scope we've already committed to? The framework should follow the decision, not the other way around."</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>RICE</dt>
+        <dd>Reach &#215; Impact &#215; Confidence &#247; Effort. A scoring formula for ranking a backlog of reasonably well-understood items where reach and impact can be measured or credibly estimated, not guessed. Its precision is only as trustworthy as its least-certain input.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>ICE</dt>
+        <dd>Impact &#215; Confidence &#215; Ease, typically averaged on a 1&#8211;10 scale. A fast, deliberately rougher alternative to RICE, built for triaging raw or early-stage ideas before real usage data exists &#8212; speed over defensibility.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>MoSCoW</dt>
+        <dd>Must have, Should have, Could have, Won't have. A categorization tool, not a ranking one &#8212; used to negotiate and document what's in or out of an already-committed scope, typically when capacity changes after a plan is set.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>False Precision</dt>
+        <dd>The failure mode where a quantitative formula is fed estimated or guessed inputs, producing a specific-looking number (like "3,600") that carries none of the certainty its precision implies. The number looks rigorous; the input underneath it wasn't.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Confidence Score</dt>
+        <dd>The RICE component meant to discount a guess &#8212; typically 100% / 80% / 50% for high / medium / low certainty. Because it's multiplicative, an inflated confidence score doesn't just skew the result a little, it compounds through the whole formula.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 11 complete</span>
+    </div>
+    <div class="footer-next"><a href="day12.html">Next lesson → Opportunity Sizing &amp; Cost of Delay</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<11) s.className='done';
+    else if (i===11) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "You have 50 raw ideas from a brainstorm, no usage data on any of them, and need to pick the top 10 to explore further within the hour. Which framework fits?",
+      opts: [
+        "RICE — it's the most rigorous, so it's always the safer default",
+        "ICE — fast, directional scoring that doesn't pretend to have data you don't have yet",
+        "MoSCoW — categorize them into Must/Should/Could/Won't and take the Musts",
+        "Score them with RICE but mark every Confidence value as 50% to be safe"
+      ],
+      correct: 1,
+      why: "RICE needs real reach and impact data to mean anything — forcing it onto raw, unvalidated ideas just produces a precise-looking number built on guesses. MoSCoW has no ranking mechanism at all; it only sorts items you've already decided about. ICE is built exactly for this moment: rough, fast, explicitly provisional triage."
+    },
+    {
+      q: "Engineering just lost capacity, and a committed set of 10 roadmap items for the quarter has to shrink to 6. Sales, Support, and Engineering all want different items cut. What's the right tool here?",
+      opts: [
+        "Re-run RICE on all 10 items since priorities may have changed",
+        "ICE, since it's faster than RICE and you're short on time",
+        "MoSCoW — these items are already ranked; the real task is a stakeholder negotiation over which already-committed Shoulds become Won'ts",
+        "Whoever has the highest-ranked RICE score automatically wins, no discussion needed"
+      ],
+      correct: 2,
+      why: "This isn't a ranking problem — the items were already prioritized. It's a scope negotiation under a new constraint, which is precisely what MoSCoW is for: giving stakeholders a shared vocabulary to agree on what gets dropped, rather than re-scoring work that was already scored correctly."
+    },
+    {
+      q: "A PM compares two RICE scores: Feature A — Reach 5,000, Impact 3, Confidence 100%, Effort 2 → score 7,500. Feature B — Reach 1,200, Impact 2, Confidence 80%, Effort 4 → score 480. What should a senior PM check before trusting that 15x gap?",
+      opts: [
+        "Nothing — once the formula is calculated, the scores are directly comparable as-is",
+        "Whether Confidence was estimated with the same rigor on both — a suspiciously round 100% often signals optimism rather than evidence, and it compounds multiplicatively through the whole score",
+        "Whether Effort should be squared instead of used linearly in the formula",
+        "Whether Reach should be measured in dollars of pipeline instead of accounts touched"
+      ],
+      correct: 1,
+      why: "RICE's weak point is always Confidence, because it's the one input that's a judgment call rather than a measurement, and it multiplies straight through the score. A clean 100% on Feature A, next to an unround 80% on Feature B, is worth a direct question: was that actually tested, or is it the team's enthusiasm talking? The formula itself and the Reach unit aren't the issue here."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re matching the framework to the decision, not the other way around.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — which framework fits is about the decision type, not which one feels most rigorous.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

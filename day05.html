@@ -1,0 +1,688 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Problem Space vs Solution Space</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --ground-rgb:245,243,237;
+  --card:#FCFBF8;
+  --line: rgba(42,39,36,0.12);
+  --line-strong: rgba(42,39,36,0.22);
+  --shadow: 0 1px 2px rgba(42,39,36,0.04), 0 8px 24px -12px rgba(42,39,36,0.14);
+  --correct:#3C7A4E; --incorrect:#B0483C;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --card:#1D1B19;
+    --line: rgba(226,223,216,0.12);
+    --line-strong: rgba(226,223,216,0.22);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.55);
+    --correct:#5FAE75; --incorrect:#D9765F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --card:#1D1B19;
+  --line: rgba(226,223,216,0.12);
+  --line-strong: rgba(226,223,216,0.22);
+  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.55);
+  --correct:#5FAE75; --incorrect:#D9765F;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:'Outfit', system-ui, sans-serif;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{ background: var(--teal); color: var(--ground); }
+
+.wrap{ max-width: 760px; margin: 0 auto; padding: 0 24px 120px; }
+
+/* ---------- Masthead ---------- */
+.masthead{
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0 20px;
+  margin-bottom: 44px;
+}
+.masthead-row{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.brand{
+  font-family:'Outfit'; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--stone); font-weight:600;
+}
+.brand strong{ color: var(--teal); font-weight:700; }
+.day-pill{
+  font-family:'Outfit'; font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+  color: var(--gold); font-weight:600; border:1px solid var(--line-strong); border-radius:999px;
+  padding: 4px 12px;
+}
+h1.title{
+  font-family:'Newsreader', serif; font-weight:600; font-size: clamp(2rem, 5vw, 2.75rem);
+  line-height:1.12; margin: 16px 0 8px; text-wrap: balance; letter-spacing:-0.01em;
+}
+.dek{
+  font-family:'Outfit'; color: var(--stone); font-size:16px; line-height:1.55; max-width:60ch;
+}
+.thread{
+  margin-top:16px; font-size:13.5px; color: var(--stone); font-family:'Outfit';
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.thread .prev{ color: var(--ink); opacity:0.7; }
+.thread .arrow{ color: var(--teal); }
+
+/* ---------- Section shell ---------- */
+section.block{ margin-bottom: 56px; }
+.section-head{
+  display:flex; align-items:baseline; gap:12px; margin-bottom:20px;
+}
+.section-num{
+  font-family:'Newsreader'; font-style:italic; font-weight:500; color: var(--teal); font-size:15px;
+  min-width:20px;
+}
+.section-label{
+  font-family:'Outfit'; font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; font-weight:600;
+  color: var(--ink);
+}
+.section-time{ font-family:'Outfit'; font-size:12px; color: var(--stone); margin-left:auto; }
+
+h2.big{
+  font-family:'Newsreader'; font-weight:600; font-size:1.5rem; line-height:1.3; margin: 0 0 14px;
+  text-wrap: balance;
+}
+p, li{ font-size:16px; line-height:1.68; }
+p{ margin: 0 0 16px; }
+strong{ font-weight:600; color: var(--ink); }
+em.term{ font-style:italic; color: var(--teal); font-weight:500; }
+
+.pullquote{
+  border-left: 3px solid var(--teal);
+  padding: 4px 0 4px 20px;
+  margin: 24px 0;
+  font-family:'Newsreader'; font-style:italic; font-size:1.2rem; line-height:1.5;
+  color: var(--ink);
+}
+
+/* ---------- Comparison ladder ---------- */
+.ladder{
+  display:grid; grid-template-columns: 1fr 1fr; gap:1px; background: var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden; margin: 20px 0 8px;
+  box-shadow: var(--shadow);
+}
+.ladder-col{ background: var(--card); padding: 18px 20px; }
+.ladder-col h3{
+  font-family:'Outfit'; font-size:11.5px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700;
+  margin:0 0 12px;
+}
+.ladder-col.bad h3{ color: var(--incorrect); }
+.ladder-col.good h3{ color: var(--teal); }
+.ladder-col ol{ margin:0; padding-left:18px; }
+.ladder-col li{ font-size:14.5px; line-height:1.6; margin-bottom:8px; color: var(--ink); }
+.ladder-col li:last-child{ margin-bottom:0; }
+@media (max-width:600px){ .ladder{ grid-template-columns:1fr; } }
+
+/* ---------- Funnel diagram (problem space narrowing to solution space) ---------- */
+.funnel{
+  background: var(--card); border:1px solid var(--line); border-radius:12px;
+  padding: 22px 24px; box-shadow: var(--shadow); margin: 20px 0 8px;
+}
+.funnel-row{
+  display:flex; align-items:center; gap:16px; padding: 13px 0; border-top:1px dashed var(--line);
+}
+.funnel-row:first-child{ border-top:none; padding-top:0; }
+.funnel-tag{
+  flex:none; width:126px; font-family:'Outfit'; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  font-weight:700; color: var(--teal);
+}
+.funnel-row.narrow .funnel-tag{ color: var(--gold); }
+.funnel-bar{ flex:1; font-size:14.5px; line-height:1.55; color: var(--ink); }
+.funnel-bar .width-wide{ display:block; height:8px; border-radius:5px; background: rgba(26,117,106,0.18); margin-bottom:6px; width:100%; }
+.funnel-bar .width-mid{ display:block; height:8px; border-radius:5px; background: rgba(184,137,46,0.22); margin-bottom:6px; width:62%; }
+.funnel-bar .width-narrow{ display:block; height:8px; border-radius:5px; background: rgba(184,137,46,0.35); margin-bottom:6px; width:30%; }
+
+/* ---------- Worked example ---------- */
+.case{
+  background: var(--card); border:1px solid var(--line); border-radius:12px;
+  padding: 22px 24px; box-shadow: var(--shadow);
+}
+.case-tag{
+  font-family:'Outfit'; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700;
+  color: var(--gold); margin-bottom:10px; display:block;
+}
+.case h4{
+  font-family:'Newsreader'; font-size:1.15rem; font-weight:600; margin:0 0 10px;
+}
+.stack{ margin-top:16px; }
+.stack-row{
+  display:flex; gap:14px; padding: 12px 0; border-top:1px solid var(--line);
+}
+.stack-row:first-child{ border-top:none; padding-top:14px; }
+.stack-num{
+  font-family:'Newsreader'; font-style:italic; color: var(--stone); font-size:14px; min-width:16px;
+}
+.stack-body b{ display:block; font-size:14px; margin-bottom:2px; }
+.stack-body span{ font-size:14px; color: var(--stone); line-height:1.5; }
+
+/* ---------- Quiz ---------- */
+.quiz-item{
+  background: var(--card); border:1px solid var(--line); border-radius:12px;
+  padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow);
+}
+.quiz-q{ font-family:'Newsreader'; font-size:1.1rem; font-weight:600; margin: 0 0 16px; line-height:1.4; }
+.opt{
+  display:flex; align-items:flex-start; gap:12px; width:100%; text-align:left;
+  background: transparent; border:1px solid var(--line-strong); border-radius:9px;
+  padding: 12px 14px; margin-bottom:9px; cursor:pointer; font-family:'Outfit'; font-size:14.5px;
+  color: var(--ink); transition: border-color .15s ease, background .15s ease;
+}
+.opt:last-child{ margin-bottom:0; }
+.opt:hover:not(:disabled){ border-color: var(--teal); background: rgba(26,117,106,0.06); }
+.opt .letter{
+  flex:none; width:22px; height:22px; border-radius:50%; border:1px solid var(--line-strong);
+  display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:600; margin-top:1px;
+}
+.opt.correct{ border-color: var(--correct); background: rgba(60,122,78,0.1); }
+.opt.correct .letter{ background: var(--correct); border-color: var(--correct); color:#fff; }
+.opt.incorrect{ border-color: var(--incorrect); background: rgba(176,72,60,0.08); }
+.opt.incorrect .letter{ background: var(--incorrect); border-color: var(--incorrect); color:#fff; }
+.opt:disabled{ cursor:default; }
+.opt:disabled:not(.correct):not(.incorrect){ opacity:0.5; }
+.explain{
+  max-height:0; overflow:hidden; transition: max-height .3s ease;
+}
+.explain.open{ max-height:400px; margin-top:14px; }
+.explain-inner{
+  border-top:1px solid var(--line); padding-top:14px; font-size:14.5px; line-height:1.6; color: var(--ink);
+}
+.explain-inner .verdict{ font-weight:700; }
+.explain-inner .verdict.right{ color: var(--correct); }
+.explain-inner .verdict.wrong{ color: var(--incorrect); }
+
+/* score ring */
+.score-wrap{
+  display:flex; align-items:center; gap:18px; background: var(--card); border:1px solid var(--line);
+  border-radius:12px; padding: 18px 22px; box-shadow: var(--shadow); opacity:0; max-height:0; overflow:hidden;
+  transition: opacity .35s ease;
+}
+.score-wrap.show{ opacity:1; max-height:200px; margin-top:6px; }
+.ring{ flex:none; }
+.score-text b{ font-family:'Newsreader'; font-size:1.2rem; display:block; margin-bottom:2px; }
+.score-text span{ font-size:13.5px; color: var(--stone); }
+
+/* ---------- Scenario drill ---------- */
+.scenario-card{
+  background: var(--card); border:1px solid var(--line); border-radius:12px; padding: 24px 26px;
+  box-shadow: var(--shadow);
+}
+.scenario-setup{ font-size:15.5px; line-height:1.65; margin-bottom:16px; }
+.scenario-setup .from{
+  font-family:'Outfit'; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color: var(--gold);
+  font-weight:700; display:block; margin-bottom:8px;
+}
+.prompt-q{
+  font-family:'Newsreader'; font-style:italic; font-size:1.05rem; color: var(--ink); margin: 18px 0 20px;
+  padding-left:16px; border-left: 2px solid var(--gold);
+}
+.reveal-btn{
+  font-family:'Outfit'; font-weight:600; font-size:14px; letter-spacing:0.02em;
+  background: var(--teal); color:#fff; border:none; border-radius:8px; padding: 11px 20px;
+  cursor:pointer; transition: filter .15s ease, transform .1s ease;
+}
+.reveal-btn:hover{ filter: brightness(1.08); }
+.reveal-btn:active{ transform: translateY(1px); }
+.reveal-btn.hidden-btn{ display:none; }
+.analysis{
+  max-height:0; overflow:hidden; transition: max-height .5s ease;
+  border-top: 1px dashed var(--line-strong); margin-top:0;
+}
+.analysis.open{ max-height:1400px; margin-top:20px; padding-top:20px; }
+.analysis-label{
+  font-family:'Outfit'; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700;
+  color: var(--teal); margin-bottom:12px; display:block;
+}
+.analysis h5{ font-family:'Newsreader'; font-size:1rem; font-weight:600; margin: 16px 0 6px; }
+.analysis h5:first-of-type{ margin-top:0; }
+.analysis p{ font-size:14.5px; margin-bottom:10px; }
+
+/* ---------- Meeting move ---------- */
+.move-card{
+  background: linear-gradient(135deg, rgba(26,117,106,0.08), rgba(184,137,46,0.06));
+  border:1px solid var(--line); border-radius:12px; padding:22px 24px;
+}
+.move-template{
+  font-family:'Newsreader'; font-style:italic; font-size:1.15rem; line-height:1.5; color: var(--ink);
+  margin: 10px 0 14px;
+}
+.move-note{ font-size:14px; color: var(--stone); }
+
+/* ---------- Glossary ---------- */
+.gloss{ display:flex; flex-direction:column; gap:0; }
+.gloss-item{ padding: 16px 0; border-top:1px solid var(--line); }
+.gloss-item:first-child{ border-top:none; padding-top:0; }
+.gloss-term{
+  font-family:'Newsreader'; font-weight:600; font-size:1.02rem; color: var(--ink);
+  display:flex; align-items:baseline; gap:10px;
+}
+.gloss-term .idx{ font-family:'Outfit'; font-size:12px; color: var(--stone); font-weight:400; }
+.gloss-def{ font-size:14.5px; color: var(--ink); opacity:0.85; margin-top:4px; line-height:1.6; }
+
+@media (max-width: 600px){
+  .wrap{ padding: 0 16px 100px; }
+  .case, .quiz-item, .scenario-card, .funnel{ padding: 18px 18px; }
+  .funnel-row{ flex-direction:column; align-items:flex-start; gap:6px; }
+  .funnel-tag{ width:auto; }
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<div class="masthead">
+    <div class="masthead-row">
+      <div class="brand"><strong>Product Sense 101</strong> · Week 1 — The PM Mental Model</div>
+      <div class="day-pill">Day 5 of 30</div>
+    </div>
+    <h1 class="title">Problem Space vs Solution Space</h1>
+    <p class="dek">The single sentence that separates a PM who explores from one who just orders features off a menu.</p>
+    <div class="thread">
+      <span class="prev">So far: product sense, first principles, jobs-to-be-done, and naming your ICP precisely</span>
+      <span class="arrow">→</span>
+      <span>Today, the discipline that ties them together: staying in the problem space long enough to actually need the segmentation and the JTBD work you just did.</span>
+    </div>
+  </div>
+
+  <!-- 1. BIG IDEA -->
+  <section class="block" id="big-idea">
+    <div class="section-head">
+      <span class="section-num">I.</span>
+      <span class="section-label">The Big Idea</span>
+      <span class="section-time">5 min read</span>
+    </div>
+
+    <h2 class="big">Two spaces, and almost every roadmap fight is about which one you're standing in</h2>
+
+    <p>This week you've built three tools for understanding a customer: product sense (Day 1), first principles decomposition (Day 2), and jobs-to-be-done (Day 3). Day 4 sharpened <em>who</em> you're studying — your ICP. Today's lesson is about discipline, not a new analytical tool: knowing which of two spaces you're currently reasoning in, and refusing to let them blur together.</p>
+
+    <p>The <em class="term">problem space</em> is everything true about the customer's world before you've committed to a fix: their goals, their constraints, what's actually broken, who's affected, how often, and how badly. The <em class="term">solution space</em> is the set of specific things you could build to address it — features, workflows, UI, architecture. Product sense, first principles, and JTBD are all tools for exploring the problem space well. The mistake that undoes all three is jumping to the solution space before the problem space is actually understood — usually because a solution arrived first, dressed up as a request.</p>
+
+    <div class="funnel">
+      <div class="funnel-row">
+        <span class="funnel-tag">Problem space</span>
+        <div class="funnel-bar">
+          <span class="width-wide"></span>
+          "Enterprise marketers at regulated companies can't launch a compliant campaign without a 3-day legal review cycle, and that review is manual and inconsistent across reviewers."
+        </div>
+      </div>
+      <div class="funnel-row narrow">
+        <span class="funnel-tag">Narrowing</span>
+        <div class="funnel-bar">
+          <span class="width-mid"></span>
+          The reviewable unit is campaign copy + audience + offer terms; the bottleneck is reviewer availability and inconsistent judgment, not the review step itself.
+        </div>
+      </div>
+      <div class="funnel-row narrow">
+        <span class="funnel-tag">Solution space</span>
+        <div class="funnel-bar">
+          <span class="width-narrow"></span>
+          Rule-based pre-checks that auto-clear 70% of campaigns, an audit trail for the rest, a reviewer queue with SLA tracking. (A dedicated "approval workflow" is one shape this could take — not the only one.)
+        </div>
+      </div>
+    </div>
+
+    <p>Notice the width of each bar. The problem space is intentionally wide — it holds every fact about the situation, including ones that turn out irrelevant. The solution space narrows only after you've explored enough of the problem space to know what actually matters. Jump straight to the bottom row and you'll build a plausible-sounding feature that may not touch the real bottleneck at all.</p>
+
+    <div class="pullquote">A request is a hypothesis about the solution space wearing the clothes of a fact about the problem space. Your job is to take the clothes off before you scope anything.</div>
+
+    <p>This is where Tuesday's and Wednesday's tools do their real work. First principles decomposition is how you strip a request back to problem-space facts. JTBD is how you describe the problem space in terms of progress the customer is trying to make, not features they're missing. Staying disciplined about which space you're in isn't a fourth framework — it's the rule that makes the other three actually get used, instead of skipped because "we already know what to build."</p>
+  </section>
+
+  <!-- 2. WORKED EXAMPLE -->
+  <section class="block" id="worked-example">
+    <div class="section-head">
+      <span class="section-num">II.</span>
+      <span class="section-label">Worked Example</span>
+      <span class="section-time">3 min</span>
+    </div>
+
+    <div class="case">
+      <span class="case-tag">B2B SaaS · CRM Marketing Platform</span>
+      <h4>"Add a scheduling calendar view to the campaign dashboard"</h4>
+      <p>A mid-market retail customer's marketing ops lead submits this through your feedback portal, upvoted by six other accounts. It reads like a clean, specific, buildable request — exactly the kind that's tempting to drop straight into a sprint.</p>
+
+      <p>Here's how a senior PM keeps it in the problem space one extra beat before deciding anything:</p>
+
+      <div class="stack">
+        <div class="stack-row">
+          <span class="stack-num">1</span>
+          <div class="stack-body">
+            <b>Name what space the request is written in.</b>
+            <span>"Calendar view" is a UI pattern — pure solution space. The problem space question underneath it hasn't been asked yet: what decision or action does the marketer need this calendar to support?</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <span class="stack-num">2</span>
+          <div class="stack-body">
+            <b>Go back to the problem space with a targeted question.</b>
+            <span>Talking to three of the six upvoters reveals the actual friction: marketers run 15-20 campaigns a month across email, SMS, and push, and currently can't tell at a glance whether two campaigns will hit the same VIP segment on the same day — leading to over-messaging complaints.</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <span class="stack-num">3</span>
+          <div class="stack-body">
+            <b>Confirm the narrowed problem before touching solutions.</b>
+            <span>The real problem-space fact: overlap detection across concurrent sends to shared audiences, not visualization of dates. A calendar view could surface this — but so could a proactive overlap warning at scheduling time, which needs no new screen at all.</span>
+          </div>
+        </div>
+        <div class="stack-row">
+          <span class="stack-num">4</span>
+          <div class="stack-body">
+            <b>Only now, enter the solution space — deliberately.</b>
+            <span>The team ships an audience-overlap warning inline in the existing scheduler: two engineering weeks instead of a new calendar surface, and it fixes the complaint the six upvoters actually had, which a calendar view alone would only have partially addressed.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. QUIZ -->
+  <section class="block" id="quiz">
+    <div class="section-head">
+      <span class="section-num">III.</span>
+      <span class="section-label">Quiz</span>
+      <span class="section-time">5 min</span>
+    </div>
+
+    <div id="quiz-container"></div>
+    <div class="score-wrap" id="score-wrap">
+      <svg class="ring" width="56" height="56" viewBox="0 0 56 56">
+        <circle cx="28" cy="28" r="24" fill="none" stroke="var(--line)" stroke-width="6"/>
+        <circle id="ring-progress" cx="28" cy="28" r="24" fill="none" stroke="var(--teal)" stroke-width="6"
+          stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8"
+          transform="rotate(-90 28 28)" style="transition: stroke-dashoffset .6s ease;"/>
+      </svg>
+      <div class="score-text">
+        <b id="score-num">0 / 3</b>
+        <span id="score-msg">Answer all three to see your score.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SCENARIO DRILL -->
+  <section class="block" id="drill">
+    <div class="section-head">
+      <span class="section-num">IV.</span>
+      <span class="section-label">Scenario Drill</span>
+      <span class="section-time">8 min</span>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-setup">
+        <span class="from">The situation</span>
+        Your Head of Sales forwards you an email from a prospect evaluating your platform against two competitors: <strong>"We need a native Salesforce integration with two-way field sync before we can sign. Every vendor we're looking at has one. Can we commit to Q3?"</strong> Sales wants this greenlit in this week's roadmap review — it's framed as a $400K deal blocker.
+      </div>
+
+      <div class="prompt-q">Before you write "native Salesforce integration" into the roadmap, work it yourself: what problem-space question haven't you asked yet, and why does the answer matter more than matching what "every vendor" has?</div>
+
+      <button class="reveal-btn" id="reveal-btn" onclick="revealAnalysis()">Reveal senior PM analysis</button>
+
+      <div class="analysis" id="analysis">
+        <span class="analysis-label">Senior PM analysis</span>
+
+        <h5>Spot the solution-space language doing the talking</h5>
+        <p>"Native integration with two-way field sync" is a specific architecture — a solution. It arrived without a stated problem attached, other than "everyone else has it," which is market signal about frequency, not a fact about what this prospect's team actually needs synced, how often, or why.</p>
+
+        <h5>Go back into the problem space</h5>
+        <p>A 20-minute call with the prospect's ops lead reveals the real friction: their sales reps manually re-enter campaign engagement data into Salesforce every Monday to prioritize outbound calls, and it's error-prone and a day behind. The underlying job is "give reps same-day visibility into marketing engagement inside the tool they already live in" — which is narrower than full bidirectional sync of every field.</p>
+
+        <h5>Reintroduce "every vendor has one" — correctly scoped</h5>
+        <p>The competitive signal tells you integration depth matters to this ICP segment broadly — worth investing in. It doesn't tell you two-way sync is the right first release. A one-way, near-real-time push of engagement events into Salesforce (a much smaller build) may satisfy the actual job for this quarter, with full two-way sync as a phase 2 the team can commit to honestly instead of overpromising Q3.</p>
+
+        <h5>Take the narrowed answer back to Sales</h5>
+        <p>The move isn't to say no to the deal blocker — it's to come back with "here's what we can ship by Q3 that solves the actual workflow gap your ops lead described, and here's the fuller sync as a committed phase 2." That's a stronger, more credible answer than agreeing to "two-way sync" and discovering the real scope in week six of the build.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. MEETING MOVE -->
+  <section class="block" id="move">
+    <div class="section-head">
+      <span class="section-num">V.</span>
+      <span class="section-label">Meeting Move</span>
+      <span class="section-time">2 min</span>
+    </div>
+
+    <div class="move-card">
+      <p style="margin-bottom:0; font-size:14px; color:var(--stone); text-transform:uppercase; letter-spacing:0.08em; font-family:'Outfit'; font-weight:700;">Use this the moment a request arrives already shaped as a feature</p>
+      <div class="move-template">"If we set aside [the specific feature] for a second — what's the situation this needs to fix, and how would we know it was fixed even if the solution looked completely different?"</div>
+      <p class="move-note">This question does the space-separation work in one move: it forces the room to state the problem-space fact independently of the proposed fix, and the "how would we know" clause gives you a success criterion you can test against multiple solution shapes — not just the one that was pitched to you.</p>
+    </div>
+  </section>
+
+  <!-- 6. GLOSSARY -->
+  <section class="block" id="glossary">
+    <div class="section-head">
+      <span class="section-num">VI.</span>
+      <span class="section-label">Glossary</span>
+      <span class="section-time">2 min</span>
+    </div>
+
+    <div class="gloss">
+      <div class="gloss-item">
+        <div class="gloss-term"><span class="idx">01</span> Problem space</div>
+        <div class="gloss-def">The set of facts about a customer's situation, goals, and constraints — independent of any proposed fix. Where discovery, JTBD interviews, and first-principles decomposition live.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term"><span class="idx">02</span> Solution space</div>
+        <div class="gloss-def">The set of specific things you could build to address a problem — features, UI, architecture. Should be entered deliberately, after the problem space is understood, not by default.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term"><span class="idx">03</span> Solutioning (premature)</div>
+        <div class="gloss-def">Committing to a specific build before the underlying problem has been validated or scoped. The most common way roadmaps fill up with features that solve the wrong-sized version of a real problem.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term"><span class="idx">04</span> Requirement vs. request</div>
+        <div class="gloss-def">A request names a solution ("add a calendar view"); a requirement names a problem-space fact the solution must satisfy ("marketers need to detect audience overlap before sending"). Translating the former into the latter is the core discipline of this lesson.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term"><span class="idx">05</span> Success criterion (space-independent)</div>
+        <div class="gloss-def">A way of knowing a problem is solved that doesn't reference the specific solution built — e.g., "over-messaging complaints drop by half," not "the calendar view shipped." Lets you validate outcomes even if you change the solution mid-flight.</div>
+      </div>
+    </div>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 5 complete</span>
+    </div>
+    <div class="footer-next"><a href="day06.html">Next lesson → Porter's Five Forces for SaaS</a></div>
+  </div>
+</div>
+
+<script>
+const QUIZ = [
+  {
+    q: "A customer support lead says: \"Customers want a bulk-export button on the reporting page.\" What's the correct first move to keep this in the right space?",
+    options: [
+      { text: "Scope the export button — it's specific enough to build directly and support already validated the need by hearing it from customers.", correct: false,
+        explain: "\"Bulk-export button\" is a solution-space description. Support hearing it repeatedly tells you a real problem exists somewhere underneath it — it doesn't tell you exporting is the right fix, or what customers actually do with the exported data." },
+      { text: "Ask what customers are trying to do with the data once it's exported, and how often — the export request may be a workaround for a gap somewhere else entirely.", correct: true,
+        explain: "Correct. Customers often ask for an export button because they need to do something the product doesn't yet support natively — build a report for their boss, merge with another data source, run analysis your platform doesn't offer. Finding that underlying job may point to a better, narrower, or entirely different fix than a raw export." },
+      { text: "Deprioritize the request since export buttons are a low-value feature category by default.", correct: false,
+        explain: "There's no such thing as a feature category that's inherently low-value — that judgment has to come from understanding the problem space first, not skipping it in the other direction." },
+    ]
+  },
+  {
+    q: "Which of these is the clearest example of a problem-space statement, as opposed to a solution-space one?",
+    options: [
+      { text: "\"We should add a Slack integration.\"", correct: false,
+        explain: "This names a specific solution (an integration to a specific tool) before establishing what job that integration would do — solution space." },
+      { text: "\"Campaign managers miss time-sensitive approval requests because they live outside the tools campaign managers check daily.\"", correct: true,
+        explain: "Correct. This is a fact about the customer's situation and behavior — where they look, what they miss, why — with no commitment yet to how it should be fixed. Multiple solutions (Slack integration, in-app badge, email digest) could all address this same problem-space fact." },
+      { text: "\"Let's build an in-app notification center.\"", correct: false,
+        explain: "Also a named solution. Notice both incorrect options here propose a specific build — the tell for solution-space language is that it describes a thing to construct, not a fact about the customer." },
+    ]
+  },
+  {
+    q: "A stakeholder says, \"I don't need the problem-space exercise — I already know what to build, I just need you to write the ticket.\" What's the sharpest, most senior response?",
+    options: [
+      { text: "Agree and write the ticket as specified — pushing back would slow down a stakeholder who clearly has conviction and domain knowledge.", correct: false,
+        explain: "Conviction isn't evidence. Even a stakeholder with strong domain knowledge is proposing a solution-space answer; skipping the problem-space check is exactly how confident, well-intentioned requests turn into the wrong build." },
+      { text: "Ask one narrow problem-space question — what changes for the customer if this ships — before writing the ticket, framed as derisking the build, not re-litigating the decision.", correct: true,
+        explain: "Correct. This isn't about blocking a confident stakeholder or reopening the whole debate — it's a fast, low-friction check that either confirms the solution is well-aimed or surfaces a gap while it's still cheap to redirect. Most stakeholders will answer a single sharp question; refusing outright usually isn't necessary." },
+      { text: "Escalate to your manager that the stakeholder is bypassing proper process.", correct: false,
+        explain: "Disproportionate for a routine moment like this. The problem-space discipline is meant to be lightweight and applied in the room, not turned into an organizational conflict." },
+    ]
+  }
+];
+
+let score = 0;
+let answered = 0;
+
+function renderQuiz(){
+  const container = document.getElementById('quiz-container');
+  QUIZ.forEach((item, qi) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-item';
+    const qEl = document.createElement('div');
+    qEl.className = 'quiz-q';
+    qEl.textContent = (qi+1) + ". " + item.q;
+    card.appendChild(qEl);
+
+    const letters = ['A','B','C'];
+    item.options.forEach((opt, oi) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.innerHTML = '<span class="letter">' + letters[oi] + '</span><span>' + opt.text + '</span>';
+      btn.addEventListener('click', () => handleAnswer(qi, oi, card));
+      card.appendChild(btn);
+    });
+
+    const explain = document.createElement('div');
+    explain.className = 'explain';
+    explain.id = 'explain-' + qi;
+    card.appendChild(explain);
+
+    container.appendChild(card);
+  });
+}
+
+function handleAnswer(qi, oi, card){
+  const buttons = card.querySelectorAll('.opt');
+  if (buttons[0].disabled) return;
+
+  const item = QUIZ[qi];
+  buttons.forEach((btn, idx) => {
+    btn.disabled = true;
+    if (item.options[idx].correct) btn.classList.add('correct');
+    else if (idx === oi) btn.classList.add('incorrect');
+  });
+
+  const wasCorrect = item.options[oi].correct;
+  if (wasCorrect) score++;
+  answered++;
+
+  const explainEl = document.getElementById('explain-' + qi);
+  const chosen = item.options[oi];
+  const correctOpt = item.options.find(o => o.correct);
+  explainEl.innerHTML = '<div class="explain-inner">' +
+    '<span class="verdict ' + (wasCorrect ? 'right' : 'wrong') + '">' + (wasCorrect ? 'Correct.' : 'Not quite.') + '</span> ' +
+    (wasCorrect ? chosen.explain : chosen.explain + (correctOpt ? '<br><br><strong>Better answer:</strong> ' + correctOpt.explain : '')) +
+    '</div>';
+  explainEl.classList.add('open');
+
+  if (answered === QUIZ.length) showScore();
+}
+
+function showScore(){
+  const wrap = document.getElementById('score-wrap');
+  wrap.classList.add('show');
+  document.getElementById('score-num').textContent = score + ' / ' + QUIZ.length;
+  const messages = {
+    0: "Worth a re-read of the Big Idea — the tell is always a named thing-to-build arriving before the underlying fact does.",
+    1: "Getting there. Keep asking 'what space is this sentence in' before reacting to any request.",
+    2: "Solid instinct. One more rep and you'll catch solution-space language on reflex.",
+    3: "Clean sweep — you're already translating requests into requirements before you scope."
+  };
+  document.getElementById('score-msg').textContent = messages[score];
+
+  const circumference = 150.8;
+  const offset = circumference - (score / QUIZ.length) * circumference;
+  document.getElementById('ring-progress').style.strokeDashoffset = offset;
+}
+
+function revealAnalysis(){
+  document.getElementById('analysis').classList.add('open');
+  document.getElementById('reveal-btn').classList.add('hidden-btn');
+}
+
+renderQuiz();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

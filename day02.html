@@ -1,0 +1,611 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Product Sense 101 · Day 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --teal-soft: rgba(26, 117, 106, 0.08);
+    --teal-mid: rgba(26, 117, 106, 0.15);
+    --gold: #B8892E;
+    --gold-soft: rgba(184, 137, 46, 0.10);
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --correct: #3A7D44;
+    --correct-soft: rgba(58, 125, 68, 0.08);
+    --incorrect: #B94A35;
+    --incorrect-soft: rgba(185, 74, 53, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --teal-soft: rgba(60, 181, 165, 0.10);
+      --teal-mid: rgba(60, 181, 165, 0.18);
+      --gold: #D4A73E;
+      --gold-soft: rgba(212, 167, 62, 0.12);
+      --stone: #7A756C;
+      --chalk: #222120;
+      --correct: #5CB86A;
+      --correct-soft: rgba(92, 184, 106, 0.10);
+      --incorrect: #D4604A;
+      --incorrect-soft: rgba(212, 96, 74, 0.10);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --teal-soft: rgba(60, 181, 165, 0.10);
+    --teal-mid: rgba(60, 181, 165, 0.18);
+    --gold: #D4A73E;
+    --gold-soft: rgba(212, 167, 62, 0.12);
+    --stone: #7A756C;
+    --chalk: #222120;
+    --correct: #5CB86A;
+    --correct-soft: rgba(92, 184, 106, 0.10);
+    --incorrect: #D4604A;
+    --incorrect-soft: rgba(212, 96, 74, 0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 660px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+  /* — Progress — */
+  .progress-strip {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--ground);
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+  .progress-label { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone); }
+  .progress-day { font-size: 0.8rem; font-weight: 500; color: var(--teal); }
+  .progress-track { height: 4px; background: var(--chalk); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 6.6%; background: var(--teal); border-radius: 2px; transition: width 0.6s ease; }
+
+  /* — Header — */
+  .lesson-header { margin-top: 2.5rem; margin-bottom: 2.5rem; }
+  .lesson-eyebrow { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .lesson-title { font-family: 'Newsreader', Georgia, serif; font-size: 2.4rem; font-weight: 600; line-height: 1.2; text-wrap: balance; color: var(--ink); margin-bottom: 0.75rem; }
+  .lesson-subtitle { font-size: 1.05rem; color: var(--stone); font-weight: 300; line-height: 1.6; max-width: 540px; }
+
+  /* — Sections — */
+  .section { margin-top: 3rem; }
+  .section-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--chalk); }
+  .section h2 { font-family: 'Newsreader', Georgia, serif; font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin-bottom: 1rem; text-wrap: balance; }
+  .section p { margin-bottom: 1rem; }
+  .section p:last-child { margin-bottom: 0; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+
+  /* — Callout — */
+  .callout { background: var(--teal-soft); border-left: 3px solid var(--teal); padding: 1.1rem 1.25rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-size: 0.95rem; line-height: 1.65; }
+  .callout-warn { background: var(--gold-soft); border-left-color: var(--gold); }
+
+  /* — Five Whys cascade — */
+  .why-cascade { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+  .why-step {
+    display: grid; grid-template-columns: auto 1fr; gap: 0.75rem; align-items: start;
+    padding: 0.75rem 1rem; background: var(--chalk); position: relative;
+  }
+  .why-step:first-child { border-radius: 6px 6px 0 0; }
+  .why-step:last-child { border-radius: 0 0 6px 6px; }
+  .why-step + .why-step { border-top: 1px solid var(--ground); }
+  .why-depth {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--stone); padding-top: 0.1rem; white-space: nowrap;
+  }
+  .why-step:last-child .why-depth { color: var(--teal); }
+  .why-text { font-size: 0.92rem; line-height: 1.55; }
+  .why-step:last-child .why-text { font-weight: 500; color: var(--ink); }
+  .why-step:last-child { background: var(--teal-soft); }
+
+  /* — Contrast box — */
+  .contrast { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1.5rem 0; }
+  @media (max-width: 500px) { .contrast { grid-template-columns: 1fr; } }
+  .contrast-panel { padding: 1rem 1.15rem; border-radius: 6px; }
+  .contrast-panel.weak { background: var(--incorrect-soft); border-left: 3px solid var(--incorrect); }
+  .contrast-panel.strong { background: var(--correct-soft); border-left: 3px solid var(--correct); }
+  .contrast-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .contrast-panel.weak .contrast-label { color: var(--incorrect); }
+  .contrast-panel.strong .contrast-label { color: var(--correct); }
+  .contrast-text { font-size: 0.88rem; line-height: 1.6; color: var(--ink); }
+
+  /* — Worked example — */
+  .example-box { background: var(--chalk); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+  .example-box h3 { font-family: 'Newsreader', Georgia, serif; font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; font-style: italic; }
+
+  /* — Quiz — */
+  .quiz-q { margin-bottom: 2rem; }
+  .quiz-q:last-child { margin-bottom: 0; }
+  .quiz-stem { font-weight: 500; font-size: 1rem; margin-bottom: 0.85rem; line-height: 1.6; }
+  .quiz-stem .q-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.6rem; height: 1.6rem; border-radius: 50%;
+    background: var(--teal); color: var(--ground);
+    font-size: 0.75rem; font-weight: 600; margin-right: 0.4rem;
+    vertical-align: text-bottom; font-variant-numeric: tabular-nums;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.45rem; }
+  .quiz-opt {
+    display: flex; align-items: baseline; gap: 0.6rem;
+    padding: 0.7rem 1rem; border: 1.5px solid var(--chalk); border-radius: 6px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    font-size: 0.92rem; line-height: 1.5; user-select: none;
+  }
+  .quiz-opt:hover:not(.answered) { border-color: var(--teal); background: var(--teal-soft); }
+  .quiz-opt:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .quiz-opt .opt-letter { font-weight: 600; color: var(--stone); flex-shrink: 0; font-variant-numeric: tabular-nums; transition: color 0.15s; }
+  .quiz-opt:hover:not(.answered) .opt-letter { color: var(--teal); }
+  .quiz-opt.correct { border-color: var(--correct); background: var(--correct-soft); }
+  .quiz-opt.correct .opt-letter { color: var(--correct); }
+  .quiz-opt.incorrect { border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .quiz-opt.incorrect .opt-letter { color: var(--incorrect); }
+  .quiz-opt.answered { cursor: default; opacity: 0.5; }
+  .quiz-opt.correct.answered, .quiz-opt.incorrect.answered { opacity: 1; }
+  .quiz-explanation { margin-top: 0.6rem; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.6; border-radius: 6px; display: none; }
+  .quiz-explanation.visible { display: block; }
+  .quiz-explanation.correct-expl { background: var(--correct-soft); color: var(--ink); }
+  .quiz-explanation.incorrect-expl { background: var(--incorrect-soft); color: var(--ink); }
+
+  /* — Scenario — */
+  .scenario-prompt { font-family: 'Newsreader', Georgia, serif; font-size: 1.1rem; font-style: italic; line-height: 1.6; margin-bottom: 1.25rem; color: var(--ink); }
+  .scenario-bullets { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.25rem; padding-left: 0; list-style: none; }
+  .scenario-bullets li { font-size: 0.92rem; line-height: 1.55; padding-left: 1rem; position: relative; }
+  .scenario-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--stone); }
+  .scenario-textarea {
+    width: 100%; min-height: 140px; padding: 1rem;
+    border: 1.5px solid var(--chalk); border-radius: 6px;
+    background: var(--ground); color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif; font-size: 0.92rem; line-height: 1.6;
+    resize: vertical; transition: border-color 0.15s;
+  }
+  .scenario-textarea:focus { outline: none; border-color: var(--teal); }
+  .scenario-textarea::placeholder { color: var(--stone); opacity: 0.6; }
+  .scenario-hint { margin-top: 0.5rem; font-size: 0.8rem; color: var(--stone); }
+  .reveal-btn {
+    display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 1rem;
+    padding: 0.55rem 1.1rem; background: var(--teal-soft); color: var(--teal);
+    border: 1.5px solid var(--teal-mid); border-radius: 6px;
+    font-family: 'Outfit', system-ui, sans-serif; font-size: 0.85rem; font-weight: 500;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .reveal-btn:hover { background: var(--teal-mid); }
+  .reveal-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .scenario-answer { margin-top: 0.85rem; padding: 1rem 1.15rem; background: var(--teal-soft); border-radius: 6px; font-size: 0.9rem; line-height: 1.65; display: none; }
+  .scenario-answer.visible { display: block; }
+  .scenario-answer p + p { margin-top: 0.5rem; }
+
+  /* — Meeting move — */
+  .meeting-move-quote {
+    font-family: 'Newsreader', Georgia, serif; font-size: 1.3rem; font-weight: 600;
+    line-height: 1.45; color: var(--teal); margin: 1rem 0;
+    padding-left: 1.25rem; border-left: 3px solid var(--teal); text-wrap: balance;
+  }
+
+  /* — Glossary — */
+  .glossary { display: flex; flex-direction: column; gap: 0.75rem; }
+  .glossary-item { padding: 0.85rem 1rem; background: var(--chalk); border-radius: 6px; }
+  .glossary-term { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+  .glossary-def { font-size: 0.85rem; color: var(--stone); line-height: 1.55; }
+
+  /* — Score — */
+  .score-strip { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; background: var(--chalk); border-radius: 8px; margin-top: 2.5rem; }
+  .score-ring { width: 52px; height: 52px; flex-shrink: 0; }
+  .score-ring circle { fill: none; stroke-width: 4; }
+  .score-ring .track { stroke: var(--ground); }
+  .score-ring .fill { stroke: var(--teal); stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 0.6s ease; }
+  .score-ring text { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+  .score-text { font-size: 0.92rem; line-height: 1.5; }
+  .score-text strong { font-weight: 600; }
+
+  /* — Recap — */
+  .recap { background: var(--gold-soft); border-radius: 8px; padding: 1.25rem; margin-top: 2rem; }
+  .recap-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .recap-text { font-size: 0.9rem; line-height: 1.6; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .section { animation: fadeUp 0.4s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<div class="progress-strip">
+    <div class="progress-meta">
+      <span class="progress-label">Product Sense 101</span>
+      <span class="progress-day">Day 2 of 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="lesson-header">
+    <div class="lesson-eyebrow">Week 1 · The PM Mental Model</div>
+    <h1 class="lesson-title">First Principles Thinking</h1>
+    <p class="lesson-subtitle">Stop borrowing other people's assumptions. Learn to reason from ground truth — the skill that separates PMs who copy features from PMs who create categories.</p>
+  </div>
+
+  <!-- The Big Idea -->
+  <div class="section">
+    <div class="section-label">The Big Idea</div>
+    <p>First principles thinking is the practice of breaking a problem down to its most fundamental truths — the things you know to be true independent of convention, precedent, or what competitors do — and reasoning up from there.</p>
+    <p>Most PMs reason <strong>by analogy</strong>: <em>"Salesforce does X, so we should do X."</em> <em>"Our competitor launched Y, so we need Y."</em> Analogy is fast, but it's fragile — it inherits someone else's assumptions without examining whether they apply to your context, your users, or your market position.</p>
+    <p>First principles asks a harder question: <strong>"What do we know to be true about our users, our market, and our technology — and what can we build from those truths alone?"</strong></p>
+
+    <div class="contrast">
+      <div class="contrast-panel weak">
+        <div class="contrast-label">Analogy</div>
+        <div class="contrast-text">"Every marketing platform has a drag-and-drop campaign builder. We need one too."</div>
+      </div>
+      <div class="contrast-panel strong">
+        <div class="contrast-label">First Principles</div>
+        <div class="contrast-text">"Our users need to define segments, select channels, set timing, and compose messages. What's the fastest path from intent to execution for <em>our</em> users?"</div>
+      </div>
+    </div>
+
+    <p>The first principles version might still lead to a drag-and-drop builder — but it might also lead to a template library with smart defaults, or an AI flow that asks three questions and generates the campaign. You don't know until you reason from the ground up.</p>
+  </div>
+
+  <!-- The Five Whys -->
+  <div class="section">
+    <div class="section-label">A Practical Tool: The Five Whys</div>
+    <p>First principles can feel abstract. The <strong>Five Whys</strong> makes it concrete. Keep asking "Why?" until you hit bedrock — the fundamental truth or constraint that can't be decomposed further.</p>
+
+    <div class="why-cascade">
+      <div class="why-step">
+        <span class="why-depth">Surface</span>
+        <span class="why-text">"We need to add a new reporting dashboard."</span>
+      </div>
+      <div class="why-step">
+        <span class="why-depth">Why?</span>
+        <span class="why-text">"Because customers keep asking for more analytics."</span>
+      </div>
+      <div class="why-step">
+        <span class="why-depth">Why?</span>
+        <span class="why-text">"Because they can't answer basic questions about campaign performance."</span>
+      </div>
+      <div class="why-step">
+        <span class="why-depth">Why?</span>
+        <span class="why-text">"Because our current reports show vanity metrics, not actionable insights."</span>
+      </div>
+      <div class="why-step">
+        <span class="why-depth">Root</span>
+        <span class="why-text">Reports were designed around what was easy to compute, not what marketers need to decide.</span>
+      </div>
+    </div>
+
+    <p>Now you're at the real problem. The solution isn't "more dashboards" — it's redesigning existing reports around <strong>decision moments</strong>. That's a fundamentally different product decision, and you only get there by pushing past the surface request.</p>
+  </div>
+
+  <!-- B2B trap -->
+  <div class="section">
+    <div class="section-label">The B2B SaaS Angle</div>
+    <p>B2B SaaS is especially prone to analogy reasoning, for four structural reasons:</p>
+    <div class="callout callout-warn">
+      <strong>The Feature Parity Trap.</strong> Competitors are visible (their feature pages, G2 comparisons). Enterprise buyers create feature checklists that force convergence. Sales teams relay "they have X, why don't we?" constantly. Category analysts define expected capabilities. All of this pressure pushes you toward copying — and away from first-principles differentiation.
+    </div>
+    <p>First principles thinking doesn't mean ignoring competitors. It means understanding <strong>why</strong> a feature exists before copying <strong>what</strong> it is. The competitor's context — their user base, their technical architecture, their market position — is almost certainly different from yours.</p>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="section">
+    <div class="section-label">Worked Example</div>
+    <div class="example-box">
+      <h3>The Pricing Page Redesign</h3>
+      <p>Your SaaS company is redesigning pricing. The team's instinct: study competitors' pricing pages, adopt the standard three-tier layout with feature comparison table and "Contact Sales" for enterprise.</p>
+      <p style="margin-top: 0.75rem">A first principles approach decomposes differently:</p>
+      <div class="contrast" style="margin-top: 0.75rem; margin-bottom: 0.75rem;">
+        <div class="contrast-panel weak">
+          <div class="contrast-label">Analogy Questions</div>
+          <div class="contrast-text">What do competitors charge? What checkout flow does Company X use? How many tiers are "standard"?</div>
+        </div>
+        <div class="contrast-panel strong">
+          <div class="contrast-label">First Principles Questions</div>
+          <div class="contrast-text">What are the fundamental value drivers for our customers? What's their actual buying process? What model aligns our revenue with the value we create?</div>
+        </div>
+      </div>
+      <p>This might lead you to usage-based pricing instead of seat-based. Or a two-tier model instead of three. Or a "start free, pay when you see ROI" structure that your competitors can't match because their cost structure is different. The answer comes from <em>your</em> fundamentals, not the industry template.</p>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <div class="section-label">Quiz · Test Your Thinking</div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">1</span> A PM says "We should add Slack integration because every competitor has one." This is an example of:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>Market-driven product development</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Reasoning by analogy</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Customer-centric design</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Competitive intelligence</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> This is classic analogy reasoning — copying a feature because others have it, without examining whether Slack integration solves a problem <em>your</em> specific users have. First principles would ask: "What communication workflow are our users trying to complete, and is Slack the right channel for it?"
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <div class="quiz-stem"><span class="q-num">2</span> The Five Whys technique is most useful when:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>You need to generate new feature ideas quickly</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>You want to validate a hypothesis with quantitative data</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>You need to decompose a surface-level request into its root cause</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>You're conducting a competitive analysis</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: C.</strong> The Five Whys is a root-cause analysis tool. It moves you from a symptom or feature request ("we need X") to the underlying truth ("the real problem is Y"). It's first principles thinking made practical — something you can run in a 30-minute meeting.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <div class="quiz-stem"><span class="q-num">3</span> Which of these is reasoning from first principles?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>"Our NPS dropped, so we should run a customer satisfaction survey"</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>"Figma charges per editor, so we should charge per editor"</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>"Power users create 10x more value than casual users, so pricing should reflect usage intensity"</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>"Gartner says we need AI features, so let's add AI to the roadmap"</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: C.</strong> This starts from a fundamental truth about how value is distributed among your users and reasons upward to a pricing structure. A is a reasonable reaction but not first-principles reasoning. B copies another company's model without examining whether the same dynamics apply. D defers to an analyst's framework rather than your own evidence.
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario -->
+  <div class="section">
+    <div class="section-label">Scenario Drill</div>
+    <p class="scenario-prompt">Your CEO returns from a conference and says: "Every major player in our space is building an AI copilot. We need one too — make it our Q1 priority."</p>
+    <p>How would you apply first principles thinking to this directive? Consider:</p>
+    <ul class="scenario-bullets">
+      <li>What fundamental problem would an AI copilot solve for your specific users?</li>
+      <li>Is there evidence your users need this, or is this competitive anxiety?</li>
+      <li>What first-principles questions would you ask before committing 3 months of engineering?</li>
+      <li>How do you push back constructively without dismissing the CEO's input?</li>
+    </ul>
+    <textarea class="scenario-textarea" placeholder="Write your approach here. How do you navigate the CEO relationship while applying first principles?"></textarea>
+    <div class="scenario-hint">The hard part isn't the framework — it's using it diplomatically with a senior stakeholder.</div>
+    <button class="reveal-btn" id="revealBtn">Show a senior PM's take ▾</button>
+    <div class="scenario-answer" id="scenarioAnswer">
+      <p><strong>Don't dismiss the CEO.</strong> That's not first principles — that's insubordination dressed as rigor. Instead, decompose the request:</p>
+      <p><strong>Start with the user:</strong> What repetitive, high-effort tasks do your users perform today? Where do they get stuck? "AI copilot" is a solution — what's the problem it maps to in your specific product?</p>
+      <p><strong>Examine the assumption:</strong> "Every major player is building one" — are they building the <em>same thing</em>? Probably not. Some are doing AI analytics, some content generation, some workflow automation. The category "AI copilot" is too vague to be a spec.</p>
+      <p><strong>Find the first principle:</strong> Your users are marketers who spend 60% of their time on campaign setup and 40% on analysis. If AI compresses setup time, that's one value proposition. If it surfaces insights they'd otherwise miss, that's a different one. Pick based on evidence about <em>your</em> users, not conference buzz.</p>
+      <p><strong>Propose a scoped experiment:</strong> "Let's spend 2 weeks validating which AI use case our top 10 customers would actually pay more for, then scope Q1 around the winner." This honors the CEO's instinct (AI matters) while applying first principles (but which AI, and for whom?).</p>
+    </div>
+  </div>
+
+  <!-- Meeting Move -->
+  <div class="section">
+    <div class="section-label">Meeting Move of the Day</div>
+    <p>When someone proposes copying a competitor's feature, ask:</p>
+    <div class="meeting-move-quote">"What problem did they build that to solve — and do we have the same problem?"</div>
+    <p>This isn't confrontational. It honors the observation (the competitor <em>did</em> build it) while redirecting the conversation to first principles. It also subtly teaches the room that features exist to solve problems, not to match checklists.</p>
+
+    <div class="recap">
+      <div class="recap-label">Connection to Day 1</div>
+      <div class="recap-text">Yesterday's Meeting Move asked <em>"What user behavior do we expect to change?"</em> — that's the <strong>User Lens</strong>. Today's question operates on the <strong>Market Lens</strong> — it unpacks competitive signals instead of accepting them at face value. You're building a repertoire.</div>
+    </div>
+  </div>
+
+  <!-- Glossary -->
+  <div class="section">
+    <div class="section-label">Glossary</div>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">First Principles Thinking</div>
+        <div class="glossary-def">Reasoning from fundamental truths rather than by analogy, convention, or precedent. Decompose a problem to its base elements and reconstruct from there.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Reasoning by Analogy</div>
+        <div class="glossary-def">Making decisions based on what others have done, assuming their context matches yours. Fast but fragile — it inherits hidden assumptions without examination.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Five Whys</div>
+        <div class="glossary-def">A root-cause analysis technique where you ask "Why?" iteratively to move from surface symptoms to underlying causes. Originated in Toyota's manufacturing system, now a staple PM tool.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Feature Parity Trap</div>
+        <div class="glossary-def">The compulsion to match every competitor feature, leading to a bloated product that does many things adequately rather than a few things exceptionally. Driven by sales pressure and buyer checklists.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Convergent Design</div>
+        <div class="glossary-def">When products in a category become increasingly similar because everyone copies each other rather than innovating from user needs. The end state of widespread analogy reasoning.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-strip" id="scoreStrip" style="display: none;">
+    <svg class="score-ring" viewBox="0 0 52 52">
+      <circle class="track" cx="26" cy="26" r="22" />
+      <circle class="fill" id="scoreArc" cx="26" cy="26" r="22" stroke-dasharray="138.23" stroke-dashoffset="138.23" />
+      <text x="26" y="26" id="scoreText">0/3</text>
+    </svg>
+    <div class="score-text" id="scoreMsg"><strong>Quiz score</strong><br>Answer all three questions to see your result.</div>
+  </div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 2 complete</span>
+    </div>
+    <div class="footer-next"><a href="day03.html">Next lesson → Jobs-to-be-Done</a></div>
+  </div>
+</div>
+
+<script>
+  var quizState = { answered: 0, correct: 0, total: 3 };
+  document.querySelectorAll('.quiz-q').forEach(function(q) {
+    var correctIdx = parseInt(q.dataset.correct);
+    var opts = q.querySelectorAll('.quiz-opt');
+    var expl = q.querySelector('.quiz-explanation');
+    function answer(selectedIdx) {
+      if (q.classList.contains('done')) return;
+      q.classList.add('done');
+      var isCorrect = selectedIdx === correctIdx;
+      quizState.answered++;
+      if (isCorrect) quizState.correct++;
+      opts.forEach(function(opt, i) {
+        opt.classList.add('answered');
+        if (i === correctIdx) opt.classList.add('correct');
+        if (i === selectedIdx && !isCorrect) opt.classList.add('incorrect');
+      });
+      expl.classList.add('visible', isCorrect ? 'correct-expl' : 'incorrect-expl');
+      updateScore();
+    }
+    opts.forEach(function(opt, i) {
+      opt.addEventListener('click', function() { answer(i); });
+      opt.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); answer(i); }
+      });
+    });
+  });
+  function updateScore() {
+    var strip = document.getElementById('scoreStrip');
+    strip.style.display = 'flex';
+    var pct = quizState.correct / quizState.total;
+    var circumference = 138.23;
+    document.getElementById('scoreArc').style.strokeDashoffset = circumference * (1 - pct);
+    document.getElementById('scoreText').textContent = quizState.correct + '/' + quizState.total;
+    var msg = document.getElementById('scoreMsg');
+    if (quizState.answered === quizState.total) {
+      if (quizState.correct === quizState.total) {
+        msg.innerHTML = '<strong>Perfect.</strong><br>You can spot analogy reasoning when you see it. Tomorrow we put a name on the problems users actually have — Jobs-to-be-Done.';
+      } else if (quizState.correct >= 2) {
+        msg.innerHTML = '<strong>Solid.</strong><br>The line between analogy and first principles can be subtle. Re-read the one you missed — the distinction sharpens with practice.';
+      } else {
+        msg.innerHTML = '<strong>Room to grow.</strong><br>The instinct to copy is strong — that\'s exactly what this course is training you out of. Try the Five Whys on a real decision this week.';
+      }
+      document.getElementById('progressFill').style.width = '6.6%';
+    }
+  }
+  document.getElementById('revealBtn').addEventListener('click', function() {
+    var answer = document.getElementById('scenarioAnswer');
+    var isVisible = answer.classList.contains('visible');
+    answer.classList.toggle('visible');
+    this.textContent = isVisible ? 'Show a senior PM\'s take ▾' : 'Hide ▴';
+  });
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

@@ -1,0 +1,569 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Opportunity Sizing &amp; Cost of Delay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 3, Day 12 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding:0 20px; padding-block:40px 80px;
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone);}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.framework-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px; margin:20px 0; background:var(--ground);
+}
+.fb-row{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:4px; flex-wrap:wrap;}
+.fb-row .fb-name{font-weight:600;}
+.fb-row .fb-score{font-family:'Newsreader',serif; font-weight:600; color:var(--teal); font-variant-numeric:tabular-nums;}
+.gauge-row{display:flex; flex-direction:column; gap:14px; margin-top:16px;}
+.gauge{display:flex; align-items:center; gap:14px;}
+.gauge-label{width:150px; flex-shrink:0; font-size:.88rem; font-weight:500;}
+.gauge-bar{flex:1; height:10px; background:var(--chalk); border-radius:6px; overflow:hidden; min-width:0;}
+.gauge-fill{height:100%; background:var(--teal); border-radius:6px;}
+.gauge-val{width:76px; text-align:right; font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--stone); flex-shrink:0;}
+
+.cod-curves{display:flex; flex-direction:column; gap:22px; margin-top:18px;}
+.cod-curve-label{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; font-size:.9rem;}
+.cod-curve-label b{font-size:.95rem;}
+.cod-curve-label span{color:var(--stone); font-size:.82rem;}
+.cod-svg-wrap{background:var(--ground); border:1px solid var(--chalk); border-radius:10px; padding:10px 14px 4px;}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.worked blockquote{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.1rem; color:var(--ink);
+  border-left:3px solid var(--gold); padding-left:16px; margin:14px 0;
+}
+.cd3-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.cd3-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.cd3-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.cd3-table tr:last-child td{border-bottom:none;}
+.cd3-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.cd3-table td.win{color:var(--teal); font-weight:600;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone);}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .gauge-label{width:110px; font-size:.82rem;}
+  .cd3-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 3 · PRIORITIZATION &amp; DECISIONS <span class="dot"></span> DAY 12 OF 30</div>
+    <h1>Opportunity Sizing &amp; Cost of Delay</h1>
+    <p class="sub">Every backlog item has a size. Only some of them have a clock attached. Yesterday's frameworks rank value against effort &#8212; none of them tell you what waiting costs.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you learned to match RICE, ICE, or MoSCoW to the kind of decision in front of you &#8212; ranking a mature backlog, triaging raw ideas, or negotiating a forced cut. All three answer the same question: <i>how big is this, relative to the others?</i> None of them ask the question underneath that one: <i>what do we lose if we don't ship it this month instead of next?</i> That's today's gap &#8212; sizing the opportunity honestly, and pricing the delay.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Opportunity Sizing and Cost of Delay are two separate disciplines that most roadmap conversations collapse into one fuzzy word: "impact." Separating them is what lets you catch the single most expensive prioritization mistake in B2B SaaS &#8212; ranking by how big something is while ignoring how fast its value is leaking away.</p>
+    <p><b>Opportunity Sizing</b> is not the TAM/SAM/SOM exercise from Day 8. Market sizing answers "how big is the market this product category could ever serve." Opportunity Sizing answers a narrower, more useful question: "if we solve this specific problem for this specific segment, what is it realistically worth" &#8212; in expansion revenue, retained accounts, or reduced cost. It's sizing one initiative, not one market, and it's the number RICE's "Impact" and "Reach" inputs should actually be built from rather than guessed.</p>
+    <p><b>Cost of Delay (CoD)</b> adds the dimension every static scoring framework leaves out: time. It is the economic value an opportunity loses, per week or per quarter, for every period you don't ship it. Two opportunities can have the same total size and completely different urgency &#8212; one bleeds value the moment it's delayed, the other barely changes whether you ship it this month or next.</p>
+    <div class="callout">
+      <h4>Why this isn't just RICE with an extra column</h4>
+      <p style="margin:0;">RICE and ICE are both snapshot tools &#8212; they score an opportunity as if it were frozen in time. Cost of Delay is a rate. Once you have a rate, you can combine it with how long the work takes to produce <b>CD3</b> (Cost of Delay &#247; Duration), sometimes called <b>WSJF</b> &#8212; Weighted Shortest Job First, the term SAFe and Donald Reinertsen's writing use for it. CD3 answers the question RICE structurally can't: of two opportunities, which one returns more economic value per week of work the team actually spends &#8212; which is often the smaller, faster, more urgent one, not the bigger one.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>A B2B SaaS product is choosing between two items for next sprint. The VP wants "the bigger opportunity" built first.</p>
+      <blockquote>"Cross-channel personalization engine" is the obvious pick &#8212; it's worth $600K a year once fully adopted. The data-residency fix for EU accounts is worth a fraction of that. Build the big one first.</blockquote>
+      <p>Sizing each honestly, including how its value decays over time:</p>
+      <div class="cod-curves">
+        <div>
+          <div class="cod-curve-label"><b>EU data-residency fix</b><span>step-function &#8212; value is flat, then falls off a cliff</span></div>
+          <div class="cod-svg-wrap">
+            <svg viewBox="0 0 320 90" width="100%" height="90" preserveAspectRatio="none" role="img" aria-label="Cost of delay stays near zero until the regulatory deadline, then jumps sharply.">
+              <line x1="0" y1="78" x2="320" y2="78" stroke="var(--chalk)" stroke-width="1"/>
+              <path d="M0,70 L190,70 L190,14 L320,14" fill="none" stroke="var(--bad)" stroke-width="3"/>
+              <line x1="190" y1="14" x2="190" y2="78" stroke="var(--stone)" stroke-width="1" stroke-dasharray="3,3"/>
+              <text x="193" y="26" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">deadline, wk 8</text>
+              <text x="4" y="64" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">~$0&#8211;6K/wk</text>
+              <text x="230" y="10" font-family="Outfit,sans-serif" font-size="9" fill="var(--bad)">$40K/wk after</text>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="cod-curve-label"><b>Cross-channel personalization engine</b><span>linear &#8212; value accrues steadily, no hard deadline</span></div>
+          <div class="cod-svg-wrap">
+            <svg viewBox="0 0 320 90" width="100%" height="90" preserveAspectRatio="none" role="img" aria-label="Cost of delay rises gradually and steadily with no fixed deadline.">
+              <line x1="0" y1="78" x2="320" y2="78" stroke="var(--chalk)" stroke-width="1"/>
+              <path d="M0,70 L320,30" fill="none" stroke="var(--gold)" stroke-width="3"/>
+              <text x="4" y="64" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">~$11K/wk, steady</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:4px;">Pricing each with CD3 before deciding what "bigger" means:</p>
+      <table class="cd3-table">
+        <thead><tr><th>Opportunity</th><th>Cost of Delay</th><th>Duration</th><th>CD3 (CoD &#247; Duration)</th></tr></thead>
+        <tbody>
+          <tr><td>EU data-residency fix</td><td class="num">$40K/wk after wk 8</td><td class="num">3 weeks</td><td class="num win">13.3</td></tr>
+          <tr><td>Personalization engine</td><td class="num">$11K/wk, steady</td><td class="num">10 weeks</td><td class="num">1.1</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-bottom:0;"><b>The reframe:</b> the personalization engine is the bigger total opportunity &#8212; nobody disputes that. But its cost of delay is nearly flat this quarter: shipping it in week 11 instead of week 1 costs roughly ten weeks of a slow linear bleed. The residency fix is small in total size but has a step-function profile: miss the regulatory deadline and several EU accounts become contractually required to leave, and the exposure jumps from near-zero to $40K a week overnight. It's also the shorter build. CD3 makes the sequencing obvious where "which one's bigger" didn't: ship the fix first, not because it's more valuable overall, but because it returns far more economic value per week of work the team has left before the deadline turns a flat line into a cliff.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Your B2B SaaS product, planning next quarter. Two items are competing for the same two engineers: <b>Model accuracy improvements</b> &#8212; steady uplift worth roughly $25K/week once live, no hard deadline &#8212; and a <b>payment-provider API migration</b> forced because the processor your billing flow depends on is sunsetting its API in 12 weeks. After that date, renewals and upgrades stop processing, full stop. Your VP asks: "Which has the bigger opportunity &#8212; let's resource that one first." What do you actually tell them?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Step 1 &#8212; Notice the question is already wrong</h4>
+        <ul>
+          <li>"Bigger opportunity" is a sizing question. It assumes both items are being compared on the same axis &#8212; total value &#8212; when one of them isn't really a prioritization decision at all. If billing stops processing renewals for every customer in 12 weeks, that's not an opportunity to size against another opportunity; it's a deadline the business cannot miss.</li>
+        </ul>
+        <h4>Step 2 &#8212; Size both honestly, including the shape of the delay cost</h4>
+        <ul>
+          <li><b>Model accuracy improvements:</b> real, recurring value ($25K/week once live), but its Cost of Delay curve is close to flat &#8212; shipping it in week 14 instead of week 2 costs roughly twelve weeks of foregone uplift, which is real money but not catastrophic, and nothing breaks if it waits.</li>
+          <li><b>Payment-provider migration:</b> Cost of Delay is close to $0/week for the first 11 weeks, then becomes effectively unbounded in week 13 &#8212; total loss of a core revenue path for every customer, not a percentage hit. That's a step-function profile with the step occurring at the edge of your delivery window, which is the specific case CD3 was built to catch: a shorter job whose cost of delay is about to go vertical outranks a bigger job whose cost of delay is still flat.</li>
+        </ul>
+        <h4>Step 3 &#8212; Reframe the decision for the VP</h4>
+        <ul>
+          <li>"Model improvements are the bigger number on a spreadsheet, but they don't have a clock on them &#8212; we lose a little value every week we delay, and we can recover that later. The payment-provider migration has a hard deadline in 12 weeks; past that, renewals stop processing for every customer, and there's no recovering that after the fact. This isn't really 'which is the bigger opportunity' &#8212; it's 'which one turns into an outage if we guess wrong.' We migrate first, and we scope model work for right after."</li>
+        </ul>
+        <h4>The trap this drill is testing</h4>
+        <ul>
+          <li>Total opportunity size feels like the more sophisticated answer because it's a bigger, more exciting number. The senior move is recognizing that a Cost of Delay curve with a cliff in it isn't competing with a flat one on the same terms &#8212; it has effectively already won the sequencing question, and the real job is explaining why to a VP who's reaching for the top-line number.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in your next roadmap or planning meeting</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Next time two items are compared only by size, redirect with:</p>
+    <div class="move-script" id="moveScript">"Before we compare how big these are &#8212; what's the cost of delay on each one? If we ship this in Q2 instead of Q1, what specifically do we lose, and does that loss grow steadily, suddenly, or not at all?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Opportunity Sizing</dt>
+        <dd>Estimating the realistic value of solving one specific problem for one specific segment &#8212; distinct from market sizing (TAM/SAM/SOM), which estimates how big an entire market could ever be.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Cost of Delay (CoD)</dt>
+        <dd>The quantified economic impact &#8212; in revenue, risk, or cost &#8212; of not shipping something, expressed as a rate per unit time rather than a one-time total.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>CD3 / WSJF</dt>
+        <dd>Cost of Delay divided by Duration. A sequencing score, popularized as Weighted Shortest Job First in SAFe and Donald Reinertsen's work, that favors fast-to-ship, urgent value over slower, larger value.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Cost of Delay Profile</dt>
+        <dd>The shape of how an opportunity's delay cost accrues over time: linear (steady), step-function or time-critical (flat, then a cliff at a deadline), or intangible/long-tail (hard to quantify but still real, like brand or trust erosion).</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Opportunity Decay</dt>
+        <dd>The erosion of an initiative's value the longer it sits unbuilt &#8212; a competitor closes the window, a regulatory grace period ends, or user intent moves on. The mechanism that makes Cost of Delay nonzero in the first place.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 12 complete</span>
+    </div>
+    <div class="footer-next"><a href="day13.html">Next lesson → The Kano Model</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<12) s.className='done';
+    else if (i===12) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "A colleague says: 'We already sized this category with TAM/SAM/SOM back in Day 8 — why do we need a separate Opportunity Sizing step before prioritizing a specific feature?' What's the right distinction?",
+      opts: [
+        "They're the same exercise, just applied at different meetings",
+        "TAM/SAM/SOM estimates how big an entire market could ever be; Opportunity Sizing estimates what one specific initiative is realistically worth to this segment — market size doesn't tell you what this feature is worth",
+        "Opportunity Sizing is always a bigger number than TAM/SAM/SOM, since it includes Cost of Delay",
+        "TAM/SAM/SOM applies to new products; Opportunity Sizing only applies to existing ones"
+      ],
+      correct: 1,
+      why: "Market sizing (Day 8) and Opportunity Sizing answer different questions at different altitudes. A market can be huge while a specific feature's realistic value to a specific segment is modest, or the reverse — conflating the two is how teams end up justifying a feature's priority with a market-size number that has nothing to do with what the feature itself will capture."
+    },
+    {
+      q: "A new data-residency requirement takes effect for EU customers on a fixed date 10 weeks out; several enterprise accounts are contractually required to leave if it's not shipped by then. Which Cost of Delay profile describes this, and why does the distinction matter?",
+      opts: [
+        "Linear — the cost rises steadily regardless of the deadline, so the exact date doesn't change the analysis",
+        "Step-function / time-critical — value stays flat until the deadline, then drops sharply, so what matters is the weeks remaining before the cliff, not the average weekly cost",
+        "Intangible — compliance risk can't be quantified, so it shouldn't factor into prioritization at all",
+        "It doesn't matter — RICE's Confidence input already accounts for deadline risk"
+      ],
+      correct: 1,
+      why: "A step-function profile means the average cost of delay across the whole timeline is misleading — almost all the risk sits in a narrow window right before the deadline. Treating it like a linear opportunity (where a few weeks of slip costs roughly the same wherever you are in the timeline) badly understates how urgent it becomes as the date approaches."
+    },
+    {
+      q: "Feature A: Cost of Delay ≈ $18K/week, Duration ≈ 2 weeks. Feature B: Cost of Delay ≈ $30K/week, Duration ≈ 8 weeks. Using CD3, which should a team sequence first?",
+      opts: [
+        "Feature B, because its raw weekly Cost of Delay figure is larger",
+        "Feature A — CD3 of 9 (18÷2) versus 3.75 (30÷8) shows it returns more economic value per week of work, even though Feature B's dollar figure looks bigger on its own",
+        "Whichever one leadership already discussed in the last planning meeting",
+        "Both equally — total value created over time is what ultimately matters, not the order"
+      ],
+      correct: 1,
+      why: "CD3 exists precisely to catch this: a smaller weekly number attached to a much shorter job can outrank a bigger weekly number attached to a long one, because the short job returns its value to the business far sooner. Comparing raw Cost of Delay without dividing by Duration is the same mistake as comparing RICE scores without checking whether Reach and Impact were measured or guessed."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re pricing the delay, not just sizing the opportunity.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — the question isn\'t how big it is, it\'s how fast the value is leaking away.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

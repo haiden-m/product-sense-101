@@ -1,0 +1,623 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Asking Sharper Questions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried forward from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 5, Day 22 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding-block:40px 80px;
+  padding-left:max(20px, env(safe-area-inset-left,0px));
+  padding-right:max(20px, env(safe-area-inset-right,0px));
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone); flex-shrink:0;}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.idea-list{list-style:none; margin:18px 0; padding:0; display:grid; gap:11px; max-width:66ch;}
+.idea-list li{padding-left:26px; position:relative; font-size:.97rem;}
+.idea-list li:before{content:"\2192"; position:absolute; left:0; top:0; color:var(--gold); font-weight:600;}
+.idea-list b{color:var(--ink);}
+
+.qtype-grid{display:grid; grid-template-columns:1fr; gap:12px; margin:22px 0;}
+@media (min-width:620px){ .qtype-grid{grid-template-columns:1fr 1fr;} }
+.qtype-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:18px 20px; background:var(--ground); min-width:0;
+}
+.qtype-card .q-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:600; display:block; margin-bottom:6px;}
+.qtype-card .q-ask{display:block; font-family:'Newsreader',serif; font-style:italic; font-size:1.02rem; color:var(--ink); margin-bottom:8px;}
+.qtype-card .q-use{font-size:.88rem; color:var(--stone); margin:0; max-width:none;}
+
+.compare-grid{display:grid; grid-template-columns:1fr; gap:14px; margin:22px 0;}
+@media (min-width:620px){ .compare-grid{grid-template-columns:1fr 1fr;} }
+.compare-card{
+  border:1px solid var(--chalk); border-radius:12px; padding:20px 22px; background:var(--ground);
+  min-width:0;
+}
+.compare-card .c-mark{
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:6px;
+}
+.compare-card.unguarded .c-mark{color:var(--bad);}
+.compare-card.guarded .c-mark{color:var(--teal);}
+.compare-card .c-name{font-weight:600; display:block; margin-bottom:8px; font-size:1.08rem; color:var(--ink);}
+.compare-card .c-ask{
+  display:block; font-family:'Newsreader',serif; font-style:italic; font-size:.95rem; color:var(--stone);
+  margin-bottom:10px;
+}
+.compare-card .c-desc{font-size:.92rem; color:var(--ink); margin:0 0 10px 0; max-width:none;}
+.compare-card .c-fit{font-size:.85rem; color:var(--stone); margin:0; max-width:none;}
+.compare-card .c-fit b{color:var(--ink);}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table td.lose{color:var(--bad); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px; flex-wrap:wrap;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone); min-width:0;}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.drill-prompt ul{margin:10px 0 0 0; padding-left:20px;}
+.drill-prompt li{margin-bottom:4px;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+.analysis .final-msg{
+  background:var(--teal-10); border-radius:10px; padding:16px 18px; font-size:.93rem; margin-top:4px;
+  border-left:3px solid var(--teal);
+}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 5 &middot; COMMUNICATION &amp; INFLUENCE <span class="dot"></span> DAY 22 OF 30</div>
+    <h1>Asking Sharper Questions</h1>
+    <p class="sub">Yesterday you learned to lead every answer with the governing thought. Today's lesson comes before that moment: the question that gets you an answer worth structuring in the first place. A vague question earns a vague answer, and no amount of pyramid structure rescues a draft built on the wrong premise.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you learned to put the governing thought first and back it with MECE reasons. That only works if the governing thought is actually true &mdash; and whether it's true usually depends on what you asked before you started writing. <b>Today</b> you're building the other half of the skill: a small repertoire of question templates that replace "can you say more?" with questions precise enough to unpack a vague claim before it becomes your governing thought.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Senior PMs aren't the people in the room with the most answers. They're the people whose questions make the room's answers sharper. That's a skill, not a personality trait &mdash; and like any skill, it's built from a small set of reusable templates, not improvised fresh every time someone says something vague.</p>
+    <p>Most PMs default to one question shape: <i>"can you tell me more?"</i> It's polite, it's safe, and it rarely moves the conversation anywhere, because it hands the ambiguity straight back to the person who was already ambiguous. A sharper question doesn't ask for more words &mdash; it asks for a specific kind of information that collapses the ambiguity. Five templates cover almost every situation you'll hit in a B2B SaaS PM's week:</p>
+
+    <div class="qtype-grid">
+      <div class="qtype-card">
+        <span class="q-label">Definition</span>
+        <span class="q-ask">"When you say 'underperforming,' underperforming relative to what?"</span>
+        <p class="q-use">Unpacks a vague term before you build anything on top of it. Most stakeholder claims hide an unstated benchmark.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Evidence</span>
+        <span class="q-ask">"What have you actually seen that makes you think that?"</span>
+        <p class="q-use">Separates an observation from an inference. Half of "the customer wants X" is someone's guess wearing a customer's voice.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Boundary</span>
+        <span class="q-ask">"What would have to be true for this to work?"</span>
+        <p class="q-use">Surfaces the assumptions a plan is silently standing on, before you commit engineering time to testing them the expensive way.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Priority</span>
+        <span class="q-ask">"If you could only have one of these two, which, and why?"</span>
+        <p class="q-use">Forces a real trade-off into the open. A stakeholder who wants "both, equally" hasn't actually prioritized anything yet.</p>
+      </div>
+      <div class="qtype-card">
+        <span class="q-label">Counterfactual</span>
+        <span class="q-ask">"What happens if we do nothing?"</span>
+        <p class="q-use">Tests urgency honestly. If the answer is "not much," the request was never as urgent as its framing implied.</p>
+      </div>
+    </div>
+
+    <ul class="idea-list">
+      <li><b>Match the template to the failure mode.</b> A vague term needs a Definition question. An unsupported claim needs an Evidence question. A plan with hidden risk needs a Boundary question. Reaching for the wrong one wastes the question.</li>
+      <li><b>Ask before you agree.</b> The templates work best in the first pass of a conversation, not as damage control after you've already said "sure, we'll scope that." Once you've nodded along, the sharper question reads as second-guessing instead of diligence.</li>
+      <li><b>One sharp question beats three soft ones.</b> A single well-aimed Boundary question can replace an entire round of "can you clarify" follow-ups, because it asks for the one fact that actually changes the plan.</li>
+      <li><b>Silence is data.</b> If a sharp question gets a long pause instead of a crisp answer, that pause is itself the finding &mdash; it usually means nobody has tested the assumption you just named.</li>
+    </ul>
+
+    <div class="compare-grid">
+      <div class="compare-card unguarded">
+        <span class="c-mark">&mdash;</span>
+        <span class="c-name">The Soft Follow-Up</span>
+        <span class="c-ask">"Got it &mdash; can you say a bit more about that?"</span>
+        <p class="c-desc">Invites the speaker to repeat their claim in different words. It feels collaborative, but it rarely produces new information &mdash; the ambiguity just gets rephrased, not resolved.</p>
+        <p class="c-fit"><b>What happens:</b> two more meetings later, the team is still debating what the original claim actually meant.</p>
+      </div>
+      <div class="compare-card guarded">
+        <span class="c-mark">+</span>
+        <span class="c-name">The Templated Question</span>
+        <span class="c-ask">"What have you seen that makes you think that, specifically?"</span>
+        <p class="c-desc">Asks for a named kind of information &mdash; evidence, a boundary condition, a trade-off &mdash; that the speaker either has or doesn't. Either way, you learn something real in one exchange.</p>
+        <p class="c-fit"><b>What happens:</b> you find out in the same meeting whether the claim rests on a support ticket, a hunch, or one loud customer call.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>This is what makes your pyramid honest</h4>
+      <p style="margin:0;">Day 21's governing thought is only as good as the claims it's built on. If you skip straight to structuring an answer without first asking a Definition or Evidence question, you risk writing a beautifully organized pyramid on top of someone else's untested assumption. Sharper questions are the quality check that happens before you write a single sentence of structure.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>Your Sales lead messages: "Big account says they need custom field mapping for their CRM sync, ASAP, or they're at risk." You have a 15-minute window before this becomes a commitment on the roadmap.</p>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>What you need to know</th><th>Soft follow-up path</th><th>Templated question path</th></tr></thead>
+        <tbody>
+          <tr><td>What "custom field mapping" actually means</td><td class="num lose">Assumed from the words; turned out to mean one specific lookup table, not a general mapping UI</td><td class="num win">Definition question surfaced the real, narrow scope in one reply</td></tr>
+          <tr><td>Whether "at risk" is real</td><td class="num lose">Taken at face value; no renewal date for another 7 months</td><td class="num win">Counterfactual question revealed the account isn't up for renewal until next spring</td></tr>
+          <tr><td>Whose claim this actually is</td><td class="num lose">Assumed it came from the customer directly</td><td class="num win">Evidence question revealed it came from one email thread Sales hadn't fully read</td></tr>
+          <tr><td>Engineering time nearly committed on the spot</td><td class="num lose">~3 sprint-weeks, based on the broad reading</td><td class="num win">~2 days, once the actual scope was known</td></tr>
+          <tr><td>How the PM came across to Sales</td><td class="num lose">Reactive, scrambling to re-scope after committing</td><td class="num win">In control, with a scoped answer by end of day</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> none of these questions were adversarial. They were specific. "What have you seen that makes you think that?" isn't the PM doubting Sales &mdash; it's the PM doing the one thing that prevents a three-sprint-week commitment from being made on the strength of a single forwarded email.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        In a roadmap review, your engineering lead says: "The recommendation engine is underperforming, and I think we need to rebuild the ranking model." The room starts nodding along toward a quarter-long rebuild.
+        <ul>
+          <li>No metric has been named yet.</li>
+          <li>Nobody has asked what "rebuild" would cost versus a narrower fix.</li>
+          <li>The last time ranking was touched was two quarters ago, for an unrelated reason.</li>
+        </ul>
+        Before the room commits to a rebuild: which question templates do you reach for, in what order, and what do you actually ask out loud?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>The question to avoid asking first</h4>
+        <ul>
+          <li>"How long would a rebuild take?" &mdash; this accepts the solution before the problem has been defined, and commits the room to scoping an answer to a question nobody has actually asked yet.</li>
+        </ul>
+        <h4>The order that actually unpacks it</h4>
+        <ul>
+          <li><b>Definition, first:</b> "Underperforming relative to what &mdash; what metric, and what's the target we're missing?" This alone often reveals there's no agreed metric, which is the real finding.</li>
+          <li><b>Evidence, second:</b> "What have you seen that points to the ranking model specifically, versus the underlying data or the features feeding it?" A model can look like the problem when the real issue is stale or incomplete training data.</li>
+          <li><b>Boundary, third:</b> "What would have to be true for a rebuild to actually fix this, that a narrower change wouldn't?" This forces the case for "rebuild" versus "retune" or "re-feed" into the open.</li>
+        </ul>
+        <h4>What usually turns up</h4>
+        <ul>
+          <li>The "underperforming" claim often traces back to one metric dip that coincides with an unrelated data pipeline change, not the ranking logic itself &mdash; a Definition and Evidence question pair catches this in minutes, not a quarter.</li>
+        </ul>
+        <div class="final-msg">"Before we scope a rebuild: what metric is the recommendation engine missing, and against what target? And is there anything pointing specifically at the ranking model, versus the data feeding it? If a data or feature issue turns out to be the real driver, that's a two-week fix, not a quarter-long rebuild &mdash; worth confirming which one we're actually looking at before we commit the team."</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this the next time someone hands you an urgent, under-specified ask</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Ask it before you agree to anything, not after:</p>
+    <div class="move-script" id="moveScript">"What have you actually seen that makes you think that &mdash; and what happens if we do nothing for two weeks?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Definition Question</dt>
+        <dd>A question that asks a vague term to name its own benchmark &mdash; "underperforming relative to what?" &mdash; before anyone builds a plan on top of it.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Evidence Question</dt>
+        <dd>A question that separates a direct observation from an inference wearing a customer's or a metric's voice &mdash; "what have you actually seen?"</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Boundary Question</dt>
+        <dd>A question that surfaces the assumptions a plan is silently standing on &mdash; "what would have to be true for this to work?" &mdash; before the team pays to test them the expensive way.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Priority Question</dt>
+        <dd>A question that forces an unresolved trade-off into the open &mdash; "if you could only have one, which, and why?" &mdash; instead of letting "both, equally" stand as an answer.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Counterfactual Question</dt>
+        <dd>A question that tests whether an urgent framing is actually urgent &mdash; "what happens if we do nothing?" &mdash; by naming the cost of inaction explicitly.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 22 complete</span>
+    </div>
+    <div class="footer-next"><a href="day23.html">Next lesson → Stakeholder Management</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<22) s.className='done';
+    else if (i===22) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "A stakeholder says \"the onboarding flow is confusing.\" Which question template unpacks this claim first?",
+      opts: [
+        "A Priority question: \"which part should we fix first?\"",
+        "A Definition question: \"confusing compared to what &mdash; a specific step, a prior version, a competitor?\"",
+        "A Counterfactual question: \"what happens if we never fix it?\"",
+        "No question is needed; start redesigning the flow"
+      ],
+      correct: 1,
+      why: "\"Confusing\" is a vague term with no stated benchmark. A Definition question asks it to name what it's being measured against, before any redesign work starts on an assumption nobody has confirmed."
+    },
+    {
+      q: "Why does a Boundary question (\"what would have to be true for this to work?\") matter before committing engineering time?",
+      opts: [
+        "It makes the requester feel heard, which is the main goal of any follow-up question",
+        "It surfaces the assumptions a plan is quietly resting on, so they can be checked cheaply instead of discovered expensively mid-build",
+        "It guarantees the plan will succeed once those conditions are named",
+        "It replaces the need for any supporting evidence"
+      ],
+      correct: 1,
+      why: "A Boundary question doesn't guarantee success — it exposes what has to be true for the plan to work, so the team can test the riskiest assumption first instead of finding out three sprints in that a condition never held."
+    },
+    {
+      q: "In the worked example, what did the Evidence question (\"what have you seen that makes you think that?\") actually reveal?",
+      opts: [
+        "That the customer had sent three separate emails demanding the feature",
+        "That the \"at risk\" framing traced back to one forwarded email thread Sales hadn't fully read, not a direct customer escalation",
+        "That engineering had already scoped the full three-week build",
+        "That the request had already been discussed and approved by leadership"
+      ],
+      correct: 1,
+      why: "The Evidence question didn't just ask for more detail — it traced the claim back to its actual source, which turned out to be a single, incompletely-read email rather than a confirmed customer escalation."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep &mdash; you\'re already reaching for the right template before the soft follow-up.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before your next stakeholder ask.' :
+                'Worth rereading the Big Idea section &mdash; match the template to the failure mode: vague term, unsupported claim, or hidden assumption.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> &mdash; ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

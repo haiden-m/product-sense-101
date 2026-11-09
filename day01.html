@@ -1,0 +1,933 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Product Sense 101 · Day 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --teal-soft: rgba(26, 117, 106, 0.08);
+    --teal-mid: rgba(26, 117, 106, 0.15);
+    --gold: #B8892E;
+    --gold-soft: rgba(184, 137, 46, 0.10);
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --correct: #3A7D44;
+    --correct-soft: rgba(58, 125, 68, 0.08);
+    --incorrect: #B94A35;
+    --incorrect-soft: rgba(185, 74, 53, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --teal-soft: rgba(60, 181, 165, 0.10);
+      --teal-mid: rgba(60, 181, 165, 0.18);
+      --gold: #D4A73E;
+      --gold-soft: rgba(212, 167, 62, 0.12);
+      --stone: #7A756C;
+      --chalk: #222120;
+      --correct: #5CB86A;
+      --correct-soft: rgba(92, 184, 106, 0.10);
+      --incorrect: #D4604A;
+      --incorrect-soft: rgba(212, 96, 74, 0.10);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --teal-soft: rgba(60, 181, 165, 0.10);
+    --teal-mid: rgba(60, 181, 165, 0.18);
+    --gold: #D4A73E;
+    --gold-soft: rgba(212, 167, 62, 0.12);
+    --stone: #7A756C;
+    --chalk: #222120;
+    --correct: #5CB86A;
+    --correct-soft: rgba(92, 184, 106, 0.10);
+    --incorrect: #D4604A;
+    --incorrect-soft: rgba(212, 96, 74, 0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 5rem;
+  }
+
+  /* — Progress bar — */
+  .progress-strip {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--ground);
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .progress-day {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--chalk);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 3.3%;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* — Header — */
+  .lesson-header {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .lesson-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .lesson-title {
+    font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .lesson-subtitle {
+    font-size: 1.05rem;
+    color: var(--stone);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 540px;
+  }
+
+  /* — Sections — */
+  .section {
+    margin-top: 3rem;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--chalk);
+  }
+  .section h2 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    text-wrap: balance;
+  }
+  .section p {
+    margin-bottom: 1rem;
+  }
+  .section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* — The Four Lenses — */
+  .lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 500px) {
+    .lenses { grid-template-columns: 1fr; }
+  }
+  .lens {
+    padding: 1rem 1.15rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    border-left: 3px solid var(--teal);
+  }
+  .lens-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.25rem;
+  }
+  .lens-desc {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Callout — */
+  .callout {
+    background: var(--teal-soft);
+    border-left: 3px solid var(--teal);
+    padding: 1.1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .callout-warn {
+    background: var(--gold-soft);
+    border-left-color: var(--gold);
+  }
+
+  /* — Worked example — */
+  .example-box {
+    background: var(--chalk);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .example-box h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+  .example-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .example-option {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    font-size: 0.92rem;
+  }
+  .example-option .opt-letter {
+    font-weight: 600;
+    color: var(--teal);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* — Quiz — */
+  .quiz-q {
+    margin-bottom: 2rem;
+  }
+  .quiz-q:last-child {
+    margin-bottom: 0;
+  }
+  .quiz-stem {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.6;
+  }
+  .quiz-stem .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--ground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+    vertical-align: text-bottom;
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .quiz-opt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .quiz-opt:hover:not(.answered) {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+  .quiz-opt:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .quiz-opt .opt-letter {
+    font-weight: 600;
+    color: var(--stone);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
+  }
+  .quiz-opt:hover:not(.answered) .opt-letter {
+    color: var(--teal);
+  }
+  .quiz-opt.correct {
+    border-color: var(--correct);
+    background: var(--correct-soft);
+  }
+  .quiz-opt.correct .opt-letter { color: var(--correct); }
+  .quiz-opt.incorrect {
+    border-color: var(--incorrect);
+    background: var(--incorrect-soft);
+  }
+  .quiz-opt.incorrect .opt-letter { color: var(--incorrect); }
+  .quiz-opt.answered {
+    cursor: default;
+    opacity: 0.5;
+  }
+  .quiz-opt.correct.answered, .quiz-opt.incorrect.answered {
+    opacity: 1;
+  }
+  .quiz-explanation {
+    margin-top: 0.6rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    border-radius: 6px;
+    display: none;
+  }
+  .quiz-explanation.visible {
+    display: block;
+  }
+  .quiz-explanation.correct-expl {
+    background: var(--correct-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation.incorrect-expl {
+    background: var(--incorrect-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation strong {
+    font-weight: 600;
+  }
+
+  /* — Scenario — */
+  .scenario-prompt {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    color: var(--ink);
+  }
+  .scenario-lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 500px) {
+    .scenario-lenses { grid-template-columns: 1fr; }
+  }
+  .scenario-lens-prompt {
+    padding: 0.7rem 0.85rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .scenario-lens-prompt strong {
+    display: block;
+    color: var(--ink);
+    font-size: 0.88rem;
+    margin-bottom: 0.15rem;
+  }
+  .scenario-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .scenario-textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .scenario-textarea::placeholder {
+    color: var(--stone);
+    opacity: 0.6;
+  }
+  .scenario-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--teal-soft);
+    color: var(--teal);
+    border: 1.5px solid var(--teal-mid);
+    border-radius: 6px;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reveal-btn:hover {
+    background: var(--teal-mid);
+  }
+  .reveal-btn:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .scenario-answer {
+    margin-top: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: var(--teal-soft);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    display: none;
+  }
+  .scenario-answer.visible { display: block; }
+
+  /* — Meeting move — */
+  .meeting-move-quote {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--teal);
+    margin: 1rem 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--teal);
+    text-wrap: balance;
+  }
+
+  /* — Glossary — */
+  .glossary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .glossary-item {
+    padding: 0.85rem 1rem;
+    background: var(--chalk);
+    border-radius: 6px;
+  }
+  .glossary-term {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+  .glossary-def {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Score summary — */
+  .score-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--chalk);
+    border-radius: 8px;
+    margin-top: 2.5rem;
+  }
+  .score-ring {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .score-ring circle {
+    fill: none;
+    stroke-width: 4;
+  }
+  .score-ring .track { stroke: var(--ground); }
+  .score-ring .fill {
+    stroke: var(--teal);
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .score-ring text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .score-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .score-text strong { font-weight: 600; }
+
+  /* — Animations — */
+  @media (prefers-reduced-motion: no-preference) {
+    .section {
+      animation: fadeUp 0.4s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<!-- Progress -->
+  <div class="progress-strip">
+    <div class="progress-meta">
+      <span class="progress-label">Product Sense 101</span>
+      <span class="progress-day">Day 1 of 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <div class="lesson-eyebrow">Week 1 · The PM Mental Model</div>
+    <h1 class="lesson-title">What Is Product Sense?</h1>
+    <p class="lesson-subtitle">The intuition that separates good PMs from great ones — and why your technical background is both your advantage and your blind spot.</p>
+  </div>
+
+  <!-- The Big Idea -->
+  <div class="section">
+    <div class="section-label">The Big Idea</div>
+    <p>Product sense is the ability to make good product decisions without complete data. It's the intuition that lets you look at a feature, a user flow, or a market signal and know whether something is right or off.</p>
+    <p>But here's what most people miss: product sense isn't magical intuition. It's <strong>pattern recognition built from four distinct lenses</strong> — and you can train each one deliberately.</p>
+
+    <div class="lenses">
+      <div class="lens">
+        <div class="lens-name">User Lens</div>
+        <div class="lens-desc">Context, motivations, pain. Not what users say — what they're trying to accomplish.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Business Lens</div>
+        <div class="lens-desc">Strategy, unit economics, competitive position. A loved feature that destroys margins isn't product sense.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Technical Lens</div>
+        <div class="lens-desc">Feasibility, cost, leverage. What creates compounding value at the architecture level.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Market Lens</div>
+        <div class="lens-desc">Trends, competitive moves, timing. Is the window opening or closing?</div>
+      </div>
+    </div>
+
+    <p>Product sense is the ability to hold all four lenses simultaneously and make trade-offs between them. Every strong product decision weighs all four. Every weak one over-indexes on just one.</p>
+
+    <div class="callout callout-warn">
+      <strong>The Technical PM Trap.</strong> When you drift toward product engineering, the Technical Lens hypertrophies. You start evaluating features by what's elegant to build rather than what's valuable to ship. You solve problems by reaching for architecture rather than reaching for the customer. The other three lenses atrophy. The fix isn't to suppress your technical strength — it's to deliberately exercise the other three until they're equally strong.
+    </div>
+  </div>
+
+  <!-- B2B Context -->
+  <div class="section">
+    <div class="section-label">The B2B SaaS Angle</div>
+    <p>In B2B SaaS — especially B2B products with deep daily workflows — product sense has an extra dimension. You're building for power users with strong opinions, whose requests frequently conflate symptoms with root causes.</p>
+    <p>A customer says <em>"I need a button that does X."</em> Product sense is hearing that and asking <strong>"What outcome are you trying to achieve that made you think of X?"</strong></p>
+    <p>And in enterprise, you have a split audience: the <em>user</em> (the practitioner working in the product daily) and the <em>buyer</em> (the VP who signs the renewal). Their jobs-to-be-done are often different. Strong B2B product sense means satisfying both without letting either dominate.</p>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="section">
+    <div class="section-label">Worked Example</div>
+    <div class="example-box">
+      <h3>The Dashboard That Nobody Uses</h3>
+      <p>Your analytics dashboard has low engagement — only 23% of users visit it weekly. Three proposals land on your desk:</p>
+      <div class="example-options">
+        <div class="example-option">
+          <span class="opt-letter">A</span>
+          <span>Add more chart types and visualization options</span>
+        </div>
+        <div class="example-option">
+          <span class="opt-letter">B</span>
+          <span>Make the dashboard the default landing page</span>
+        </div>
+        <div class="example-option">
+          <span class="opt-letter">C</span>
+          <span>Interview 10 power users about their first action each morning, then redesign around that workflow</span>
+        </div>
+      </div>
+      <p><strong>The product sense read:</strong> Option C starts from the User Lens. A assumes the problem is capability (Technical Lens bias). B forces engagement through exposure — a growth tactic, not a product insight. C acknowledges you don't yet know what the problem is and goes to find out.</p>
+      <p>But the strongest answer layers in the Business Lens too: in B2B, the "user" might be a marketing manager, but the "buyer" is the VP. What does the VP need to see in their first 10 seconds? That's the question that protects the renewal.</p>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <div class="section-label">Quiz · Test Your Thinking</div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">1</span> A customer requests an API endpoint for bulk data export. The technical cost is low. Your product sense alarm should ring because:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>API features are always low priority for product teams</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>The request might signal they're preparing to migrate to a competitor</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>APIs don't drive user engagement metrics</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Bulk operations are technically risky at scale</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> This is the Business Lens working. A low-cost request can still be a high-signal event. "I want to export all my data" is one of the strongest churn indicators in B2B SaaS. The strongest PMs don't just evaluate the request — they decode what the request <em>means</em> about the customer's trajectory.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="2">
+      <div class="quiz-stem"><span class="q-num">2</span> You're prioritizing your Q4 roadmap. Which is an example of applying the Market Lens?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>Choosing the feature with the highest RICE score</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Building what engineering is most excited about</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Accelerating your attribution feature because a competitor just raised $50M in the same space</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Defaulting to what the sales team hears most often</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: C.</strong> The Market Lens reads competitive dynamics and timing. A competitor raising $50M signals they're about to flood the same space with engineering resources — that changes your priority calculus. D is closer to User/Business Lens (demand filtered through sales). A is a prioritization framework, not a lens. B is Technical Lens bias.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">3</span> "Product-led growth" in B2B SaaS means:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>The product team leads the company's overall strategy</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Growth comes from the product experience itself, not primarily from sales-led motions</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Building products using agile methodology</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Letting users vote on the product roadmap</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> PLG is a go-to-market strategy where the product is the primary vehicle for acquisition, activation, and expansion. Think Slack, Figma, Notion — users adopt the tool, experience its value, then pull in teammates. It contrasts with sales-led growth (SLG) where human sellers drive deal flow. Most B2B companies use a hybrid.
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario Drill -->
+  <div class="section">
+    <div class="section-label">Scenario Drill</div>
+    <p class="scenario-prompt">Your biggest enterprise customer (15% of ARR) is threatening to churn unless you build a custom integration with their internal CRM system. Engineering estimates 6 weeks of work that would only serve this one customer.</p>
+    <p>Apply all four lenses before deciding. Use the prompts below:</p>
+    <div class="scenario-lenses">
+      <div class="scenario-lens-prompt">
+        <strong>User Lens</strong>
+        What is this customer actually trying to achieve with this integration?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Business Lens</strong>
+        What's the true cost/benefit beyond the 6 weeks of engineering?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Technical Lens</strong>
+        Is there a platform approach that turns this one-off into a generalizable capability?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Market Lens</strong>
+        Are other customers or prospects likely to need similar integrations?
+      </div>
+    </div>
+    <textarea class="scenario-textarea" placeholder="Write your analysis here. What would you do and why? Think through the trade-offs…"></textarea>
+    <div class="scenario-hint">No wrong answers — this is about practicing the lens discipline.</div>
+    <button class="reveal-btn" id="revealBtn">Show a senior PM's take ▾</button>
+    <div class="scenario-answer" id="scenarioAnswer">
+      <p><strong>A strong answer touches all four:</strong></p>
+      <p><strong>User:</strong> Don't take the integration request at face value. What workflow are they trying to complete? Maybe they need data to flow between systems — an integration is one solution, but a CSV sync, a webhook, or a Zapier connector might solve 80% of the need at 10% of the cost.</p>
+      <p style="margin-top:0.5rem"><strong>Business:</strong> 15% of ARR is significant — but is the customer growing or flat? If they're growing, the retention value compounds. If flat, you're building a $300K feature to protect $300K of revenue. Also: what's the opportunity cost? What doesn't ship in those 6 weeks?</p>
+      <p style="margin-top:0.5rem"><strong>Technical:</strong> This is where a technical PM shines. Can you build a generic integration framework or connector API that serves this customer today and becomes a platform capability tomorrow? That turns a one-off cost into an asset.</p>
+      <p style="margin-top:0.5rem"><strong>Market:</strong> If 3 other enterprise prospects mentioned CRM integrations in sales calls last quarter, this stops being a one-customer request and becomes a market signal.</p>
+      <p style="margin-top:0.5rem">The decision likely isn't a binary yes/no — it's about finding the version of "yes" that creates leverage beyond this single customer.</p>
+    </div>
+  </div>
+
+  <!-- Meeting Move -->
+  <div class="section">
+    <div class="section-label">Meeting Move of the Day</div>
+    <p>Next time someone proposes a feature in a meeting, ask:</p>
+    <div class="meeting-move-quote">"What's the user behavior we expect to change if we ship this?"</div>
+    <p>This forces the conversation from solution-space back into problem-space. It's the single most powerful question a PM can ask because it demands that the proposer articulate the <strong>theory of change</strong> — not just the deliverable, but the causal chain from feature to outcome.</p>
+    <p>Practice it once this week. Notice how it reshapes the conversation.</p>
+  </div>
+
+  <!-- Glossary -->
+  <div class="section">
+    <div class="section-label">Glossary</div>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">Product Sense</div>
+        <div class="glossary-def">The ability to make good product decisions with incomplete information, by synthesizing user, business, technical, and market perspectives simultaneously.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Problem Space vs Solution Space</div>
+        <div class="glossary-def">Problem space is the set of user needs and desired outcomes. Solution space is the set of possible implementations. Strong PMs spend more time in problem space before jumping to solutions.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">ARR (Annual Recurring Revenue)</div>
+        <div class="glossary-def">The annualized value of recurring subscription revenue. The heartbeat metric of B2B SaaS. MRR × 12 = ARR, but only for recurring contracts — services and one-time fees excluded.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">PLG (Product-Led Growth)</div>
+        <div class="glossary-def">A go-to-market strategy where the product itself drives user acquisition, conversion, and expansion — contrasted with sales-led growth (SLG). Slack, Figma, and Notion are canonical examples.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Churn Signal</div>
+        <div class="glossary-def">Any behavioral indicator that a customer may not renew. Common signals: data export requests, declining login frequency, support ticket spikes, executive sponsor departure.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-strip" id="scoreStrip" style="display: none;">
+    <svg class="score-ring" viewBox="0 0 52 52">
+      <circle class="track" cx="26" cy="26" r="22" />
+      <circle class="fill" id="scoreArc" cx="26" cy="26" r="22"
+              stroke-dasharray="138.23" stroke-dashoffset="138.23" />
+      <text x="26" y="26" id="scoreText">0/3</text>
+    </svg>
+    <div class="score-text" id="scoreMsg"><strong>Quiz score</strong><br>Answer all three questions to see your result.</div>
+  </div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 1 complete</span>
+    </div>
+    <div class="footer-next"><a href="day02.html">Next lesson → First Principles Thinking</a></div>
+  </div>
+</div>
+
+<script>
+  // — Quiz logic —
+  const quizState = { answered: 0, correct: 0, total: 3 };
+
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const correctIdx = parseInt(q.dataset.correct);
+    const opts = q.querySelectorAll('.quiz-opt');
+    const expl = q.querySelector('.quiz-explanation');
+
+    function answer(selectedIdx) {
+      if (q.classList.contains('done')) return;
+      q.classList.add('done');
+
+      const isCorrect = selectedIdx === correctIdx;
+      quizState.answered++;
+      if (isCorrect) quizState.correct++;
+
+      opts.forEach((opt, i) => {
+        opt.classList.add('answered');
+        if (i === correctIdx) opt.classList.add('correct');
+        if (i === selectedIdx && !isCorrect) opt.classList.add('incorrect');
+      });
+
+      expl.classList.add('visible', isCorrect ? 'correct-expl' : 'incorrect-expl');
+      updateScore();
+    }
+
+    opts.forEach((opt, i) => {
+      opt.addEventListener('click', () => answer(i));
+      opt.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); answer(i); }
+      });
+    });
+  });
+
+  function updateScore() {
+    const strip = document.getElementById('scoreStrip');
+    strip.style.display = 'flex';
+
+    const pct = quizState.correct / quizState.total;
+    const circumference = 138.23;
+    const arc = document.getElementById('scoreArc');
+    arc.style.strokeDashoffset = circumference * (1 - pct);
+
+    document.getElementById('scoreText').textContent =
+      quizState.correct + '/' + quizState.total;
+
+    const msg = document.getElementById('scoreMsg');
+    if (quizState.answered === quizState.total) {
+      if (quizState.correct === quizState.total) {
+        msg.innerHTML = '<strong>Perfect.</strong><br>Your four lenses are already working. Tomorrow we go deeper — first principles thinking.';
+      } else if (quizState.correct >= 2) {
+        msg.innerHTML = '<strong>Solid.</strong><br>You caught the key patterns. Review the explanation on the one you missed — the nuance matters.';
+      } else {
+        msg.innerHTML = '<strong>Room to grow.</strong><br>That\'s exactly why you\'re here. Re-read the Four Lenses section and try applying them to a decision you made this week.';
+      }
+      // Update progress bar
+      document.getElementById('progressFill').style.width = '3.3%';
+    }
+  }
+
+  // — Scenario reveal —
+  document.getElementById('revealBtn').addEventListener('click', function() {
+    const answer = document.getElementById('scenarioAnswer');
+    const isVisible = answer.classList.contains('visible');
+    answer.classList.toggle('visible');
+    this.textContent = isVisible ? 'Show a senior PM\'s take ▾' : 'Hide ▴';
+  });
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

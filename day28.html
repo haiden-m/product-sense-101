@@ -1,0 +1,939 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Product Sense 101 · Day 28</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --teal-soft: rgba(26, 117, 106, 0.08);
+    --teal-mid: rgba(26, 117, 106, 0.15);
+    --gold: #B8892E;
+    --gold-soft: rgba(184, 137, 46, 0.10);
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --correct: #3A7D44;
+    --correct-soft: rgba(58, 125, 68, 0.08);
+    --incorrect: #B94A35;
+    --incorrect-soft: rgba(185, 74, 53, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --teal-soft: rgba(60, 181, 165, 0.10);
+      --teal-mid: rgba(60, 181, 165, 0.18);
+      --gold: #D4A73E;
+      --gold-soft: rgba(212, 167, 62, 0.12);
+      --stone: #7A756C;
+      --chalk: #222120;
+      --correct: #5CB86A;
+      --correct-soft: rgba(92, 184, 106, 0.10);
+      --incorrect: #D4604A;
+      --incorrect-soft: rgba(212, 96, 74, 0.10);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --teal-soft: rgba(60, 181, 165, 0.10);
+    --teal-mid: rgba(60, 181, 165, 0.18);
+    --gold: #D4A73E;
+    --gold-soft: rgba(212, 167, 62, 0.12);
+    --stone: #7A756C;
+    --chalk: #222120;
+    --correct: #5CB86A;
+    --correct-soft: rgba(92, 184, 106, 0.10);
+    --incorrect: #D4604A;
+    --incorrect-soft: rgba(212, 96, 74, 0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 2rem max(16px, env(safe-area-inset-right, 0px)) 5rem max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  /* — Progress bar — */
+  .progress-strip {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--ground);
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .progress-day {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--chalk);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 93.3%;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* — Header — */
+  .lesson-header {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .lesson-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .lesson-title {
+    font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .lesson-subtitle {
+    font-size: 1.05rem;
+    color: var(--stone);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 540px;
+  }
+
+  /* — Sections — */
+  .section {
+    margin-top: 3rem;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--chalk);
+  }
+  .section h2 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    text-wrap: balance;
+  }
+  .section p {
+    margin-bottom: 1rem;
+  }
+  .section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* — The Four Lenses (reused for Platform Test) — */
+  .lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 500px) {
+    .lenses { grid-template-columns: 1fr; }
+  }
+  .lens {
+    padding: 1rem 1.15rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    border-left: 3px solid var(--teal);
+  }
+  .lens-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.25rem;
+  }
+  .lens-desc {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Callout — */
+  .callout {
+    background: var(--teal-soft);
+    border-left: 3px solid var(--teal);
+    padding: 1.1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .callout-warn {
+    background: var(--gold-soft);
+    border-left-color: var(--gold);
+  }
+
+  /* — Worked example — */
+  .example-box {
+    background: var(--chalk);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .example-box h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+  .example-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .example-option {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    font-size: 0.92rem;
+  }
+  .example-option .opt-letter {
+    font-weight: 600;
+    color: var(--teal);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* — Quiz — */
+  .quiz-q {
+    margin-bottom: 2rem;
+  }
+  .quiz-q:last-child {
+    margin-bottom: 0;
+  }
+  .quiz-stem {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.6;
+  }
+  .quiz-stem .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--ground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+    vertical-align: text-bottom;
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .quiz-opt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .quiz-opt:hover:not(.answered) {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+  .quiz-opt:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .quiz-opt .opt-letter {
+    font-weight: 600;
+    color: var(--stone);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
+  }
+  .quiz-opt:hover:not(.answered) .opt-letter {
+    color: var(--teal);
+  }
+  .quiz-opt.correct {
+    border-color: var(--correct);
+    background: var(--correct-soft);
+  }
+  .quiz-opt.correct .opt-letter { color: var(--correct); }
+  .quiz-opt.incorrect {
+    border-color: var(--incorrect);
+    background: var(--incorrect-soft);
+  }
+  .quiz-opt.incorrect .opt-letter { color: var(--incorrect); }
+  .quiz-opt.answered {
+    cursor: default;
+    opacity: 0.5;
+  }
+  .quiz-opt.correct.answered, .quiz-opt.incorrect.answered {
+    opacity: 1;
+  }
+  .quiz-explanation {
+    margin-top: 0.6rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    border-radius: 6px;
+    display: none;
+  }
+  .quiz-explanation.visible {
+    display: block;
+  }
+  .quiz-explanation.correct-expl {
+    background: var(--correct-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation.incorrect-expl {
+    background: var(--incorrect-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation strong {
+    font-weight: 600;
+  }
+
+  /* — Scenario — */
+  .scenario-prompt {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    color: var(--ink);
+  }
+  .scenario-lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 500px) {
+    .scenario-lenses { grid-template-columns: 1fr; }
+  }
+  .scenario-lens-prompt {
+    padding: 0.7rem 0.85rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .scenario-lens-prompt strong {
+    display: block;
+    color: var(--ink);
+    font-size: 0.88rem;
+    margin-bottom: 0.15rem;
+  }
+  .scenario-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .scenario-textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .scenario-textarea::placeholder {
+    color: var(--stone);
+    opacity: 0.6;
+  }
+  .scenario-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--teal-soft);
+    color: var(--teal);
+    border: 1.5px solid var(--teal-mid);
+    border-radius: 6px;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reveal-btn:hover {
+    background: var(--teal-mid);
+  }
+  .reveal-btn:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .scenario-answer {
+    margin-top: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: var(--teal-soft);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    display: none;
+  }
+  .scenario-answer.visible { display: block; }
+
+  /* — Meeting move — */
+  .meeting-move-quote {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--teal);
+    margin: 1rem 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--teal);
+    text-wrap: balance;
+  }
+
+  /* — Glossary — */
+  .glossary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .glossary-item {
+    padding: 0.85rem 1rem;
+    background: var(--chalk);
+    border-radius: 6px;
+  }
+  .glossary-term {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+  .glossary-def {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Score summary — */
+  .score-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--chalk);
+    border-radius: 8px;
+    margin-top: 2.5rem;
+  }
+  .score-ring {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .score-ring circle {
+    fill: none;
+    stroke-width: 4;
+  }
+  .score-ring .track { stroke: var(--ground); }
+  .score-ring .fill {
+    stroke: var(--teal);
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .score-ring text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .score-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .score-text strong { font-weight: 600; }
+
+  /* — Animations — */
+  @media (prefers-reduced-motion: no-preference) {
+    .section {
+      animation: fadeUp 0.4s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<!-- Progress -->
+  <div class="progress-strip">
+    <div class="progress-meta">
+      <span class="progress-label">Product Sense 101</span>
+      <span class="progress-day">Day 28 of 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <div class="lesson-eyebrow">Week 6 · Synthesis & Advanced</div>
+    <h1 class="lesson-title">API &amp; Platform PM</h1>
+    <p class="lesson-subtitle">Building for developers and ecosystems — where your customer stops being a person and becomes another piece of software, and the product is a promise you can't quietly take back.</p>
+  </div>
+
+  <!-- The Big Idea -->
+  <div class="section">
+    <div class="section-label">The Big Idea</div>
+    <p>Every lesson so far has assumed your customer is a human looking at a screen. Platform PM breaks that assumption. When you ship an API, a webhook, or an SDK, your customer is a developer, and your product surface is a contract written in request shapes, status codes, and field names instead of buttons and copy.</p>
+    <p>That shift sounds technical, but it's really a <strong>product</strong> shift. You're no longer designing an experience someone moves through once; you're designing an interface someone else's code will call thousands of times, often for years, often without ever upgrading. Back on Day 9 you learned that a platform's value compounds when other people build on top of it — API & Platform PM is the discipline of actually earning that.</p>
+
+    <div class="lenses">
+      <div class="lens">
+        <div class="lens-name">User Lens → Developer Experience</div>
+        <div class="lens-desc">The "user" is reading your docs at 11pm trying to ship their own deadline. Confusing errors and inconsistent naming are usability bugs, same as a confusing button.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Business Lens → Platform economics</div>
+        <div class="lens-desc">Every integration a partner builds is distribution you didn't pay for — but every integration you support is also a liability you now carry indefinitely.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Technical Lens → The contract</div>
+        <div class="lens-desc">An API is a promise. Once a third party depends on a field or a behavior, "fixing" it is a breaking change to someone else's production system.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">Market Lens → Ecosystem moat</div>
+        <div class="lens-desc">A platform that attracts partners who build switching-cost-raising integrations is defensible in a way a single great feature never is.</div>
+      </div>
+    </div>
+
+    <p>The practical tool for a platform PM is <strong>the Platform Test</strong> — three questions that decide whether a capability should be built as a one-off feature or exposed as a durable platform primitive:</p>
+
+    <div class="callout">
+      <strong>1. Will more than one consumer need this?</strong> A one-off integration serves one customer. A primitive serves every customer who will ever ask for something like it.<br><br>
+      <strong>2. Can we expose it as a contract we're willing to keep?</strong> If the underlying data model is still churning internally, it's too early to promise external stability.<br><br>
+      <strong>3. Does opening it build a moat, or does it commoditize us?</strong> Exposing your scheduling engine might help partners; exposing your scoring model might hand competitors your IP.
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>The Technical PM Trap, platform edition.</strong> A technical background makes it easy to fall in love with the elegance of the API itself — clean REST design, perfect idempotency keys, a beautiful SDK. None of that is the product. The product is whether a developer at a partner company can accomplish their job faster with your platform than by building it themselves. An elegant API nobody adopts is a well-built feature nobody asked for, wearing a different costume.
+    </div>
+  </div>
+
+  <!-- B2B Context -->
+  <div class="section">
+    <div class="section-label">The B2B SaaS Angle</div>
+    <p>In API-first B2B products, platform thinking shows up constantly. Customer data flows in from a dozen source systems; event triggers need to fire the moment a record crosses a threshold; agencies and systems integrators want to build on top of your orchestration engine rather than wait for your roadmap.</p>
+    <p>Two patterns recur in this domain specifically. First, <strong>event delivery</strong>: should a real-time customer-state change reach a partner system via webhook (you push, low latency, but you now own retry and delivery guarantees) or via a polling endpoint (they pull, simpler for you, laggier for them)? Second, <strong>data gravity</strong>: once a partner's workflow depends on reading customer segments from your platform, they're unlikely to rebuild that logic elsewhere — which is exactly the switching cost that makes platform investment worth it, provided you don't break the contract underneath them.</p>
+    <p>The enterprise buyer/user split from Day 1 gets a third party added here: the <em>partner developer</em>, who never buys anything but decides, by how painful your API is, whether the integration that was supposed to lock in your buyer actually ships.</p>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="section">
+    <div class="section-label">Worked Example</div>
+    <div class="example-box">
+      <h3>The Loyalty-Tier Webhook Request</h3>
+      <p>Your largest customer's BI team wants to know the instant a shopper's loyalty tier changes, so their internal dashboard stays in sync. Three ways to respond land on your desk:</p>
+      <div class="example-options">
+        <div class="example-option">
+          <span class="opt-letter">A</span>
+          <span>Write a one-off nightly export script that dumps tier changes to their S3 bucket</span>
+        </div>
+        <div class="example-option">
+          <span class="opt-letter">B</span>
+          <span>Tell them to poll your existing customer-profile API every few minutes and diff the tier field themselves</span>
+        </div>
+        <div class="example-option">
+          <span class="opt-letter">C</span>
+          <span>Build a generic Customer Event Webhook framework — tier change is the first of many event types it can emit</span>
+        </div>
+      </div>
+      <p><strong>The product sense read:</strong> A solves today's ticket and creates tomorrow's maintenance burden — a bespoke script that only one engineer understands, with no monitoring and no reuse. B pushes real cost onto the partner (polling delay, wasted calls, diffing logic they shouldn't have to write) in exchange for zero engineering effort on your side — cheap for you, expensive for the ecosystem.</p>
+      <p>C passes the Platform Test: more than one consumer will want event notifications (segment entry, churn-risk flag, consent change — tier is just the first), the event envelope can be a contract you design deliberately from day one instead of retrofitting later, and a general event system is a capability competitors would have to build from scratch to match. The 6-week estimate for C looks worse than A's 3 days — until you count the fourth customer who asks for the same thing next quarter.</p>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <div class="section-label">Quiz · Test Your Thinking</div>
+
+    <div class="quiz-q" data-correct="2">
+      <div class="quiz-stem"><span class="q-num">1</span> Your API currently returns a customer's status as a free-text string like "Active" or "active" depending on which internal service wrote it. A partner's integration breaks whenever the casing changes. What's the real product failure here?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>The partner should have written more defensive code</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>String fields are inherently unreliable and should be avoided</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>The API shipped without a stable contract — an enum with defined values the team is committed to, instead of an implementation detail leaking through</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>This is purely an engineering QA issue, not a product one</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: C.</strong> This is the Technical Lens applied to platform work: an API's job is to expose a deliberate contract, not whatever shape the internal data happens to be in today. A platform PM defines the enum, documents every valid value, and treats a casing change as a breaking change requiring a version bump — because somewhere, a partner's production system is parsing that exact string.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">2</span> A partner asks for a webhook instead of having to poll your API every minute. What's the main product trade-off you're accepting by saying yes?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>Webhooks are always cheaper to build than polling endpoints</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>You take on responsibility for retry logic, delivery guarantees, and ordering — failures now happen on your infrastructure instead of theirs</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Webhooks eliminate the need for authentication</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>There is no meaningful difference from the partner's side</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> Polling puts the burden of checking on the partner; a webhook moves that burden onto you. You now own what happens when their endpoint is down, whether events can arrive out of order, and whether a dropped event is silently lost. The Business Lens question is whether that ongoing operational cost is worth the distribution and stickiness the webhook buys you.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="0">
+      <div class="quiz-stem"><span class="q-num">3</span> Six months after launch, your platform API has three large partners depending on a field you now realize is badly designed. What does "backward compatibility" require of you?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>Keep the old field working as documented, and introduce the improved version alongside it with a migration path and a deprecation timeline</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Fix the field immediately — partners should adapt quickly to improvements</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Email partners once and change the field a week later</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Wait for a partner to complain before doing anything</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: A.</strong> Backward compatibility means a published contract keeps behaving the way its consumers were told it would, even after you've learned better. The discipline is additive change plus a deprecation window, not silent mutation. This is the cost of calling something a platform rather than a feature — you've sold stability, and reneging on it is more expensive than it looks from inside the building.
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario Drill -->
+  <div class="section">
+    <div class="section-label">Scenario Drill</div>
+    <p class="scenario-prompt">Sales just promised a strategic prospect "real-time API access to segment membership changes" to close a deal that renews in 6 weeks. Engineering says the existing segment engine has no event hooks at all — building generic ones is a 5-week project; faking it for this one customer with a scheduled poll-and-diff job is 4 days.</p>
+    <p>Apply all four lenses before deciding. Use the prompts below:</p>
+    <div class="scenario-lenses">
+      <div class="scenario-lens-prompt">
+        <strong>User Lens</strong>
+        What does "real-time" actually need to mean for the workflow the prospect described — seconds, minutes, same business day?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Business Lens</strong>
+        What's the cost of under-delivering on a sales promise versus the cost of 5 extra weeks of engineering time?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Technical Lens</strong>
+        Does the quick fix become throwaway code, or can it be built as a thin first version of the real thing?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Market Lens</strong>
+        Is "real-time segment events" a capability your competitors already offer, or a genuine differentiator worth owning properly?
+      </div>
+    </div>
+    <textarea class="scenario-textarea" placeholder="Write your analysis here. What would you do and why? Think through the trade-offs…"></textarea>
+    <div class="scenario-hint">No wrong answers — this is about practicing the lens discipline.</div>
+    <button class="reveal-btn" id="revealBtn">Show a senior PM's take ▾</button>
+    <div class="scenario-answer" id="scenarioAnswer">
+      <p><strong>A strong answer touches all four:</strong></p>
+      <p><strong>User:</strong> Before building anything, get the actual requirement from the prospect's team, not the sales summary. "Real-time" from sales often means "not a weekly CSV export" — a 5-minute poll interval may fully satisfy the real workflow, which changes the engineering estimate dramatically.</p>
+      <p style="margin-top:0.5rem"><strong>Business:</strong> A broken promise to a strategic prospect at signing is expensive in trust, not just revenue — but so is burning 5 weeks of the platform roadmap for one logo if the capability doesn't generalize. The real question is whether this deal is large enough, or representative enough of the pipeline, to justify accelerating a platform investment you'd eventually make anyway.</p>
+      <p style="margin-top:0.5rem"><strong>Technical:</strong> The deciding move is making the 4-day version a deliberate V1 of the real architecture rather than a disposable hack — same event schema, same webhook contract, just backed by a poll-and-diff job internally at first. That way the "shortcut" is forward-compatible, and swapping in true event hooks later is invisible to the partner.</p>
+      <p style="margin-top:0.5rem"><strong>Market:</strong> If real-time event webhooks are becoming table stakes in B2B platforms, this isn't really a one-customer favor — it's a deferred platform investment that a sales deal just forced onto the roadmap. Treat the deadline as a forcing function, not a distraction from it.</p>
+      <p style="margin-top:0.5rem">The decision isn't "ship the hack" versus "build it right" — it's building the right contract first, behind whichever implementation the timeline allows.</p>
+    </div>
+  </div>
+
+  <!-- Meeting Move -->
+  <div class="section">
+    <div class="section-label">Meeting Move of the Day</div>
+    <p>Next time a one-off integration or custom API request comes up in a meeting, ask:</p>
+    <div class="meeting-move-quote">"If the fifth partner asked for this exact same thing, what would we wish we'd built today?"</div>
+    <p>This question forces the room past the immediate requester and into platform thinking without you having to say the word "platform." It surfaces whether you're looking at a one-off favor or the first instance of a pattern — and it's far more persuasive than arguing in the abstract about technical debt.</p>
+    <p>Practice it once this week. Notice who in the room starts thinking in contracts instead of tickets.</p>
+  </div>
+
+  <!-- Glossary -->
+  <div class="section">
+    <div class="section-label">Glossary</div>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">API-First Design</div>
+        <div class="glossary-def">Designing the API contract before building the internal implementation or any UI on top of it, so the interface reflects deliberate product decisions rather than whatever the internals happen to expose.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Developer Experience (DX)</div>
+        <div class="glossary-def">The UX discipline applied to developers as users — clear docs, predictable naming, useful error messages, and a sandbox to test against. Bad DX is a usability bug, full stop.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Backward Compatibility</div>
+        <div class="glossary-def">A guarantee that existing integrations keep working after you ship a change. Breaking it silently is the platform equivalent of changing a signed contract without telling the other party.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Webhook vs. Polling</div>
+        <div class="glossary-def">A webhook pushes data to a partner the moment an event happens (low latency, but you own delivery and retries); polling has the partner pull on a schedule (simpler for you, laggier and chattier for them).</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Platform Moat</div>
+        <div class="glossary-def">The defensibility a platform earns when partners build integrations on top of it — switching away means rebuilding someone else's work, not just replacing a feature. Builds directly on Day 9's network effects and Day 7's moats.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-strip" id="scoreStrip" style="display: none;">
+    <svg class="score-ring" viewBox="0 0 52 52">
+      <circle class="track" cx="26" cy="26" r="22" />
+      <circle class="fill" id="scoreArc" cx="26" cy="26" r="22"
+              stroke-dasharray="138.23" stroke-dashoffset="138.23" />
+      <text x="26" y="26" id="scoreText">0/3</text>
+    </svg>
+    <div class="score-text" id="scoreMsg"><strong>Quiz score</strong><br>Answer all three questions to see your result.</div>
+  </div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 28 complete</span>
+    </div>
+    <div class="footer-next"><a href="day29.html">Next lesson → AI-Era Product Thinking</a></div>
+  </div>
+</div>
+
+<script>
+  // — Quiz logic —
+  const quizState = { answered: 0, correct: 0, total: 3 };
+
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const correctIdx = parseInt(q.dataset.correct);
+    const opts = q.querySelectorAll('.quiz-opt');
+    const expl = q.querySelector('.quiz-explanation');
+
+    function answer(selectedIdx) {
+      if (q.classList.contains('done')) return;
+      q.classList.add('done');
+
+      const isCorrect = selectedIdx === correctIdx;
+      quizState.answered++;
+      if (isCorrect) quizState.correct++;
+
+      opts.forEach((opt, i) => {
+        opt.classList.add('answered');
+        if (i === correctIdx) opt.classList.add('correct');
+        if (i === selectedIdx && !isCorrect) opt.classList.add('incorrect');
+      });
+
+      expl.classList.add('visible', isCorrect ? 'correct-expl' : 'incorrect-expl');
+      updateScore();
+    }
+
+    opts.forEach((opt, i) => {
+      opt.addEventListener('click', () => answer(i));
+      opt.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); answer(i); }
+      });
+    });
+  });
+
+  function updateScore() {
+    const strip = document.getElementById('scoreStrip');
+    strip.style.display = 'flex';
+
+    const pct = quizState.correct / quizState.total;
+    const circumference = 138.23;
+    const arc = document.getElementById('scoreArc');
+    arc.style.strokeDashoffset = circumference * (1 - pct);
+
+    document.getElementById('scoreText').textContent =
+      quizState.correct + '/' + quizState.total;
+
+    const msg = document.getElementById('scoreMsg');
+    if (quizState.answered === quizState.total) {
+      if (quizState.correct === quizState.total) {
+        msg.innerHTML = '<strong>Perfect.</strong><br>You\'re thinking in contracts, not tickets. Tomorrow — AI-era product thinking, where the contract gets probabilistic.';
+      } else if (quizState.correct >= 2) {
+        msg.innerHTML = '<strong>Solid.</strong><br>You caught the key patterns. Review the explanation on the one you missed — the nuance matters more here than usual, since a wrong platform call costs you for years.';
+      } else {
+        msg.innerHTML = '<strong>Room to grow.</strong><br>That\'s exactly why you\'re here. Re-read the Platform Test and try applying it to an integration request you\'ve seen recently.';
+      }
+      // Update progress bar
+      document.getElementById('progressFill').style.width = '93.3%';
+    }
+  }
+
+  // — Scenario reveal —
+  document.getElementById('revealBtn').addEventListener('click', function() {
+    const answer = document.getElementById('scenarioAnswer');
+    const isVisible = answer.classList.contains('visible');
+    answer.classList.toggle('visible');
+    this.textContent = isVisible ? 'Show a senior PM\'s take ▾' : 'Hide ▴';
+  });
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

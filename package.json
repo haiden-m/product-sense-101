@@ -1,0 +1,15 @@
+{
+  "name": "product-sense-101",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Product Sense 101 — 30-day course (static site)",
+  "scripts": {
+    "build": "node scripts/build-dist.mjs",
+    "dev": "npx serve .",
+    "dev:dist": "npx serve dist",
+    "deploy": "npm run build && vercel deploy dist --environment production --yes"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0"
+  }
+}

@@ -1,0 +1,487 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Platform Thinking & Network Effects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* layout: single reading column, numbered course modules, teal rule dividers, score ring in quiz header */
+    --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+    --good:#1A756A; --bad:#B0503F;
+    --display: "Newsreader", Georgia, serif;
+    --body: "Outfit", -apple-system, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+      --good:#3CB5A5; --bad:#D97B63;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --good:#3CB5A5; --bad:#D97B63;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:var(--body);
+    margin:0; padding-inline:20px; padding-block:40px;
+    line-height:1.6;
+  }
+  .page{max-width:680px; margin:0 auto;}
+
+  .kicker{
+    font-family:var(--body); font-weight:600; font-size:.75rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--teal); display:flex; align-items:center; gap:10px; margin-bottom:6px;
+  }
+  .kicker .day-badge{
+    background:var(--teal); color:var(--ground); border-radius:100px; padding:3px 11px; letter-spacing:.06em;
+    font-size:.72rem;
+  }
+  .kicker::after{content:""; flex:1; height:1px; background:var(--chalk);}
+
+  h1{
+    font-family:var(--display); font-weight:600; font-size:clamp(1.8rem,5vw,2.5rem);
+    margin:0 0 6px; text-wrap:balance; letter-spacing:-.01em;
+  }
+  .subtitle{color:var(--stone); font-size:1rem; margin-bottom:8px;}
+  .bridge{
+    font-size:.9rem; color:var(--stone); background:var(--chalk); border-radius:10px;
+    padding:10px 14px; margin-bottom:34px; border-left:3px solid var(--gold);
+  }
+  .bridge b{color:var(--ink); font-weight:600;}
+
+  section{margin-bottom:46px;}
+  .sec-head{
+    display:flex; align-items:baseline; gap:10px; margin-bottom:16px;
+  }
+  .sec-num{
+    font-family:var(--display); font-style:italic; color:var(--gold); font-size:1.1rem; min-width:1.4em;
+  }
+  .sec-title{font-family:var(--display); font-weight:600; font-size:1.4rem;}
+  .sec-time{color:var(--stone); font-size:.8rem; margin-left:auto; white-space:nowrap;}
+
+  p{margin:0 0 14px;}
+  .prose p:last-child{margin-bottom:0}
+
+  .callout{
+    background:var(--chalk); border-radius:12px; padding:16px 18px; margin:18px 0;
+  }
+  .callout .label{
+    font-weight:600; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); margin-bottom:6px; display:block;
+  }
+
+  .types-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:18px 0;
+  }
+  .type-card{
+    border:1px solid var(--chalk); border-radius:12px; padding:14px 16px; min-width:0;
+  }
+  .type-card .t-name{font-family:var(--display); font-weight:600; font-size:1.02rem; color:var(--teal); margin-bottom:4px;}
+  .type-card .t-desc{font-size:.85rem; color:var(--ink); opacity:.85;}
+
+  .example-card{
+    border:1px solid var(--chalk); border-radius:14px; padding:20px 22px; background:var(--chalk);
+  }
+  .example-card .ex-tag{
+    font-weight:600; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold);
+  }
+  .example-card h3{font-family:var(--display); font-weight:600; font-size:1.15rem; margin:6px 0 10px;}
+
+  /* Quiz */
+  .quiz-head{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:6px;}
+  .score-ring{position:relative; width:52px; height:52px; flex-shrink:0;}
+  .score-ring svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .score-ring circle{fill:none; stroke-width:5;}
+  .score-ring .track{stroke:var(--chalk);}
+  .score-ring .fill{stroke:var(--teal); stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+  .score-ring .num{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--body); font-weight:700; font-size:.82rem;
+  }
+  .q-block{
+    margin-bottom:26px; border:1px solid var(--chalk); border-radius:14px; padding:18px 20px;
+  }
+  .q-block:last-child{margin-bottom:0}
+  .q-text{font-weight:600; margin-bottom:12px; font-size:1rem;}
+  .q-options{display:flex; flex-direction:column; gap:8px;}
+  .q-option{
+    text-align:left; border:1px solid var(--chalk); background:transparent; color:var(--ink);
+    border-radius:10px; padding:10px 14px; font-family:var(--body); font-size:.92rem; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .q-option:hover:not(:disabled){border-color:var(--teal);}
+  .q-option:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+  .q-option:disabled{cursor:default;}
+  .q-option.correct{border-color:var(--good); background:color-mix(in srgb, var(--good) 14%, transparent); font-weight:600;}
+  .q-option.incorrect{border-color:var(--bad); background:color-mix(in srgb, var(--bad) 12%, transparent);}
+  .q-option.dim{opacity:.5;}
+  .q-feedback{
+    margin-top:12px; padding:12px 14px; border-radius:10px; font-size:.88rem; display:none;
+    background:var(--chalk);
+  }
+  .q-feedback.show{display:block;}
+  .q-feedback .verdict{font-weight:700; margin-bottom:4px;}
+  .q-feedback .verdict.right{color:var(--good);}
+  .q-feedback .verdict.wrong{color:var(--bad);}
+
+  /* Scenario */
+  .scenario-box{border:1px solid var(--chalk); border-radius:14px; padding:20px 22px;}
+  .scenario-box .prompt{margin-bottom:16px;}
+  .reveal-btn{
+    background:var(--teal); color:var(--ground); border:none; border-radius:100px;
+    padding:11px 22px; font-family:var(--body); font-weight:600; font-size:.9rem; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px; transition:opacity .15s;
+  }
+  .reveal-btn:hover{opacity:.88;}
+  .reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+  .analysis{
+    display:none; margin-top:18px; padding-top:18px; border-top:1px dashed var(--stone);
+  }
+  .analysis.show{display:block;}
+  .analysis .a-label{
+    font-weight:600; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; display:block;
+  }
+  .analysis ul{margin:0 0 12px; padding-left:1.2em;}
+  .analysis li{margin-bottom:8px;}
+  .analysis li:last-child{margin-bottom:0}
+
+  /* Meeting move */
+  .move-card{
+    background:var(--ink); color:var(--ground); border-radius:14px; padding:22px 24px;
+  }
+  .move-card .m-label{
+    font-weight:600; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; display:block;
+  }
+  .move-card .m-quote{
+    font-family:var(--display); font-style:italic; font-size:1.15rem; line-height:1.5; margin:0 0 10px;
+  }
+  .move-card .m-note{font-size:.85rem; opacity:.75;}
+
+  /* Glossary */
+  .gloss-list{display:flex; flex-direction:column; gap:14px;}
+  .gloss-item{display:grid; grid-template-columns:minmax(0,160px) 1fr; gap:14px;}
+  @media (max-width:520px){ .gloss-item{grid-template-columns:1fr;} }
+  .gloss-term{font-family:var(--display); font-weight:600; color:var(--teal); font-size:1rem;}
+  .gloss-def{font-size:.9rem; min-width:0;}
+
+  
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<div class="kicker"><span class="day-badge">Day 9</span> Week 2 · Strategic Frameworks</div>
+  <h1>Platform Thinking &amp; Network Effects</h1>
+  <p class="subtitle">Why some products get more valuable simply because more people use them.</p>
+  <div class="bridge"><b>Yesterday</b> you sized the market with TAM/SAM/SOM — a static snapshot of how big the opportunity could be. <b>Today's frame explains how that opportunity can grow on its own</b>: a platform's addressable market expands as the network around it grows, without your team building a single new feature.</div>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">I.</span>
+      <span class="sec-title">The Big Idea</span>
+      <span class="sec-time">5 min</span>
+    </div>
+    <div class="prose">
+      <p>Most B2B SaaS roadmaps are written like a <b>product</b>: we ship a feature, a customer gets value from that feature, done. Value flows in one line, from your engineering team to one customer's screen. A <b>platform</b> is a different shape entirely. Value comes from the connections <i>between</i> distinct groups of users — and each new participant on either side makes the whole system worth more to everyone already in it.</p>
+      <p>That extra value-from-connection is a <b>network effect</b>, and it's the single most important idea in platform strategy because it's the only mechanism that lets a product's value curve bend upward on its own, without a corresponding increase in your engineering spend. Three flavors show up constantly in B2B SaaS:</p>
+      <div class="types-grid">
+        <div class="type-card">
+          <div class="t-name">Direct</div>
+          <div class="t-desc">More users of the <i>same</i> type make it better for that type. A Slack workspace gets more useful as more of your own colleagues join it.</div>
+        </div>
+        <div class="type-card">
+          <div class="t-name">Indirect (cross-side)</div>
+          <div class="t-desc">More users on <i>one</i> side make the product better for the <i>other</i> side. More sellers on a marketplace attract more buyers, and vice versa.</div>
+        </div>
+        <div class="type-card">
+          <div class="t-name">Data</div>
+          <div class="t-desc">More usage generates more data, which makes the underlying models or benchmarks better for everyone, even without any direct interaction between users.</div>
+        </div>
+      </div>
+      <p>The test for whether you're actually building a platform — not just adding features to a product — is simple: <b>does the value come from connections between distinct groups, or only from what your own team ships?</b> An AI feature that only gets smarter from your own R&amp;D is a good product. An AI feature that gets smarter because thousands of customers' campaign outcomes feed it is a data network effect, and that's platform thinking.</p>
+      <div class="callout">
+        <span class="label">Why this matters for a senior PM</span>
+        Network effects are also the deepest kind of competitive moat (see Day 7): a well-designed one compounds automatically, is expensive for a competitor to replicate even with a superior feature set, and turns "market share" into a genuinely self-reinforcing asset rather than a number that resets every renewal cycle.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">II.</span>
+      <span class="sec-title">Worked Example</span>
+      <span class="sec-time">3 min</span>
+    </div>
+    <div class="example-card">
+      <span class="ex-tag">B2B SaaS / Integrations</span>
+      <h3>A connector and partner ecosystem</h3>
+      <p>Consider a B2B platform's integrations layer: connectors to payment systems, identity providers, data warehouses, and communication channels, plus built-in AI that recommends next-best-actions. Two network effects are stacked on top of each other here:</p>
+      <p><b>Indirect network effect:</b> every channel partner (a new SMS provider, a new ad platform) that integrates makes the platform more valuable to brands who use that channel — and every brand that adopts the platform makes it more attractive for the next channel partner to build an integration, since there's now a bigger audience of marketers on the other side. Neither side needs the other side to grow for their own sake; each side benefits because the other side grows.</p>
+      <p><b>Data network effect:</b> every campaign a brand runs through the platform generates outcome data — what worked, for which segment, in which channel. Pooled (and properly anonymized) across the customer base, that data can make the next brand's recommendations better on day one, before they've run a single campaign of their own. This is exactly why a data network effect is easy to confuse with plain economies of scale: scale just lowers your cost per customer, while a data network effect makes the <i>product itself</i> get better for every customer as the base grows.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="sec-head">
+      <span class="sec-num">III.</span>
+      <span class="sec-title">Quiz</span>
+      <span class="sec-time">5 min</span>
+    </div>
+    <div class="quiz-head">
+      <p style="margin:0; color:var(--stone); font-size:.9rem;">Click an option on each question to check your answer.</p>
+      <div class="score-ring">
+        <svg viewBox="0 0 52 52">
+          <circle class="track" cx="26" cy="26" r="21"></circle>
+          <circle class="fill" id="ring-fill" cx="26" cy="26" r="21" stroke-dasharray="131.9" stroke-dashoffset="131.9"></circle>
+        </svg>
+        <div class="num" id="ring-num">0/3</div>
+      </div>
+    </div>
+
+    <div class="q-block" data-qid="1">
+      <div class="q-text">1. A vendor launches a marketplace where partner agencies list pre-built campaign templates that brands can install directly. As more brands join, more agencies want to list templates — and as more agencies list templates, more brands are drawn in. What is this?</div>
+      <div class="q-options">
+        <button class="q-option" data-correct="false">A direct network effect</button>
+        <button class="q-option" data-correct="true">An indirect (cross-side) network effect</button>
+        <button class="q-option" data-correct="false">A data network effect</button>
+        <button class="q-option" data-correct="false">Just a feature addition, not a network effect</button>
+      </div>
+      <div class="q-feedback">
+        <div class="verdict"></div>
+        <div class="explain">Two <i>distinct</i> groups — agencies and brands — each make the product more valuable to the other as they grow. That cross-side dynamic is the signature of an indirect network effect, and it's what makes a marketplace fundamentally different from a feature list.</div>
+      </div>
+    </div>
+
+    <div class="q-block" data-qid="2">
+      <div class="q-text">2. An AI recommendation engine gets measurably more accurate the more campaigns customers run through it, because it learns from aggregate outcome data across the whole customer base. This is best described as:</div>
+      <div class="q-options">
+        <button class="q-option" data-correct="false">A direct network effect</button>
+        <button class="q-option" data-correct="false">Simple economies of scale</button>
+        <button class="q-option" data-correct="true">A data network effect</button>
+        <button class="q-option" data-correct="false">A one-way integration, not a network effect</button>
+      </div>
+      <div class="q-feedback">
+        <div class="verdict"></div>
+        <div class="explain">Economies of scale would only mean it gets <i>cheaper</i> to serve more customers. Here the product itself gets <i>better</i> for every customer as usage grows — that's the defining feature of a data network effect, and it's the one type of network effect that doesn't require users to interact with each other at all.</div>
+      </div>
+    </div>
+
+    <div class="q-block" data-qid="3">
+      <div class="q-text">3. Which is the sharpest test for whether you're building a "platform" rather than just a "product with more features"?</div>
+      <div class="q-options">
+        <button class="q-option" data-correct="false">Whether it exposes a public API</button>
+        <button class="q-option" data-correct="false">Whether the company is the market leader</button>
+        <button class="q-option" data-correct="true">Whether value comes from connections between distinct groups of users, not only from the vendor's own roadmap</button>
+        <button class="q-option" data-correct="false">Whether it's sold on an annual subscription</button>
+      </div>
+      <div class="q-feedback">
+        <div class="verdict"></div>
+        <div class="explain">APIs and pricing models are implementation details. The structural question is where value comes from: if it only ever comes from what your own team ships, you have a (possibly excellent) product; if it also comes from connections between groups that grow independently of your roadmap, you have a platform.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">IV.</span>
+      <span class="sec-title">Scenario Drill</span>
+      <span class="sec-time">8 min</span>
+    </div>
+    <div class="scenario-box">
+      <div class="prompt">
+        <p><b>The setup:</b> Your leadership team is debating whether to build a marketplace where third-party developers and boutique agencies can build and sell custom analytics modules and workflow widgets that brand customers can install into their workspace — a plugin ecosystem, roughly.</p>
+        <p><b>Your task:</b> before reading the analysis below, think through it yourself. Is this a platform bet worth making right now? What has to be true for it to work, and what's the single biggest risk? Jot down your own answer, then reveal the senior PM take.</p>
+      </div>
+      <button class="reveal-btn" id="reveal-btn">Reveal senior PM analysis →</button>
+      <div class="analysis" id="analysis">
+        <span class="a-label">Senior PM analysis</span>
+        <ul>
+          <li><b>Name the chicken-and-egg problem first.</b> A marketplace with zero developers has nothing for brands to install, and a marketplace with zero installing brands has no reason for a developer to spend a week building a widget. Whoever proposes this needs a concrete answer for which side gets seeded artificially first — usually your team builds 3-5 reference widgets yourselves to prove the model works before recruiting outside developers.</li>
+          <li><b>Check whether real network effect potential exists at all, or whether this is just "more features, outsourced."</b> If brands only ever interact with a widget's output and never with the developer, and developers never benefit from each other, you may not have a two-sided network effect — you may just have an outsourced feature backlog wearing platform language. Worth being precise about this before committing engineering time to build the marketplace infrastructure (permissions, billing splits, review pipeline).</li>
+          <li><b>Weigh it against the moat it would build (ties to Day 7).</b> If it works, a healthy marketplace raises switching costs enormously — a brand that's built workflows around six installed partner widgets doesn't want to re-platform. That's a real, compounding moat, which is exactly why competitors would want to copy it and exactly why it's hard for them to, once brands and developers are both invested.</li>
+          <li><b>Sequence the risk.</b> Quality control is the operational risk (a bad third-party widget that breaks a brand's campaign reflects on you, not the developer) and cannibalization is the strategic risk (does a great partner widget make your own roadmap for that feature redundant?). Both are solvable, but neither should be an afterthought discovered after launch.</li>
+          <li><b>The precondition most teams skip:</b> a marketplace is a bet you make <i>on top of</i> product-market fit, not a way to find it. If your core platform doesn't yet have strong, sticky usage among customers, there's no demand for developers to build against — which is exactly the topic of Day 10.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">V.</span>
+      <span class="sec-title">Meeting Move</span>
+      <span class="sec-time">2 min</span>
+    </div>
+    <div class="move-card">
+      <span class="m-label">Use this the next time an ecosystem or marketplace idea comes up</span>
+      <p class="m-quote">"Before we scope this, whose side are we seeding first — and what's the smallest version of this that creates real value for that first side alone, with zero participants on the other side?"</p>
+      <p class="m-note">This single question forces the room to name the chicken-and-egg problem out loud instead of designing both sides of a two-sided system simultaneously, which is how most marketplace efforts stall in build without ever launching.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">VI.</span>
+      <span class="sec-title">Glossary</span>
+      <span class="sec-time">2 min</span>
+    </div>
+    <div class="gloss-list">
+      <div class="gloss-item">
+        <div class="gloss-term">Network effect</div>
+        <div class="gloss-def">The phenomenon where a product or service becomes more valuable to each user as more people (or a specific group of people) use it — value grows from connections between users, not just from added features.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Two-sided market</div>
+        <div class="gloss-def">A platform serving two distinct user groups whose value to each other creates an indirect network effect — e.g. brands and channel partners, or buyers and sellers on a marketplace.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Chicken-and-egg problem</div>
+        <div class="gloss-def">The launch challenge unique to multi-sided platforms: neither side wants to join until the other side already has scale, so the platform has no natural starting point without deliberate seeding.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Data network effect</div>
+        <div class="gloss-def">A network effect where the product improves for every user as aggregate usage data accumulates, even without users interacting with each other directly. Distinct from economies of scale, which only lowers cost, not quality.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Platform vs. product</div>
+        <div class="gloss-def">A product delivers value directly from vendor to user; a platform delivers value primarily through connections it enables between distinct groups of users, and keeps compounding as those groups grow.</div>
+      </div>
+    </div>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 9 complete</span>
+    </div>
+    <div class="footer-next"><a href="day10.html">Next lesson → Product&ndash;Market Fit</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var correctCount = 0;
+  var answeredCount = 0;
+  var total = 3;
+  var ringFill = document.getElementById('ring-fill');
+  var ringNum = document.getElementById('ring-num');
+  var CIRC = 131.9;
+
+  function updateRing(){
+    var pct = total ? (correctCount/total) : 0;
+    ringFill.style.strokeDashoffset = String(CIRC * (1 - pct));
+    ringNum.textContent = correctCount + '/' + total;
+  }
+
+  document.querySelectorAll('.q-block').forEach(function(block){
+    var options = block.querySelectorAll('.q-option');
+    var feedback = block.querySelector('.q-feedback');
+    var verdict = feedback.querySelector('.verdict');
+    options.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        if(block.dataset.answered) return;
+        block.dataset.answered = 'true';
+        answeredCount++;
+        var isCorrect = opt.dataset.correct === 'true';
+        options.forEach(function(o){
+          o.disabled = true;
+          if(o.dataset.correct === 'true'){
+            o.classList.add('correct');
+          } else if(o === opt){
+            o.classList.add('incorrect');
+          } else {
+            o.classList.add('dim');
+          }
+        });
+        if(isCorrect){
+          correctCount++;
+          verdict.textContent = 'Correct.';
+          verdict.className = 'verdict right';
+        } else {
+          verdict.textContent = 'Not quite.';
+          verdict.className = 'verdict wrong';
+        }
+        feedback.classList.add('show');
+        updateRing();
+      });
+    });
+  });
+
+  var revealBtn = document.getElementById('reveal-btn');
+  var analysis = document.getElementById('analysis');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysis.classList.toggle('show');
+    revealBtn.textContent = isShown ? 'Hide senior PM analysis' : 'Reveal senior PM analysis →';
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

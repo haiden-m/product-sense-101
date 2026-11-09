@@ -1,0 +1,10 @@
+.vercel
+.DS_Store
+node_modules
+.env*
+*.log
+.upload
+.deploy-payload.json
+.deploy-manifest.json
+.deploy-mcp-body.json
+dist

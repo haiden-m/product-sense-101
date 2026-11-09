@@ -1,0 +1,958 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Product Sense 101 · Day 30</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --teal-soft: rgba(26, 117, 106, 0.08);
+    --teal-mid: rgba(26, 117, 106, 0.15);
+    --gold: #B8892E;
+    --gold-soft: rgba(184, 137, 46, 0.10);
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --correct: #3A7D44;
+    --correct-soft: rgba(58, 125, 68, 0.08);
+    --incorrect: #B94A35;
+    --incorrect-soft: rgba(185, 74, 53, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --teal-soft: rgba(60, 181, 165, 0.10);
+      --teal-mid: rgba(60, 181, 165, 0.18);
+      --gold: #D4A73E;
+      --gold-soft: rgba(212, 167, 62, 0.12);
+      --stone: #7A756C;
+      --chalk: #222120;
+      --correct: #5CB86A;
+      --correct-soft: rgba(92, 184, 106, 0.10);
+      --incorrect: #D4604A;
+      --incorrect-soft: rgba(212, 96, 74, 0.10);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --teal-soft: rgba(60, 181, 165, 0.10);
+    --teal-mid: rgba(60, 181, 165, 0.18);
+    --gold: #D4A73E;
+    --gold-soft: rgba(212, 167, 62, 0.12);
+    --stone: #7A756C;
+    --chalk: #222120;
+    --correct: #5CB86A;
+    --correct-soft: rgba(92, 184, 106, 0.10);
+    --incorrect: #D4604A;
+    --incorrect-soft: rgba(212, 96, 74, 0.10);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 2rem max(16px, env(safe-area-inset-right, 0px)) 5rem max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  /* — Progress bar — */
+  .progress-strip {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--ground);
+    padding: 1rem 0 0.75rem;
+    border-bottom: 1px solid var(--chalk);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+  .progress-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .progress-day {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .progress-track {
+    height: 4px;
+    background: var(--chalk);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+
+  /* — Header — */
+  .lesson-header {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .lesson-eyebrow {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .lesson-title {
+    font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-wrap: balance;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .lesson-subtitle {
+    font-size: 1.05rem;
+    color: var(--stone);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 540px;
+  }
+
+  /* — Sections — */
+  .section {
+    margin-top: 3rem;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--chalk);
+  }
+  .section h2 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    text-wrap: balance;
+  }
+  .section p {
+    margin-bottom: 1rem;
+  }
+  .section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* — Lenses / spine grid — */
+  .lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 500px) {
+    .lenses { grid-template-columns: 1fr; }
+  }
+  .lens {
+    padding: 1rem 1.15rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    border-left: 3px solid var(--teal);
+  }
+  .lens-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 0.25rem;
+  }
+  .lens-desc {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Callout — */
+  .callout {
+    background: var(--teal-soft);
+    border-left: 3px solid var(--teal);
+    padding: 1.1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .callout-warn {
+    background: var(--gold-soft);
+    border-left-color: var(--gold);
+  }
+
+  /* — Worked example — */
+  .example-box {
+    background: var(--chalk);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .example-box h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+  }
+  .example-step {
+    margin-bottom: 0.9rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .example-step:last-child { margin-bottom: 0; }
+  .example-step strong {
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  /* — Quiz — */
+  .quiz-q {
+    margin-bottom: 2rem;
+  }
+  .quiz-q:last-child {
+    margin-bottom: 0;
+  }
+  .quiz-stem {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 0.85rem;
+    line-height: 1.6;
+  }
+  .quiz-stem .q-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--teal);
+    color: var(--ground);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+    vertical-align: text-bottom;
+    font-variant-numeric: tabular-nums;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .quiz-opt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+  .quiz-opt:hover:not(.answered) {
+    border-color: var(--teal);
+    background: var(--teal-soft);
+  }
+  .quiz-opt:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .quiz-opt .opt-letter {
+    font-weight: 600;
+    color: var(--stone);
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
+  }
+  .quiz-opt:hover:not(.answered) .opt-letter {
+    color: var(--teal);
+  }
+  .quiz-opt.correct {
+    border-color: var(--correct);
+    background: var(--correct-soft);
+  }
+  .quiz-opt.correct .opt-letter { color: var(--correct); }
+  .quiz-opt.incorrect {
+    border-color: var(--incorrect);
+    background: var(--incorrect-soft);
+  }
+  .quiz-opt.incorrect .opt-letter { color: var(--incorrect); }
+  .quiz-opt.answered {
+    cursor: default;
+    opacity: 0.5;
+  }
+  .quiz-opt.correct.answered, .quiz-opt.incorrect.answered {
+    opacity: 1;
+  }
+  .quiz-explanation {
+    margin-top: 0.6rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    border-radius: 6px;
+    display: none;
+  }
+  .quiz-explanation.visible {
+    display: block;
+  }
+  .quiz-explanation.correct-expl {
+    background: var(--correct-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation.incorrect-expl {
+    background: var(--incorrect-soft);
+    color: var(--ink);
+  }
+  .quiz-explanation strong {
+    font-weight: 600;
+  }
+
+  /* — Scenario — */
+  .scenario-prompt {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    color: var(--ink);
+  }
+  .scenario-lenses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 500px) {
+    .scenario-lenses { grid-template-columns: 1fr; }
+  }
+  .scenario-lens-prompt {
+    padding: 0.7rem 0.85rem;
+    background: var(--chalk);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .scenario-lens-prompt strong {
+    display: block;
+    color: var(--ink);
+    font-size: 0.88rem;
+    margin-bottom: 0.15rem;
+  }
+  .scenario-textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 1rem;
+    border: 1.5px solid var(--chalk);
+    border-radius: 6px;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  .scenario-textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .scenario-textarea::placeholder {
+    color: var(--stone);
+    opacity: 0.6;
+  }
+  .scenario-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .reveal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    padding: 0.55rem 1.1rem;
+    background: var(--teal-soft);
+    color: var(--teal);
+    border: 1.5px solid var(--teal-mid);
+    border-radius: 6px;
+    font-family: 'Outfit', system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reveal-btn:hover {
+    background: var(--teal-mid);
+  }
+  .reveal-btn:focus-visible {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+  }
+  .scenario-answer {
+    margin-top: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: var(--teal-soft);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    display: none;
+  }
+  .scenario-answer.visible { display: block; }
+
+  /* — Meeting move — */
+  .meeting-move-quote {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--teal);
+    margin: 1rem 0;
+    padding-left: 1.25rem;
+    border-left: 3px solid var(--teal);
+    text-wrap: balance;
+  }
+
+  /* — Glossary — */
+  .glossary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .glossary-item {
+    padding: 0.85rem 1rem;
+    background: var(--chalk);
+    border-radius: 6px;
+  }
+  .glossary-term {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
+  }
+  .glossary-def {
+    font-size: 0.85rem;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+
+  /* — Graduation banner — */
+  .grad-banner {
+    margin-top: 2.5rem;
+    padding: 1.75rem;
+    background: var(--teal);
+    color: var(--ground);
+    border-radius: 10px;
+    text-align: center;
+  }
+  .grad-banner .grad-emoji {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  .grad-banner h3 {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .grad-banner p {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    opacity: 0.92;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* — Score summary — */
+  .score-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--chalk);
+    border-radius: 8px;
+    margin-top: 2.5rem;
+  }
+  .score-ring {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+  .score-ring circle {
+    fill: none;
+    stroke-width: 4;
+  }
+  .score-ring .track { stroke: var(--ground); }
+  .score-ring .fill {
+    stroke: var(--teal);
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+  .score-ring text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  .score-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .score-text strong { font-weight: 600; }
+
+  /* — Animations — */
+  @media (prefers-reduced-motion: no-preference) {
+    .section {
+      animation: fadeUp 0.4s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<!-- Progress -->
+  <div class="progress-strip">
+    <div class="progress-meta">
+      <span class="progress-label">Product Sense 101</span>
+      <span class="progress-day">Day 30 of 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <div class="lesson-eyebrow">Week 6 · Synthesis &amp; Advanced — Capstone</div>
+    <h1 class="lesson-title">The Decision Spine</h1>
+    <p class="lesson-subtitle">Twenty-nine days taught you thirty frameworks, mostly one at a time. Today's job is different: run several of them in sequence, in the right order, on one real decision — because that's the only way product sense actually gets used.</p>
+  </div>
+
+  <!-- The Big Idea -->
+  <div class="section">
+    <div class="section-label">The Big Idea</div>
+    <p>A framework you can name but not reach for at the right moment is trivia. The skill this course has actually been building, one day at a time, is judgment about sequence: which two or three tools matter for <em>this</em> decision, in what order, with what's actually known right now. Nobody opens a binder of thirty frameworks in a real meeting. A senior PM runs a much shorter path from scratch, every time, without announcing which step they're on.</p>
+    <p>Call that path <strong>the Decision Spine</strong> — six movements that map cleanly onto this course's six weeks. Each movement's output is the next one's input, which is the part that matters: skip a movement and every framework downstream of it produces a confident, well-formatted answer to the wrong question.</p>
+
+    <div class="lenses">
+      <div class="lens">
+        <div class="lens-name">1. Frame · Days 1–5</div>
+        <div class="lens-desc">Four lenses, first principles, Jobs-to-be-Done, segmentation, staying in the problem space. Output: the real job, for the real segment, stated without a solution baked in.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">2. Size · Days 6–10</div>
+        <div class="lens-desc">Five Forces, moats, TAM/SAM/SOM, platform thinking, product-market fit. Output: whether the opportunity is big enough, defensible enough, and real enough to act on.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">3. Decide · Days 11–15</div>
+        <div class="lens-desc">RICE/ICE/MoSCoW, cost of delay, Kano, one-way vs. two-way doors, tech debt as strategy. Output: what to do, by when, and how reversible that commitment actually is.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">4. Clarify · Days 16–20</div>
+        <div class="lens-desc">Product critique, UX heuristics, data-informed vs. data-driven, North Star metrics, the art of saying no. Output: a sharp read on quality, the one metric that matters, and the courage to cut scope.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">5. Communicate · Days 21–25</div>
+        <div class="lens-desc">The Pyramid Principle, sharper questions, stakeholder management, crisp PRDs, roadmap narratives. Output: the decision, structured so someone else can act on it without a follow-up meeting.</div>
+      </div>
+      <div class="lens">
+        <div class="lens-name">6. Scale · Days 26–30</div>
+        <div class="lens-desc">Growth loops, B2B pricing, API &amp; platform thinking, AI-era product sense, and today's synthesis. Output: whether the decision still holds once usage, price, and probabilistic features enter the picture.</div>
+      </div>
+    </div>
+
+    <p>Order matters more than any individual framework. Run RICE before you've framed the job correctly (movement 3 before movement 1) and you get a precise, well-justified score for solving the wrong problem — a worse outcome than no framework at all, because the math makes it look rigorous.</p>
+
+    <div class="callout">
+      <strong>The spine compresses in real life.</strong> In an actual meeting you won't walk through six numbered steps out loud. You'll feel that a conversation is missing a movement — the room is debating priority (3) with no agreement on the job (1), or debating the PRD's wording (5) when the real unresolved question is whether the door is reversible (3). Naming which movement is missing, out loud, is usually worth more than any single framework.
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>The Technical PM Trap, one last time.</strong> Every lesson in this course has circled back to the same failure mode: a technical background makes the "Decide" and "Scale" movements irresistibly fun — scoring, architecting, optimizing — while "Frame" and "Communicate" feel like soft skills to rush through. They're not soft. They're the two movements that determine whether the other four were worth running at all.</div>
+  </div>
+
+  <!-- B2B Context -->
+  <div class="section">
+    <div class="section-label">The B2B SaaS Angle</div>
+    <p>On a mature B2B product, the spine rarely runs in a tidy straight line — most real decisions arrive already tangled across two or three movements at once. A churn uptick looks like a "Decide" problem (what do we build) until you realize it's actually a "Frame" problem (we never confirmed the job for this segment). A pricing debate looks like a "Scale" problem until it turns out nobody ran "Size" on whether the segment can even support the proposed price.</p>
+    <p>The capstone case below is built the way real B2B SaaS decisions actually show up: compressed, time-boxed, and missing at least one movement nobody noticed was missing. Running the full spine on it, even just once, is the difference between finishing this course able to recite thirty frameworks and finishing it able to use three of them, correctly, under pressure, by Monday.</p>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="section">
+    <div class="section-label">Worked Example</div>
+    <div class="example-box">
+      <h3>The Send-Time Optimization Plateau</h3>
+      <p style="margin-bottom:1rem; font-size:0.92rem;">Your platform's AI Send-Time Optimization (STO) feature is used on 80% of campaigns among your top 50 enterprise accounts — and under 15% among the SMB and mid-market accounts that make up 70% of your customer base. Leadership asks: invest further in enterprise AI capability, or fix long-tail adoption?</p>
+
+      <div class="example-step"><strong>Frame.</strong> "Weak adoption" isn't the diagnosis — it's the symptom. The enterprise job is "prove campaign ROI to my board"; AI-recommended send times are evidence for that case. The SMB job is "get this campaign out before lunch"; a recommendation the marketer has to review and trust is friction, not help, for that job. Same feature, two different jobs — the segmentation from Day 4 was never actually run on this feature.</div>
+      <div class="example-step"><strong>Size.</strong> Competitors are bundling STO free into SMB tiers (Day 6, Five Forces: low switching cost, commoditizing capability). The SMB segment's SAM is large by seat count but has little willingness to pay for an AI add-on specifically — the moat here isn't the model, it's the data and workflow it sits inside (Day 7).</div>
+      <div class="example-step"><strong>Decide.</strong> On the Kano model (Day 13), STO is a performance feature for SMB at best, not a delighter — so it's not worth a dedicated onboarding flow. Defaulting it "on" with a one-click override is a low-stakes two-way door (Day 14): cheap to test, cheap to reverse.</div>
+      <div class="example-step"><strong>Clarify.</strong> The adoption numbers are data-informed, not yet data-driven (Day 18) — five SMB customer calls are needed before concluding the feature itself is the problem. Until then, the right move is saying no (Day 20) to a full SMB-specific rebuild.</div>
+      <div class="example-step"><strong>Communicate.</strong> The PRD (Day 24) recommends the smallest reversible change — default-on with override — framed to leadership as a time-to-first-send outcome (Day 25), not a feature list.</div>
+      <div class="example-step"><strong>Scale.</strong> If default-on moves adoption, STO stops being an enterprise upsell and becomes table-stakes retention infrastructure across every tier (Day 26) — which reopens the pricing question (Day 27) on its own terms, later, with real data instead of a hunch.</div>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <div class="section-label">Quiz · Test Your Thinking</div>
+
+    <div class="quiz-q" data-correct="0">
+      <div class="quiz-stem"><span class="q-num">1</span> A team ran RICE on five candidate features and has a confident, numbered ranking. Before trusting it, what should be checked first?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>Whether the underlying job and segment were actually framed correctly before any of the five were scored</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Whether ICE would have produced a different order</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Whether the engineering estimates included a buffer</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Whether finance has signed off on the ranking</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: A.</strong> RICE only scores the options in front of it — it can't tell you whether those are the right five options to be scoring. Skipping "Frame" (Days 1–5) before "Decide" (Day 11) produces a precise ranking of possibly the wrong candidates, and the precision makes the mistake harder to spot, not easier.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">2</span> Which pairing most directly catches the mistake of treating a reversible decision as if it were permanent, or vice versa?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>North Star Metrics + the Art of Saying No</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>One-Way vs. Two-Way Doors + Cost of Delay</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Five Forces + TAM/SAM/SOM</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>The Pyramid Principle + Stakeholder Mapping</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> Day 14 tells you how reversible a decision actually is; Day 12 tells you what waiting costs. Run together, they stop a two-way door from being debated for a month like a one-way one, and stop a genuinely one-way door from being rushed because "delay is expensive" without first asking whether it can be undone.
+      </div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">3</span> Your PRD recommendation gets strong pushback from three stakeholders in review. Drawing on Days 21–23, what's the best next move?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0">
+          <span class="opt-letter">A</span>
+          <span>Restate the recommendation more firmly — the PRD already made the case</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1">
+          <span class="opt-letter">B</span>
+          <span>Ask what evidence would change each objector's mind, and weigh each objection by their power and interest</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2">
+          <span class="opt-letter">C</span>
+          <span>Escalate to your manager before the meeting ends</span>
+        </div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3">
+          <span class="opt-letter">D</span>
+          <span>Withdraw the recommendation and present all options as equally valid</span>
+        </div>
+      </div>
+      <div class="quiz-explanation">
+        <strong>Correct: B.</strong> Day 22's sharper questions turn a standoff into information — "what would change your mind" surfaces whether the objection is evidence, risk tolerance, or politics. Day 23's power/interest grid then tells you which objection actually has to be resolved in the room versus handled offline.
+      </div>
+    </div>
+  </div>
+
+  <!-- Scenario Drill -->
+  <div class="section">
+    <div class="section-label">Scenario Drill — The Capstone</div>
+    <p class="scenario-prompt">A competitor just launched a free "campaign-in-a-box" AI feature aimed at your SMB tier: one prompt in, a full segment, offer, creative, and send time out. Your CEO wants a response shipped this quarter. You have capacity for exactly one major initiative — and SMB churn has quietly ticked up 1.5 points this year, for reasons nobody has diagnosed.</p>
+    <p>Run the spine. Use the four prompts below to work through it before revealing a senior PM's take.</p>
+    <div class="scenario-lenses">
+      <div class="scenario-lens-prompt">
+        <strong>Frame &amp; Size</strong>
+        What job is the SMB customer actually hiring this for — and is the churn uptick connected to that job, or a coincidence you're about to conflate with it?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Decide</strong>
+        Is matching the competitor feature-for-feature a one-way or two-way door given your one-quarter capacity limit? What does cost of delay say about building it now versus diagnosing churn first?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Clarify</strong>
+        What would you have to say no to this quarter in order to say yes to this? Is there a version of saying no to the feature race entirely?
+      </div>
+      <div class="scenario-lens-prompt">
+        <strong>Communicate &amp; Scale</strong>
+        What's the one-paragraph, Pyramid-Principle version of your recommendation to the CEO — and what North Star metric tells you in 60 days whether it worked?
+      </div>
+    </div>
+    <textarea class="scenario-textarea" placeholder="Write your analysis here. Work through all four movements before you decide what you'd actually do…"></textarea>
+    <div class="scenario-hint">No wrong answers — the goal is running the whole spine, not landing on the "right" feature decision.</div>
+    <button class="reveal-btn" id="revealBtn">Show a senior PM's take ▾</button>
+    <div class="scenario-answer" id="scenarioAnswer">
+      <p><strong>A strong answer runs all four movements, in order:</strong></p>
+      <p><strong>Frame &amp; Size:</strong> The job is "stop spending my lunch break building a campaign," not "own an AI tool." The churn uptick is a suspect, not a confirmed cause — five SMB churn interviews this week are cheap and might reveal the real driver is something unrelated to campaign creation entirely. Treating the two as obviously linked, without checking, is the same framing mistake Day 1–5 warned about.</p>
+      <p style="margin-top:0.5rem"><strong>Decide:</strong> Matching the competitor feature-for-feature is a one-way door disguised as urgency — a full "campaign-in-a-box" build consumes the entire quarter's capacity and can't be undone if it turns out churn was never about this. The two-way-door move is a scoped pilot: ship the single highest-leverage step (for instance, one-click send-time + offer suggestion, not the full four-step chain) to a sample of at-risk accounts, and treat full parity as a second-quarter decision made with evidence.</p>
+      <p style="margin-top:0.5rem"><strong>Clarify:</strong> Saying yes to the pilot means saying no to the competitor's full feature set this quarter, and saying no to any other roadmap item competing for that capacity. That's a defensible no once it's framed as "we're testing the cheapest version of the same bet," not as falling behind.</p>
+      <p style="margin-top:0.5rem"><strong>Communicate &amp; Scale:</strong> To the CEO: "We're not matching their feature count — we're testing whether AI campaign creation is actually what's driving SMB churn, with a two-week pilot before committing the quarter." The North Star for the 60-day check: pilot-cohort churn versus a matched control group, not feature-adoption rate, because adoption without retention impact would mean the whole bet was framed wrong from the start.</p>
+      <p style="margin-top:0.5rem">The decision isn't "build the competing feature" versus "ignore the competitor" — it's refusing to let urgency skip the Frame movement, and choosing the smallest two-way door that still tests the real hypothesis.</p>
+    </div>
+  </div>
+
+  <!-- Meeting Move -->
+  <div class="section">
+    <div class="section-label">Meeting Move of the Day</div>
+    <p>This is the meeting move to carry forward past this course — use it whenever a room is converging fast on a decision:</p>
+    <div class="meeting-move-quote">"Which part of this have we actually not talked through yet — the job, the size, the reversibility, or how we'll explain it?"</div>
+    <p>Most rushed decisions aren't missing effort — they're missing one specific movement nobody named out loud. Asking this costs ten seconds and usually finds it. It's the single question that makes the whole thirty-day spine usable without anyone in the room needing to have taken the course.</p>
+  </div>
+
+  <!-- Glossary -->
+  <div class="section">
+    <div class="section-label">Glossary</div>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">The Decision Spine</div>
+        <div class="glossary-def">The six-movement path from Frame to Scale that this course's six weeks each taught separately — the order a real decision actually needs them run in.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Framework Chaining</div>
+        <div class="glossary-def">Using several frameworks in sequence, where each one's output becomes the next one's input — as opposed to picking a single favorite framework and stopping there.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Confident Trivia</div>
+        <div class="glossary-def">Knowing a framework's name and steps without the judgment of when to reach for it. The gap this course was built to close, one day at a time.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Compressed Spine</div>
+        <div class="glossary-def">How the six movements actually show up in a live meeting: not as six labeled steps, but as a felt sense of which one the room has skipped.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Product Sense (recapped)</div>
+        <div class="glossary-def">Day 1's definition, closed out: the trained judgment to apply the right lens, framework, and trade-off to a specific decision, under real constraints, without being told which one to use.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-strip" id="scoreStrip" style="display: none;">
+    <svg class="score-ring" viewBox="0 0 52 52">
+      <circle class="track" cx="26" cy="26" r="22" />
+      <circle class="fill" id="scoreArc" cx="26" cy="26" r="22"
+              stroke-dasharray="138.23" stroke-dashoffset="138.23" />
+      <text x="26" y="26" id="scoreText">0/3</text>
+    </svg>
+    <div class="score-text" id="scoreMsg"><strong>Quiz score</strong><br>Answer all three questions to see your result.</div>
+  </div>
+
+  <!-- Graduation -->
+  <div class="grad-banner">
+    <div class="grad-emoji">🎓</div>
+    <h3>Thirty days, done.</h3>
+    <p>From the Four Lenses on Day 1 to the full spine today — that's the whole toolkit. The frameworks won't stay sharp on their own: the meeting-move habit is the part worth keeping past today. Revisit any day from the course hub whenever a real decision calls for it.</p>
+  </div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 30 complete — course complete</span>
+    </div>
+    <div class="footer-next"><a href="index.html">Back to course home</a></div>
+  </div>
+</div>
+
+<script>
+  // — Quiz logic —
+  const quizState = { answered: 0, correct: 0, total: 3 };
+
+  document.querySelectorAll('.quiz-q').forEach(q => {
+    const correctIdx = parseInt(q.dataset.correct);
+    const opts = q.querySelectorAll('.quiz-opt');
+    const expl = q.querySelector('.quiz-explanation');
+
+    function answer(selectedIdx) {
+      if (q.classList.contains('done')) return;
+      q.classList.add('done');
+
+      const isCorrect = selectedIdx === correctIdx;
+      quizState.answered++;
+      if (isCorrect) quizState.correct++;
+
+      opts.forEach((opt, i) => {
+        opt.classList.add('answered');
+        if (i === correctIdx) opt.classList.add('correct');
+        if (i === selectedIdx && !isCorrect) opt.classList.add('incorrect');
+      });
+
+      expl.classList.add('visible', isCorrect ? 'correct-expl' : 'incorrect-expl');
+      updateScore();
+    }
+
+    opts.forEach((opt, i) => {
+      opt.addEventListener('click', () => answer(i));
+      opt.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); answer(i); }
+      });
+    });
+  });
+
+  function updateScore() {
+    const strip = document.getElementById('scoreStrip');
+    strip.style.display = 'flex';
+
+    const pct = quizState.correct / quizState.total;
+    const circumference = 138.23;
+    const arc = document.getElementById('scoreArc');
+    arc.style.strokeDashoffset = circumference * (1 - pct);
+
+    document.getElementById('scoreText').textContent =
+      quizState.correct + '/' + quizState.total;
+
+    const msg = document.getElementById('scoreMsg');
+    if (quizState.answered === quizState.total) {
+      if (quizState.correct === quizState.total) {
+        msg.innerHTML = '<strong>Perfect — and that\'s the course.</strong><br>Thirty days of frameworks, landed on the one that ties them together. Well earned.';
+      } else if (quizState.correct >= 2) {
+        msg.innerHTML = '<strong>Solid finish.</strong><br>You caught the key synthesis points. Worth a second look at whichever one you missed before it comes up in a real meeting.';
+      } else {
+        msg.innerHTML = '<strong>Room to grow — and that\'s fine on a capstone.</strong><br>Re-read the Decision Spine above and try mapping one framework from each movement to a real decision on your plate right now.';
+      }
+    }
+  }
+
+  // — Scenario reveal —
+  document.getElementById('revealBtn').addEventListener('click', function() {
+    const answer = document.getElementById('scenarioAnswer');
+    const isVisible = answer.classList.contains('visible');
+    answer.classList.toggle('visible');
+    this.textContent = isVisible ? 'Show a senior PM\'s take ▾' : 'Hide ▴';
+  });
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

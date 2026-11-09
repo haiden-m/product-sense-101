@@ -1,0 +1,581 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Product Sense 101 · Day 3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Outfit:wght@300;400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F5F3ED;
+    --ink: #2A2724;
+    --teal: #1A756A;
+    --teal-soft: rgba(26, 117, 106, 0.08);
+    --teal-mid: rgba(26, 117, 106, 0.15);
+    --gold: #B8892E;
+    --gold-soft: rgba(184, 137, 46, 0.10);
+    --stone: #918B81;
+    --chalk: #EBE8E1;
+    --correct: #3A7D44;
+    --correct-soft: rgba(58, 125, 68, 0.08);
+    --incorrect: #B94A35;
+    --incorrect-soft: rgba(185, 74, 53, 0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #171614;
+      --ink: #E2DFD8;
+      --teal: #3CB5A5;
+      --teal-soft: rgba(60, 181, 165, 0.10);
+      --teal-mid: rgba(60, 181, 165, 0.18);
+      --gold: #D4A73E;
+      --gold-soft: rgba(212, 167, 62, 0.12);
+      --stone: #7A756C;
+      --chalk: #222120;
+      --correct: #5CB86A;
+      --correct-soft: rgba(92, 184, 106, 0.10);
+      --incorrect: #D4604A;
+      --incorrect-soft: rgba(212, 96, 74, 0.10);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #171614;
+    --ink: #E2DFD8;
+    --teal: #3CB5A5;
+    --teal-soft: rgba(60, 181, 165, 0.10);
+    --teal-mid: rgba(60, 181, 165, 0.18);
+    --gold: #D4A73E;
+    --gold-soft: rgba(212, 167, 62, 0.12);
+    --stone: #7A756C;
+    --chalk: #222120;
+    --correct: #5CB86A;
+    --correct-soft: rgba(92, 184, 106, 0.10);
+    --incorrect: #D4604A;
+    --incorrect-soft: rgba(212, 96, 74, 0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--ground); color: var(--ink);
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-weight: 400; line-height: 1.7; font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 660px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+  .progress-strip { position: sticky; top: 0; z-index: 10; background: var(--ground); padding: 1rem 0 0.75rem; border-bottom: 1px solid var(--chalk); }
+  .progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+  .progress-label { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--stone); }
+  .progress-day { font-size: 0.8rem; font-weight: 500; color: var(--teal); }
+  .progress-track { height: 4px; background: var(--chalk); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 10%; background: var(--teal); border-radius: 2px; transition: width 0.6s ease; }
+  .lesson-header { margin-top: 2.5rem; margin-bottom: 2.5rem; }
+  .lesson-eyebrow { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .lesson-title { font-family: 'Newsreader', Georgia, serif; font-size: 2.4rem; font-weight: 600; line-height: 1.2; text-wrap: balance; color: var(--ink); margin-bottom: 0.75rem; }
+  .lesson-subtitle { font-size: 1.05rem; color: var(--stone); font-weight: 300; line-height: 1.6; max-width: 540px; }
+  .section { margin-top: 3rem; }
+  .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--chalk); }
+  .section h2 { font-family: 'Newsreader', Georgia, serif; font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin-bottom: 1rem; text-wrap: balance; }
+  .section p { margin-bottom: 1rem; }
+  .section p:last-child { margin-bottom: 0; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+  .callout { background: var(--teal-soft); border-left: 3px solid var(--teal); padding: 1.1rem 1.25rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-size: 0.95rem; line-height: 1.65; }
+  .callout-warn { background: var(--gold-soft); border-left-color: var(--gold); }
+
+  /* — Job layers — */
+  .job-layers { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; }
+  .job-layer {
+    display: grid; grid-template-columns: 7.5rem 1fr; gap: 0; align-items: stretch;
+  }
+  .job-layer:first-child .jl-tag { border-radius: 6px 0 0 0; }
+  .job-layer:first-child .jl-content { border-radius: 0 6px 0 0; }
+  .job-layer:last-child .jl-tag { border-radius: 0 0 0 6px; }
+  .job-layer:last-child .jl-content { border-radius: 0 0 6px 0; }
+  .jl-tag {
+    display: flex; align-items: center; justify-content: center;
+    padding: 0.75rem 0.5rem; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase; text-align: center;
+    line-height: 1.3;
+  }
+  .jl-content {
+    padding: 0.75rem 1rem; font-size: 0.9rem; line-height: 1.55;
+    border-left: 1px solid var(--ground);
+  }
+  .job-layer.functional .jl-tag { background: var(--teal); color: var(--ground); }
+  .job-layer.functional .jl-content { background: var(--teal-soft); }
+  .job-layer.emotional .jl-tag { background: var(--gold); color: var(--ground); }
+  .job-layer.emotional .jl-content { background: var(--gold-soft); }
+  .job-layer.social .jl-tag { background: var(--stone); color: var(--ground); }
+  .job-layer.social .jl-content { background: var(--chalk); }
+
+  /* — JTBD statement — */
+  .jtbd-stmt {
+    background: var(--chalk); border-radius: 8px; padding: 1.25rem 1.35rem;
+    margin: 1.5rem 0; font-size: 0.95rem; line-height: 1.65;
+  }
+  .jtbd-stmt .jtbd-kw {
+    font-weight: 600; color: var(--teal); font-size: 0.8rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+
+  /* — Forces diagram — */
+  .forces {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 500px) { .forces { grid-template-columns: 1fr; } }
+  .force-card {
+    padding: 0.85rem 1rem; border-radius: 6px; font-size: 0.88rem; line-height: 1.55;
+  }
+  .force-card.push { background: var(--correct-soft); border-left: 3px solid var(--correct); }
+  .force-card.pull { background: var(--teal-soft); border-left: 3px solid var(--teal); }
+  .force-card.anxiety { background: var(--incorrect-soft); border-left: 3px solid var(--incorrect); }
+  .force-card.habit { background: var(--gold-soft); border-left: 3px solid var(--gold); }
+  .force-label {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 0.25rem;
+  }
+  .force-card.push .force-label { color: var(--correct); }
+  .force-card.pull .force-label { color: var(--teal); }
+  .force-card.anxiety .force-label { color: var(--incorrect); }
+  .force-card.habit .force-label { color: var(--gold); }
+  .forces-eq {
+    text-align: center; font-family: 'Newsreader', Georgia, serif;
+    font-size: 1rem; font-weight: 600; color: var(--stone);
+    margin: 0.75rem 0; font-style: italic;
+  }
+
+  /* — Worked example — */
+  .example-box { background: var(--chalk); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+  .example-box h3 { font-family: 'Newsreader', Georgia, serif; font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; font-style: italic; }
+  .insight-list { display: flex; flex-direction: column; gap: 0.35rem; margin: 0.75rem 0; padding: 0; list-style: none; }
+  .insight-list li { font-size: 0.88rem; line-height: 1.55; padding-left: 1rem; position: relative; }
+  .insight-list li::before { content: '→'; position: absolute; left: 0; color: var(--teal); font-weight: 600; }
+
+  /* — Quiz — */
+  .quiz-q { margin-bottom: 2rem; }
+  .quiz-q:last-child { margin-bottom: 0; }
+  .quiz-stem { font-weight: 500; font-size: 1rem; margin-bottom: 0.85rem; line-height: 1.6; }
+  .quiz-stem .q-num { display: inline-flex; align-items: center; justify-content: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--teal); color: var(--ground); font-size: 0.75rem; font-weight: 600; margin-right: 0.4rem; vertical-align: text-bottom; font-variant-numeric: tabular-nums; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.45rem; }
+  .quiz-opt { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.7rem 1rem; border: 1.5px solid var(--chalk); border-radius: 6px; cursor: pointer; transition: border-color 0.15s, background 0.15s; font-size: 0.92rem; line-height: 1.5; user-select: none; }
+  .quiz-opt:hover:not(.answered) { border-color: var(--teal); background: var(--teal-soft); }
+  .quiz-opt:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .quiz-opt .opt-letter { font-weight: 600; color: var(--stone); flex-shrink: 0; font-variant-numeric: tabular-nums; transition: color 0.15s; }
+  .quiz-opt:hover:not(.answered) .opt-letter { color: var(--teal); }
+  .quiz-opt.correct { border-color: var(--correct); background: var(--correct-soft); }
+  .quiz-opt.correct .opt-letter { color: var(--correct); }
+  .quiz-opt.incorrect { border-color: var(--incorrect); background: var(--incorrect-soft); }
+  .quiz-opt.incorrect .opt-letter { color: var(--incorrect); }
+  .quiz-opt.answered { cursor: default; opacity: 0.5; }
+  .quiz-opt.correct.answered, .quiz-opt.incorrect.answered { opacity: 1; }
+  .quiz-explanation { margin-top: 0.6rem; padding: 0.85rem 1rem; font-size: 0.88rem; line-height: 1.6; border-radius: 6px; display: none; }
+  .quiz-explanation.visible { display: block; }
+  .quiz-explanation.correct-expl { background: var(--correct-soft); color: var(--ink); }
+  .quiz-explanation.incorrect-expl { background: var(--incorrect-soft); color: var(--ink); }
+
+  /* — Scenario — */
+  .scenario-prompt { font-family: 'Newsreader', Georgia, serif; font-size: 1.1rem; font-style: italic; line-height: 1.6; margin-bottom: 1.25rem; color: var(--ink); }
+  .persona-prompts { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+  .persona-card { padding: 0.75rem 1rem; background: var(--chalk); border-radius: 6px; }
+  .persona-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.15rem; }
+  .persona-hint { font-size: 0.82rem; color: var(--stone); line-height: 1.5; }
+  .scenario-textarea { width: 100%; min-height: 160px; padding: 1rem; border: 1.5px solid var(--chalk); border-radius: 6px; background: var(--ground); color: var(--ink); font-family: 'Outfit', system-ui, sans-serif; font-size: 0.92rem; line-height: 1.6; resize: vertical; transition: border-color 0.15s; }
+  .scenario-textarea:focus { outline: none; border-color: var(--teal); }
+  .scenario-textarea::placeholder { color: var(--stone); opacity: 0.6; }
+  .scenario-hint { margin-top: 0.5rem; font-size: 0.8rem; color: var(--stone); }
+  .reveal-btn { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 1rem; padding: 0.55rem 1.1rem; background: var(--teal-soft); color: var(--teal); border: 1.5px solid var(--teal-mid); border-radius: 6px; font-family: 'Outfit', system-ui, sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .reveal-btn:hover { background: var(--teal-mid); }
+  .reveal-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .scenario-answer { margin-top: 0.85rem; padding: 1rem 1.15rem; background: var(--teal-soft); border-radius: 6px; font-size: 0.9rem; line-height: 1.65; display: none; }
+  .scenario-answer.visible { display: block; }
+  .scenario-answer p + p { margin-top: 0.6rem; }
+
+  /* — Meeting move — */
+  .meeting-move-quote { font-family: 'Newsreader', Georgia, serif; font-size: 1.3rem; font-weight: 600; line-height: 1.45; color: var(--teal); margin: 1rem 0; padding-left: 1.25rem; border-left: 3px solid var(--teal); text-wrap: balance; }
+
+  .recap { background: var(--gold-soft); border-radius: 8px; padding: 1.25rem; margin-top: 2rem; }
+  .recap-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .recap-text { font-size: 0.9rem; line-height: 1.6; }
+
+  .glossary { display: flex; flex-direction: column; gap: 0.75rem; }
+  .glossary-item { padding: 0.85rem 1rem; background: var(--chalk); border-radius: 6px; }
+  .glossary-term { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+  .glossary-def { font-size: 0.85rem; color: var(--stone); line-height: 1.55; }
+
+  .score-strip { display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.25rem; background: var(--chalk); border-radius: 8px; margin-top: 2.5rem; }
+  .score-ring { width: 52px; height: 52px; flex-shrink: 0; }
+  .score-ring circle { fill: none; stroke-width: 4; }
+  .score-ring .track { stroke: var(--ground); }
+  .score-ring .fill { stroke: var(--teal); stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; transition: stroke-dashoffset 0.6s ease; }
+  .score-ring text { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 13px; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+  .score-text { font-size: 0.92rem; line-height: 1.5; }
+  .score-text strong { font-weight: 600; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .section { animation: fadeUp 0.4s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  }
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="page">
+<div class="progress-strip">
+    <div class="progress-meta">
+      <span class="progress-label">Product Sense 101</span>
+      <span class="progress-day">Day 3 of 30</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="lesson-header">
+    <div class="lesson-eyebrow">Week 1 · The PM Mental Model</div>
+    <h1 class="lesson-title">Jobs-to-be-Done</h1>
+    <p class="lesson-subtitle">People don't buy products. They hire them to make progress. Learn the framework that turns vague feature requests into precise product strategy.</p>
+  </div>
+
+  <!-- The Big Idea -->
+  <div class="section">
+    <div class="section-label">The Big Idea</div>
+    <p>Jobs-to-be-Done (JTBD) says that people don't buy products for what they <em>are</em> — they "hire" them for the progress they're trying to make. The classic version: <em>"People don't want a quarter-inch drill. They want a quarter-inch hole."</em> But JTBD goes deeper — they don't even want the hole. They want to hang a shelf. And they want to hang a shelf because they want their living room to feel organized.</p>
+    <p>The <strong>job</strong> is the progress a person is trying to make in a particular circumstance. And every job operates on three layers:</p>
+
+    <div class="job-layers">
+      <div class="job-layer functional">
+        <div class="jl-tag">Functional</div>
+        <div class="jl-content">The practical task. <em>"Organize my campaign performance data into a report."</em></div>
+      </div>
+      <div class="job-layer emotional">
+        <div class="jl-tag">Emotional</div>
+        <div class="jl-content">How they want to feel. <em>"Confident that I'm making the right budget allocation."</em></div>
+      </div>
+      <div class="job-layer social">
+        <div class="jl-tag">Social</div>
+        <div class="jl-content">How they want to be perceived. <em>"Seen as data-driven and strategic by my VP."</em></div>
+      </div>
+    </div>
+
+    <p>Most PMs only hear the functional layer. But the emotional and social layers often drive the buying decision — and the churn decision. A report that's technically accurate but makes the marketer <em>feel</em> uncertain about what to do next has failed the emotional job, even if it nailed the functional one.</p>
+  </div>
+
+  <!-- The JTBD Statement -->
+  <div class="section">
+    <div class="section-label">The JTBD Statement</div>
+    <p>JTBD gives you a precise sentence format for capturing what users actually need. It's more useful than a user story because it grounds the need in a <strong>real moment</strong>:</p>
+
+    <div class="jtbd-stmt">
+      <span class="jtbd-kw">When</span> I'm preparing for my weekly marketing review,<br>
+      <span class="jtbd-kw">I want to</span> quickly see which campaigns are underperforming,<br>
+      <span class="jtbd-kw">So I can</span> reallocate budget before the meeting and look prepared.
+    </div>
+
+    <p>Compare that to a typical user story: <em>"As a marketer, I want a dashboard so I can see my data."</em> The JTBD version tells you the <strong>circumstance</strong> (weekly review prep), the <strong>motivation</strong> (spot underperformers fast), and the <strong>outcome</strong> (reallocate budget, appear prepared). It's specific enough to design from.</p>
+  </div>
+
+  <!-- Four Forces -->
+  <div class="section">
+    <div class="section-label">The Four Forces of Progress</div>
+    <p>JTBD also explains <em>why</em> people switch products — or don't. When someone adopts a new tool, four forces are at play:</p>
+
+    <div class="forces">
+      <div class="force-card push">
+        <div class="force-label">Push</div>
+        Dissatisfaction with the current solution. <em>"This takes me 2 hours every Monday."</em>
+      </div>
+      <div class="force-card pull">
+        <div class="force-label">Pull</div>
+        Attraction of the new solution. <em>"That tool generates the report in 5 minutes."</em>
+      </div>
+      <div class="force-card anxiety">
+        <div class="force-label">Anxiety</div>
+        Uncertainty about switching. <em>"Will my historical data migrate correctly?"</em>
+      </div>
+      <div class="force-card habit">
+        <div class="force-label">Habit</div>
+        Comfort with the status quo. <em>"I already know how to build this in Excel."</em>
+      </div>
+    </div>
+    <div class="forces-eq">Switching happens when Push + Pull &gt; Anxiety + Habit</div>
+
+    <p>This is why B2B products with high switching costs retain customers even when better alternatives exist — Anxiety and Habit are too strong. It's also why your onboarding experience matters as much as your feature set: great onboarding reduces Anxiety.</p>
+
+    <div class="callout callout-warn">
+      <strong>Competing against non-consumption.</strong> Sometimes your biggest competitor isn't another product — it's <em>doing nothing</em>. The prospect solves the problem with spreadsheets, email, and manual processes. The job exists, but they haven't hired anything to do it. That means your Push messaging needs to make the pain of the status quo visible, because they've normalized it.
+    </div>
+  </div>
+
+  <!-- Worked Example -->
+  <div class="section">
+    <div class="section-label">Worked Example</div>
+    <div class="example-box">
+      <h3>"I Need Better Reports"</h3>
+      <p>A customer submits this request. Here's what the JTBD lens reveals:</p>
+      <div class="job-layers" style="margin: 1rem 0;">
+        <div class="job-layer functional">
+          <div class="jl-tag">Functional</div>
+          <div class="jl-content">"I need to understand which campaigns drove revenue last month."</div>
+        </div>
+        <div class="job-layer emotional">
+          <div class="jl-tag">Emotional</div>
+          <div class="jl-content">"I want to feel confident presenting numbers to my CMO."</div>
+        </div>
+        <div class="job-layer social">
+          <div class="jl-tag">Social</div>
+          <div class="jl-content">"I want to be the person who always has the data."</div>
+        </div>
+      </div>
+      <p style="margin-top:0.75rem">The full JTBD statement:</p>
+      <div class="jtbd-stmt" style="margin: 0.75rem 0;">
+        <span class="jtbd-kw">When</span> preparing for my monthly CMO review,
+        <span class="jtbd-kw">I want to</span> quickly generate a campaign attribution report with revenue impact,
+        <span class="jtbd-kw">So I can</span> demonstrate marketing's contribution to pipeline and feel confident in my presentation.
+      </div>
+      <p>This tells you far more than "better reports":</p>
+      <ul class="insight-list">
+        <li><strong>Timing:</strong> monthly cadence, preparation context</li>
+        <li><strong>Format:</strong> needs to be presentation-ready, not raw data</li>
+        <li><strong>Metric:</strong> revenue attribution specifically</li>
+        <li><strong>Audience:</strong> CMO — executive summary, not granular detail</li>
+        <li><strong>Emotion:</strong> confidence and credibility are the real deliverable</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div class="section">
+    <div class="section-label">Quiz · Test Your Thinking</div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">1</span> "When I'm running late for a meeting, I want to grab something filling quickly, so I can get through the morning without being hungry." In JTBD terms, the "job" is:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0"><span class="opt-letter">A</span><span>Buying breakfast</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1"><span class="opt-letter">B</span><span>Getting through a time-constrained morning without hunger</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2"><span class="opt-letter">C</span><span>Going to a coffee shop</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3"><span class="opt-letter">D</span><span>Eating a healthy meal</span></div>
+      </div>
+      <div class="quiz-explanation"><strong>Correct: B.</strong> The job is the progress in a particular circumstance. The circumstance (running late) shapes everything — it's why a banana, a protein bar, and a drive-through milkshake all compete for the same job despite being in completely different product categories. "Breakfast" is the solution space. The job is the outcome.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">2</span> A B2B customer says "I want a Salesforce integration." The most useful JTBD follow-up question is:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0"><span class="opt-letter">A</span><span>"Which Salesforce edition are you on?"</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1"><span class="opt-letter">B</span><span>"What workflow does this need to support — what are you trying to accomplish that requires data flowing between the two systems?"</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2"><span class="opt-letter">C</span><span>"Have you seen our competitor's Salesforce integration?"</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3"><span class="opt-letter">D</span><span>"How many users would need access?"</span></div>
+      </div>
+      <div class="quiz-explanation"><strong>Correct: B.</strong> JTBD pushes you upstream of the solution. A, C, and D accept the integration as a given and optimize around it. B goes to the job: maybe the real need is a daily summary email with CRM data, which is far simpler to build. You can't discover that if you never ask what progress they're trying to make.</div>
+    </div>
+
+    <div class="quiz-q" data-correct="1">
+      <div class="quiz-stem"><span class="q-num">3</span> The Four Forces model says switching happens when:</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="0"><span class="opt-letter">A</span><span>The new product has more features than the old one</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="1"><span class="opt-letter">B</span><span>Push from current pain + Pull from the new solution exceeds Anxiety about switching + Habit of the current way</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="2"><span class="opt-letter">C</span><span>The price of the new product is lower than the current one</span></div>
+        <div class="quiz-opt" tabindex="0" role="button" data-idx="3"><span class="opt-letter">D</span><span>A competitor raises funding and increases marketing spend</span></div>
+      </div>
+      <div class="quiz-explanation"><strong>Correct: B.</strong> The Four Forces model captures why switching is an emotional and behavioral challenge, not just a feature comparison. This explains why B2B products with high switching costs (data migration, retraining, workflow disruption) retain customers even when superior alternatives exist — the Anxiety and Habit forces overpower the Pull.</div>
+    </div>
+  </div>
+
+  <!-- Scenario -->
+  <div class="section">
+    <div class="section-label">Scenario Drill</div>
+    <p class="scenario-prompt">You're a PM at a marketing automation platform. Your sales team keeps losing deals to a competitor with "better AI features." Before adding AI to the roadmap, you want to understand the actual jobs-to-be-done.</p>
+    <p>Write a JTBD statement for each persona. Where do their jobs conflict?</p>
+    <div class="persona-prompts">
+      <div class="persona-card">
+        <div class="persona-name">Marketing Manager (daily user)</div>
+        <div class="persona-hint">What's their day-to-day frustration? What moment would trigger them to reach for AI?</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">VP of Marketing (buyer / decision maker)</div>
+        <div class="persona-hint">What story do they need to tell? Who's their audience?</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-name">Marketing Ops Admin (implementer)</div>
+        <div class="persona-hint">What does adopting new AI capabilities mean for their workload?</div>
+      </div>
+    </div>
+    <textarea class="scenario-textarea" placeholder="Write your three JTBD statements here. Then note where the jobs conflict — that tension is where product strategy lives."></textarea>
+    <div class="scenario-hint">Think functional, emotional, and social for each persona.</div>
+    <button class="reveal-btn" id="revealBtn">Show a senior PM's take ▾</button>
+    <div class="scenario-answer" id="scenarioAnswer">
+      <p><strong>Marketing Manager:</strong> <em>"When I'm building a new campaign, I want AI to suggest optimal send times and subject lines based on past performance, so I can launch faster without second-guessing every decision."</em><br>→ The AI isn't the point — reduced decision fatigue is. Functional: speed. Emotional: confidence.</p>
+      <p><strong>VP of Marketing:</strong> <em>"When I'm justifying marketing spend to the CFO, I want AI-powered attribution that connects campaigns to revenue, so I can prove ROI and secure next quarter's budget."</em><br>→ They don't care about the AI — they care about the story the data tells. Functional: attribution. Social: credibility with C-suite.</p>
+      <p><strong>Marketing Ops Admin:</strong> <em>"When I'm onboarding a new tool, I want the AI to require minimal configuration and not break existing workflows, so I can avoid a painful migration and keep the team productive."</em><br>→ For this persona, "better AI" might be a <em>negative</em> — more complexity, more things to configure and debug. Functional: low maintenance. Emotional: no anxiety.</p>
+      <p><strong>The conflict:</strong> The VP wants sophisticated AI to impress the C-suite. The Admin wants simplicity. The Manager just wants to move faster. "Better AI features" is a solution — the jobs are all different. Your product strategy needs to address all three, and the Admin's anxiety is often the silent deal-killer that sales never surfaces.</p>
+    </div>
+  </div>
+
+  <!-- Meeting Move -->
+  <div class="section">
+    <div class="section-label">Meeting Move of the Day</div>
+    <p>When a stakeholder describes what they want built, ask:</p>
+    <div class="meeting-move-quote">"When does this need arise — what's the situation the user is in right before they'd reach for this?"</div>
+    <p>This is the JTBD <strong>circumstance</strong> question. It's powerful because it forces the conversation to ground the feature in a real moment, not an abstract capability. "We need better analytics" is vague. "On Monday morning, when I'm trying to decide which campaigns to pause before the weekly standup" is a spec you can design from.</p>
+
+    <div class="recap">
+      <div class="recap-label">Building Your Toolkit</div>
+      <div class="recap-text">Day 1: <em>"What user behavior do we expect to change?"</em> (User Lens)<br>Day 2: <em>"What problem did they build that to solve?"</em> (First Principles)<br>Day 3: <em>"When does this need arise?"</em> (JTBD Circumstance)<br><br>Three meetings, three different questions. Each one pulls the conversation out of solution-space and into problem-space from a different angle.</div>
+    </div>
+  </div>
+
+  <!-- Glossary -->
+  <div class="section">
+    <div class="section-label">Glossary</div>
+    <div class="glossary">
+      <div class="glossary-item">
+        <div class="glossary-term">Jobs-to-be-Done (JTBD)</div>
+        <div class="glossary-def">A framework that describes the progress a person is trying to make in a particular circumstance. People "hire" products to do jobs — features are how, jobs are why.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Functional / Emotional / Social Jobs</div>
+        <div class="glossary-def">Three layers of every job: what needs to get done (functional), how the person wants to feel (emotional), and how they want to be perceived (social). B2B buyers respond to all three.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Four Forces of Progress</div>
+        <div class="glossary-def">Push (current pain) + Pull (new solution's appeal) vs Anxiety (switching fear) + Habit (status quo comfort). Switching happens when the first pair outweighs the second.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Competing Against Non-Consumption</div>
+        <div class="glossary-def">When your biggest competitor isn't another product but "doing nothing." The prospect uses spreadsheets, email, or manual processes. The job exists — they just haven't hired anyone for it yet.</div>
+      </div>
+      <div class="glossary-item">
+        <div class="glossary-term">Circumstance</div>
+        <div class="glossary-def">The specific situation that triggers a job. In JTBD, context determines what "good" looks like — the same person has different jobs in different circumstances.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="score-strip" id="scoreStrip" style="display: none;">
+    <svg class="score-ring" viewBox="0 0 52 52">
+      <circle class="track" cx="26" cy="26" r="22" />
+      <circle class="fill" id="scoreArc" cx="26" cy="26" r="22" stroke-dasharray="138.23" stroke-dashoffset="138.23" />
+      <text x="26" y="26" id="scoreText">0/3</text>
+    </svg>
+    <div class="score-text" id="scoreMsg"><strong>Quiz score</strong><br>Answer all three questions to see your result.</div>
+  </div>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 3 complete</span>
+    </div>
+    <div class="footer-next"><a href="day04.html">Next lesson → Customer Segmentation &amp; ICPs</a></div>
+  </div>
+</div>
+
+<script>
+  var quizState = { answered: 0, correct: 0, total: 3 };
+  document.querySelectorAll('.quiz-q').forEach(function(q) {
+    var correctIdx = parseInt(q.dataset.correct);
+    var opts = q.querySelectorAll('.quiz-opt');
+    var expl = q.querySelector('.quiz-explanation');
+    function answer(si) {
+      if (q.classList.contains('done')) return;
+      q.classList.add('done');
+      var ok = si === correctIdx;
+      quizState.answered++;
+      if (ok) quizState.correct++;
+      opts.forEach(function(o, i) {
+        o.classList.add('answered');
+        if (i === correctIdx) o.classList.add('correct');
+        if (i === si && !ok) o.classList.add('incorrect');
+      });
+      expl.classList.add('visible', ok ? 'correct-expl' : 'incorrect-expl');
+      updateScore();
+    }
+    opts.forEach(function(o, i) {
+      o.addEventListener('click', function() { answer(i); });
+      o.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); answer(i); } });
+    });
+  });
+  function updateScore() {
+    document.getElementById('scoreStrip').style.display = 'flex';
+    var pct = quizState.correct / quizState.total;
+    document.getElementById('scoreArc').style.strokeDashoffset = 138.23 * (1 - pct);
+    document.getElementById('scoreText').textContent = quizState.correct + '/' + quizState.total;
+    if (quizState.answered === quizState.total) {
+      var msg = document.getElementById('scoreMsg');
+      if (quizState.correct === 3) msg.innerHTML = '<strong>Perfect.</strong><br>You can decompose requests into jobs. Tomorrow we sharpen who the customer actually is — segmentation and ICPs.';
+      else if (quizState.correct >= 2) msg.innerHTML = '<strong>Solid.</strong><br>The JTBD instinct is building. Review the miss — the layers of the job are where the nuance lives.';
+      else msg.innerHTML = '<strong>Keep at it.</strong><br>JTBD is a shift in how you listen. Try writing a JTBD statement for a real feature request today — the format makes it click.';
+      document.getElementById('progressFill').style.width = '10%';
+    }
+  }
+  document.getElementById('revealBtn').addEventListener('click', function() {
+    var a = document.getElementById('scenarioAnswer');
+    var v = a.classList.contains('visible');
+    a.classList.toggle('visible');
+    this.textContent = v ? 'Show a senior PM\'s take ▾' : 'Hide ▴';
+  });
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>

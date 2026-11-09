@@ -1,0 +1,539 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Product-Market Fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 2, Day 10 of 10 — a real sequence)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.18); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding:0 20px; padding-block:40px 80px;
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone);}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.framework-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px; margin:20px 0; background:var(--ground);
+}
+.gauge-row{display:flex; flex-direction:column; gap:14px; margin-top:16px;}
+.gauge{display:flex; align-items:center; gap:14px;}
+.gauge-label{width:150px; flex-shrink:0; font-size:.88rem; font-weight:500;}
+.gauge-bar{flex:1; height:10px; background:var(--chalk); border-radius:6px; overflow:hidden; min-width:0;}
+.gauge-fill{height:100%; background:var(--teal); border-radius:6px;}
+.gauge-val{width:38px; text-align:right; font-variant-numeric:tabular-nums; font-size:.85rem; color:var(--stone); flex-shrink:0;}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.worked blockquote{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.1rem; color:var(--ink);
+  border-left:3px solid var(--gold); padding-left:16px; margin:14px 0;
+}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone);}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .gauge-label{width:110px; font-size:.82rem;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+</head>
+<body>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 2 · STRATEGIC FRAMEWORKS <span class="dot"></span> DAY 10 OF 30</div>
+    <h1>Product&#8211;Market Fit</h1>
+    <p class="sub">The one state every strategic framework this week has been pointing toward &#8212; and the one most B2B SaaS teams misdiagnose, in both directions.</p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> you mapped platform thinking and network effects &#8212; how a product's value can compound as usage grows. Today closes the week by asking the harder question underneath all of it: compounds <i>for whom</i>, and how would you actually know? PMF is the checkpoint that tells you whether the moat, the segment, and the wedge you've been analyzing all week are even worth defending yet.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Product&#8211;market fit is not a feeling. It's the point where a defined segment pulls your product forward faster than your sales and marketing can push it &#8212; where retention, expansion, and referral start doing structural work that acquisition spend used to do alone.</p>
+    <p>Marc Andreessen's original formulation was blunt: "You can always feel product&#8211;market fit when it's happening." That line gets quoted constantly and misapplied just as often, because it describes the <i>symptom</i>, not the <i>test</i>. Senior PMs don't wait to feel it. They instrument for it, because B2B SaaS has a specific failure mode: you can mistake a motivated champion, a generous pilot budget, or a single whale logo for market pull, when what you actually have is one person's enthusiasm propping up a product nobody else asked for.</p>
+    <p>The useful reframe: PMF isn't a company-wide state, it's segment-specific. One product has PMF with enterprise retail ops teams running coordinated multi-channel programs. That tells you nothing about whether the same product has PMF with a mid-market subscription business that wants onboarding automation first and lifecycle orchestration second. A platform can be in fit with one ICP and pre-fit with the adjacent one it's trying to expand into &#8212; which is exactly the situation most "why isn't this new segment adopting like our core base did" conversations are actually about.</p>
+    <div class="callout">
+      <h4>Why this is hard to self-diagnose</h4>
+      <p style="margin:0;">Every team has evidence it can point to for PMF &#8212; a few happy logos, inbound interest, a press mention. The discipline is in weighting the <i>right</i> evidence: retention curves that flatten instead of decay to zero, usage that deepens without hand-holding, expansion revenue that outpaces new-logo revenue, and prospects who would be genuinely upset if the product disappeared. Anecdote is cheap. A flattening cohort curve is not.</p>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>A B2B SaaS product ships a new "Workflow Automation" module 14 months ago. Adoption looks strong on paper: 40 of 220 eligible accounts have turned it on. Leadership wants to know &#8212; is this PMF, or not yet?</p>
+      <blockquote>"We have 40 logos using it. Isn't that proof the market wants this?"</blockquote>
+      <p><b>The senior PM's actual read, framework-first:</b></p>
+      <div class="framework-box">
+        <p style="margin-bottom:6px; font-weight:500;">Sean Ellis Test, run on those 40 accounts: "How would you feel if you could no longer use Workflow Automation?"</p>
+        <div class="gauge-row">
+          <div class="gauge"><div class="gauge-label">Very disappointed</div><div class="gauge-bar"><div class="gauge-fill" style="width:22%"></div></div><div class="gauge-val">22%</div></div>
+          <div class="gauge"><div class="gauge-label">Somewhat disappointed</div><div class="gauge-bar"><div class="gauge-fill" style="width:31%; background:var(--gold);"></div></div><div class="gauge-val">31%</div></div>
+          <div class="gauge"><div class="gauge-label">Not disappointed</div><div class="gauge-bar"><div class="gauge-fill" style="width:47%; background:var(--stone);"></div></div><div class="gauge-val">47%</div></div>
+        </div>
+        <p style="margin-top:16px; margin-bottom:0;">The 40%-"very disappointed" threshold Ellis popularized is a rule of thumb, not a law &#8212; but at 22%, this is nowhere close. Cross-referenced against usage data: of the 40 accounts, 11 were pushed in by their CSM to hit an adoption KPI and have logged in twice since onboarding. That's not pull, that's push wearing pull's clothing.</p>
+      </div>
+      <p style="margin-bottom:0;"><b>The actual diagnosis:</b> This isn't failed PMF &#8212; it's undiagnosed segmentation. The 9 accounts that scored "very disappointed" share a profile: mid-market retail and travel brands running 15+ concurrent campaigns who were manually stitching journey logic in spreadsheets before. For <i>that</i> segment, early signal looks real. For the other 31, the module solved a problem they didn't have urgently enough to resist being unseated by the next roadmap item. The move isn't "kill it" or "scale it" &#8212; it's narrow the ICP, re-run the test on a cleaner segment, and stop counting logo-count as the metric that matters.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Your B2B SaaS product, 8 months post-launch of a real-time insights add-on sold to existing customers. 18 accounts have adopted it. Your VP of Product asks you in the hallway: "Do we have PMF on the add-on yet? GTM wants to put it in the keynote next quarter." You have three days before you need an answer. What do you actually do?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Step 1 &#8212; Refuse the binary</h4>
+        <ul>
+          <li>"Do we have PMF" is a yes/no question about something that is segment-specific and graduated. Reframe the ask: "Let me tell you which segments show fit, which show early signal, and which show none &#8212; and what that means for a keynote claim."</li>
+        </ul>
+        <h4>Step 2 &#8212; Pull the right evidence in 3 days</h4>
+        <ul>
+          <li><b>Retention/usage curve</b> on the 18 accounts by cohort month &#8212; flattening (good) vs. decaying to zero (bad). This is available same-day from product analytics; don't wait on a survey.</li>
+          <li><b>Sean Ellis pulse</b> &#8212; a 5-minute async survey to the 18 primary admins, even with a small N. Directional signal beats no signal.</li>
+          <li><b>Expansion vs. push</b> &#8212; how many of the 18 were self-initiated trials vs. CSM-driven pilots with incentives attached. This single cut usually explains half the adoption number.</li>
+          <li><b>Segment the 18</b> by firmographic and use-case &#8212; industry vertical, campaign volume, prior workaround. Look for a cluster, not an average.</li>
+        </ul>
+        <h4>Step 3 &#8212; Answer the VP with a segmented verdict, not a number</h4>
+        <ul>
+          <li>Something like: "Strong early-fit signal with high-volume retail accounts running 10+ campaigns &#8212; 6 of 18, all self-initiated, usage climbing month over month. Weak or no signal elsewhere. I'd recommend the keynote lead with that specific segment's story, not a company-wide PMF claim &#8212; overclaiming here sets a renewal and expansion narrative we can't back up a year from now."</li>
+        </ul>
+        <h4>The trap this drill is testing</h4>
+        <ul>
+          <li>The failure mode isn't picking the wrong framework &#8212; it's answering the binary question as asked, under time pressure, with a vanity metric (logo count, feature flag enabled) because it's the fastest number to produce. The senior move is spending one of your three days re-scoping the question itself.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this in your next roadmap or QBR conversation</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Next time someone cites adoption count as proof of fit, redirect with:</p>
+    <div class="move-script" id="moveScript">"Which segment is pulling this hardest, and what would they lose if we took it away &#8212; versus who adopted it because we asked them to?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>Product&#8211;Market Fit (PMF)</dt>
+        <dd>The state in which a well-defined customer segment experiences enough value from a product that retention, usage depth, and organic referral become self-sustaining &#8212; distinct from early traction, which can be driven entirely by sales push or incentive.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Sean Ellis Test</dt>
+        <dd>A survey asking users "How would you feel if you could no longer use this product?" The 40%-"very disappointed" threshold is a popularized heuristic for fit, not a certified benchmark &#8212; useful as a directional signal, dangerous as the only input to a go/no-go call.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Cohort Retention Curve</dt>
+        <dd>Usage or revenue retention plotted by signup cohort over time. A curve that flattens above zero (an "asymptote") signals a durable core of engaged users; one that decays toward zero signals the product hasn't found its segment yet, regardless of top-line growth.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Push vs. Pull Adoption</dt>
+        <dd>Push adoption is driven by sales incentive, CSM pressure, or contractual bundling; pull adoption is customer-initiated, driven by the product solving a problem they were already actively trying to solve. Only pull is reliable PMF evidence.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Segment-Level Fit</dt>
+        <dd>The principle that PMF is never company-wide &#8212; a platform can be in fit with one ICP (e.g., enterprise retail) while being pre-fit with an adjacent one it's expanding into (e.g., mid-market subscription businesses), and treating the two as one number produces false confidence or false alarm.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 10 complete</span>
+    </div>
+    <div class="footer-next"><a href="day11.html">Next lesson → RICE, ICE &amp; MoSCoW</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<10) s.className='done';
+    else if (i===10) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "A platform shows 50 accounts with a feature enabled, but only 9% say they'd be \"very disappointed\" to lose it on a Sean Ellis survey. What's the most accurate read?",
+      opts: [
+        "The feature has PMF because 50 accounts are actively using it",
+        "The feature likely lacks PMF with this account mix — enablement count isn't the same as pull, and the survey is the stronger signal",
+        "The Sean Ellis test is unreliable and should be ignored in favor of usage data",
+        "PMF can't be measured until the feature has existed for at least 2 years"
+      ],
+      correct: 1,
+      why: "Enablement/adoption counts are a vanity metric prone to sales push, pilot incentives, or passive bundling. The disappointment survey — while not infallible alone — is a much closer proxy for genuine pull, and at 9% it's a strong signal that fit hasn't been found yet, whatever the logo count says."
+    },
+    {
+      q: "The product has strong PMF with enterprise retail brands but weak signal with mid-market businesses in a new vertical trying the same product. What does this most likely mean?",
+      opts: [
+        "The product has failed and needs to be rebuilt from scratch",
+        "PMF is company-wide, so this is just noise in the data",
+        "PMF is segment-specific — the product fits one ICP and is pre-fit with the adjacent one, which calls for a different go-to-market or product approach for that segment",
+        "Mid-market accounts are never a reliable source of PMF signal"
+      ],
+      correct: 2,
+      why: "This is the core reframe: PMF is never a single company-wide state. A platform can be solidly in fit with one defined segment while still searching for fit with an adjacent one — that's a segmentation and roadmap question, not evidence the whole product is broken."
+    },
+    {
+      q: "Which piece of evidence is the STRONGEST indicator of genuine product-market pull, versus push?",
+      opts: [
+        "Total number of logins across all accounts last quarter",
+        "A quote from one enthusiastic champion at a key account",
+        "A cohort retention curve that flattens above zero, combined with usage that was self-initiated rather than CSM-driven",
+        "The number of feature requests submitted for adjacent functionality"
+      ],
+      correct: 2,
+      why: "A flattening retention curve shows the value is durable over time rather than a short-lived spike, and self-initiated usage rules out the confound of sales or CSM pressure propping up the numbers. Raw login totals and single champion quotes are both exactly the kind of anecdotal evidence that masks a lack of real fit."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    var pct = score / 3;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re reading adoption signals like a senior PM.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — the push-vs-pull distinction is the crux of this one.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
+
+</body></html>

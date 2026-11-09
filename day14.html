@@ -1,0 +1,570 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>One-Way vs Two-Way Doors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN PLAN
+   Color: ground/ink/teal/gold/stone/chalk — carried from Day 1's system
+   Type: Newsreader (display, editorial serif) / Outfit (body, geometric sans)
+   Layout: single scrolling column, max 760px, numbered sections (Week 3, Day 14 of 30)
+   ============================================================ */
+:root{
+  --ground:#F5F3ED; --ink:#2A2724; --teal:#1A756A; --gold:#B8892E; --stone:#918B81; --chalk:#EBE8E1;
+  --teal-10:rgba(26,117,106,.10); --teal-18:rgba(26,117,106,.22); --gold-14:rgba(184,137,46,.14);
+  --good:#2E7D4F; --bad:#B3482F;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+    --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+    --good:#4CAF7A; --bad:#E07354;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#171614; --ink:#E2DFD8; --teal:#3CB5A5; --gold:#D4A73E; --stone:#7A756C; --chalk:#222120;
+  --teal-10:rgba(60,181,165,.14); --teal-18:rgba(60,181,165,.22); --gold-14:rgba(212,167,62,.16);
+  --good:#4CAF7A; --bad:#E07354;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:'Outfit',system-ui,sans-serif;
+  padding:0 20px; padding-block:40px 80px;
+  line-height:1.6;
+}
+.wrap{max-width:760px; margin:0 auto;}
+h1,h2,h3{font-family:'Newsreader',Georgia,serif; text-wrap:balance; margin:0;}
+.eyebrow{
+  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal);
+  font-weight:600; display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.eyebrow .dot{width:4px; height:4px; border-radius:50%; background:var(--stone);}
+.progress-track{
+  display:flex; gap:4px; margin-top:14px;
+}
+.progress-track span{height:5px; flex:1; border-radius:3px; background:var(--chalk);}
+.progress-track span.done{background:var(--teal);}
+.progress-track span.today{background:var(--gold);}
+
+header.top{padding-bottom:28px; border-bottom:1px solid var(--chalk); margin-bottom:36px;}
+header.top h1{font-size:2.3rem; font-weight:600; margin-top:10px; line-height:1.15;}
+header.top p.sub{font-size:1.05rem; color:var(--stone); margin-top:10px; max-width:58ch;}
+.connects{
+  margin-top:20px; padding:14px 16px; background:var(--teal-10); border-radius:10px;
+  font-size:.92rem; border-left:3px solid var(--teal);
+}
+.connects b{color:var(--teal);}
+
+section{margin-bottom:48px;}
+.section-head{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.section-num{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.5rem; color:var(--gold); font-weight:500;
+}
+.section-head h2{font-size:1.5rem; font-weight:600;}
+p{margin:0 0 14px 0; max-width:66ch;}
+.lead{font-size:1.08rem;}
+
+.callout{
+  background:var(--chalk); border-radius:12px; padding:20px 22px; margin:18px 0;
+}
+.callout h4{font-family:'Outfit',sans-serif; font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--teal); margin-bottom:8px;}
+
+.framework-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px; margin:20px 0; background:var(--ground);
+}
+
+.door-chart-wrap{background:var(--ground); border:1px solid var(--chalk); border-radius:10px; padding:16px 18px; margin:18px 0;}
+
+.category-grid{display:flex; flex-direction:column; gap:12px; margin:18px 0;}
+.cat-row{display:flex; gap:14px; align-items:flex-start; border:1px solid var(--chalk); border-radius:12px; padding:16px 18px; background:var(--ground);}
+.cat-row .cat-mark{width:10px; height:10px; border-radius:50%; margin-top:6px; flex-shrink:0;}
+.cat-row .cat-name{font-weight:600; display:block; margin-bottom:3px;}
+.cat-row .cat-desc{font-size:.92rem; color:var(--ink); margin:0;}
+
+.worked{
+  background:var(--teal-10); border-radius:14px; padding:24px 26px;
+}
+.worked .tag{
+  display:inline-block; font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  background:var(--teal); color:var(--ground); padding:3px 10px; border-radius:20px; margin-bottom:14px;
+}
+.worked blockquote{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.1rem; color:var(--ink);
+  border-left:3px solid var(--gold); padding-left:16px; margin:14px 0;
+}
+.data-table{width:100%; border-collapse:collapse; margin:16px 0; font-size:.92rem;}
+.data-table th{text-align:left; font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--stone); padding:0 10px 8px 0; border-bottom:1px solid var(--chalk);}
+.data-table td{padding:10px 10px 10px 0; border-bottom:1px solid var(--chalk); vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table td.num{font-variant-numeric:tabular-nums; white-space:nowrap;}
+.data-table td.win{color:var(--teal); font-weight:600;}
+.data-table-scroll{overflow-x:auto;}
+
+.quiz-q{
+  border:1px solid var(--chalk); border-radius:14px; padding:22px; margin-bottom:18px; background:var(--ground);
+}
+.quiz-q .qtext{font-weight:500; margin-bottom:14px; font-size:1.02rem;}
+.opt{
+  display:block; width:100%; text-align:left; padding:13px 16px; margin-bottom:9px;
+  border:1px solid var(--chalk); border-radius:10px; background:var(--ground); color:var(--ink);
+  font-family:'Outfit',sans-serif; font-size:.95rem; cursor:pointer; transition:border-color .15s, background .15s;
+}
+.opt:hover{border-color:var(--stone);}
+.opt:focus-visible{outline:2px solid var(--teal); outline-offset:2px;}
+.opt.correct{background:var(--teal-10); border-color:var(--teal); color:var(--teal); font-weight:500;}
+.opt.incorrect{background:var(--gold-14); border-color:var(--bad); color:var(--bad); font-weight:500;}
+.opt[disabled]{cursor:default;}
+.feedback{
+  margin-top:12px; padding:14px 16px; border-radius:10px; background:var(--chalk); font-size:.92rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback .verdict{font-weight:600; margin-bottom:4px;}
+.feedback .verdict.right{color:var(--good);}
+.feedback .verdict.wrong{color:var(--bad);}
+
+.scorebox{
+  display:flex; align-items:center; gap:18px; padding:18px 22px; border-radius:14px; background:var(--chalk); margin-top:6px;
+}
+.ring{position:relative; width:64px; height:64px; flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none; stroke:var(--ground); stroke-width:6;}
+.ring-fg{fill:none; stroke:var(--teal); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .5s ease;}
+.ring-text{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Newsreader',serif; font-weight:600; font-size:1.05rem; font-variant-numeric:tabular-nums;
+}
+.score-copy{font-size:.92rem; color:var(--stone);}
+.score-copy b{color:var(--ink);}
+
+.drill-box{
+  border:1px solid var(--chalk); border-radius:14px; padding:24px 26px; background:var(--ground);
+}
+.drill-prompt{
+  background:var(--chalk); border-radius:10px; padding:18px 20px; margin-bottom:18px; font-size:.97rem;
+}
+.drill-prompt .role{font-weight:600; color:var(--teal); display:block; margin-bottom:6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.06em;}
+.reveal-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:30px; border:none;
+  background:var(--teal); color:var(--ground); font-family:'Outfit',sans-serif; font-weight:600; font-size:.92rem;
+  cursor:pointer; transition:transform .12s, opacity .15s;
+}
+.reveal-btn:hover{transform:translateY(-1px);}
+.reveal-btn:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.analysis{
+  display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--stone);
+}
+.analysis.show{display:block;}
+.analysis h4{font-size:.85rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold); font-weight:600; margin-bottom:8px; margin-top:18px;}
+.analysis h4:first-child{margin-top:0;}
+.analysis ul{margin:0; padding-left:20px;}
+.analysis li{margin-bottom:6px;}
+
+.meeting-move{
+  background:var(--ink); color:var(--ground); border-radius:16px; padding:28px 26px;
+}
+.meeting-move .eyebrow{color:var(--gold);}
+.meeting-move h2{color:var(--ground); font-size:1.4rem;}
+.move-script{
+  font-family:'Newsreader',serif; font-style:italic; font-size:1.18rem; line-height:1.5;
+  margin:18px 0; padding:18px 20px; background:rgba(245,243,237,.07); border-radius:10px; border-left:3px solid var(--gold);
+}
+.copy-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:24px;
+  border:1px solid rgba(245,243,237,.3); background:transparent; color:var(--ground);
+  font-family:'Outfit',sans-serif; font-size:.85rem; cursor:pointer; margin-top:4px;
+}
+.copy-btn:hover{background:rgba(245,243,237,.08);}
+
+.glossary{
+  display:grid; grid-template-columns:1fr; gap:14px;
+}
+.gloss-term{
+  border-bottom:1px solid var(--chalk); padding-bottom:14px;
+}
+.gloss-term dt{font-family:'Newsreader',serif; font-weight:600; font-size:1.1rem; color:var(--teal); margin-bottom:4px;}
+.gloss-term dd{margin:0; font-size:.94rem; color:var(--ink);}
+
+@media (max-width:480px){
+  header.top h1{font-size:1.85rem;}
+  .data-table{font-size:.82rem;}
+  .cat-row{flex-direction:row;}
+}
+
+  /* — Course nav & footer — */
+    .course-nav {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1.25rem;
+    padding: calc(40px + env(safe-area-inset-top, 0px)) 20px 0;
+    box-sizing: border-box;
+  }
+  .course-home,
+  .footer-home {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .course-home:hover,
+  .footer-home:hover {
+    text-decoration: underline;
+  }
+  .lesson-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--chalk);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--stone);
+  }
+  .footer-day {
+    color: var(--stone);
+  }
+  .footer-next {
+    margin-left: auto;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  .footer-next a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+  .footer-next a:hover {
+    text-decoration: underline;
+  }
+
+</style>
+<nav class="course-nav" aria-label="Course"><a class="course-home" href="index.html">← Course home</a></nav>
+
+<div class="wrap">
+<header class="top">
+    <div class="eyebrow">WEEK 3 · PRIORITIZATION &amp; DECISIONS <span class="dot"></span> DAY 14 OF 30</div>
+    <h1>One-Way vs Two-Way Doors</h1>
+    <p class="sub">Yesterday sorted features by the shape of satisfaction they produce. Today sorts decisions by a question that has nothing to do with how big they feel in the room: <i>if this turns out wrong, how expensive is it to walk back?</i></p>
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="connects">
+      <b>Yesterday</b> the Kano Model separated features by curve shape — must-be, performance, attractive — so you'd stop scoring all of them as if "more investment" meant "more satisfaction." Today is a second, independent axis that sits on top of any framework you've already used to decide <i>what</i> to build: once you've picked the feature, <i>how much process does the decision to ship it actually deserve?</i> A delighter and a must-be can both be two-way doors. A RICE score of 9 and a RICE score of 3 can both be one-way doors. Reversibility doesn't care what framework put the item on your roadmap.
+    </div>
+  </header>
+
+  <section id="big-idea">
+    <div class="section-head"><span class="section-num">01</span><h2>The Big Idea</h2></div>
+    <p class="lead">Jeff Bezos's 1997 shareholder letter drew a line that most product orgs still get backwards: some decisions are one-way doors, and some are two-way doors, and the entire discipline is matching the weight of your process to which kind you're walking through.</p>
+    <p>A <b>two-way door</b> is a decision you can reverse quickly and cheaply if it turns out wrong. Change the default send frequency for one segment, tweak an onboarding flow's copy, A/B test a new pricing page layout — walk through, look around, and if it's bad, walk back out. Almost nothing is lost by moving fast, because the cost of being wrong is small and temporary.</p>
+    <p>A <b>one-way door</b> is a decision that's expensive, slow, or impossible to undo once you're through it. Migrating customer data to a new schema, deprecating an API that partners have built integrations against, signing a multi-year contract with a payments processor, telling a customer their data retention policy changed. Walking back out costs real money, real trust, or isn't physically possible at all.</p>
+
+    <div class="category-grid">
+      <div class="cat-row">
+        <span class="cat-mark" style="background:var(--teal);"></span>
+        <div><span class="cat-name" style="color:var(--teal);">Two-way door (Type 2)</span><p class="cat-desc">Reversible at low cost. Decide with incomplete information, using a small group, fast. Most decisions — even ones that feel big in the meeting — are actually this. A feature flag, an opt-in beta, a change scoped to one customer segment are all built-in reverse gears.</p></div>
+      </div>
+      <div class="cat-row">
+        <span class="cat-mark" style="background:var(--bad);"></span>
+        <div><span class="cat-name" style="color:var(--bad);">One-way door (Type 1)</span><p class="cat-desc">Irreversible, or reversible only at high cost in money, time, or trust. Decide deliberately, with broader input and real data, slowly. Schema migrations, breaking API changes already adopted downstream, and anything that changes what customers were promised fall here.</p></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <h4>The mistake runs in both directions</h4>
+      <p style="margin:0;">Treat a two-way door like a one-way door and you get decision debt: committee reviews, six-week sign-off chains, and a roadmap that moves at the speed of its slowest approver — for a change you could've shipped behind a flag and learned from in a day. Treat a one-way door like a two-way door and you get the opposite failure: a schema change pushed on Friday because "we can always roll back," except the migration already ran against production data and rolling back means a data-loss incident, not a revert commit. The skill isn't speed and it isn't caution — it's correctly sorting which door you're at before you decide how carefully to open it.</p>
+    </div>
+
+    <div class="door-chart-wrap">
+      <svg viewBox="0 0 340 160" width="100%" height="160" role="img" aria-label="Quadrant chart: horizontal axis is reversibility cost, low to high; vertical axis is decision speed, slow to fast. Two-way doors sit low-cost and fast. One-way doors sit high-cost and slow. The mismatched quadrants — slow two-way doors and fast one-way doors — are marked as the trap.">
+        <line x1="40" y1="12" x2="40" y2="130" stroke="var(--stone)" stroke-width="1"/>
+        <line x1="40" y1="130" x2="320" y2="130" stroke="var(--stone)" stroke-width="1"/>
+        <line x1="180" y1="12" x2="180" y2="130" stroke="var(--chalk)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="40" y1="71" x2="320" y2="71" stroke="var(--chalk)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="4" y="25" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">fast</text>
+        <text x="4" y="122" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">slow</text>
+        <text x="44" y="144" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">low reversal cost</text>
+        <text x="236" y="144" font-family="Outfit,sans-serif" font-size="9" fill="var(--stone)">high reversal cost</text>
+        <text x="46" y="35" font-family="Outfit,sans-serif" font-size="10.5" font-weight="600" fill="var(--teal)">Two-way door</text>
+        <text x="46" y="48" font-family="Outfit,sans-serif" font-size="8.5" fill="var(--stone)">decide fast, small group</text>
+        <text x="203" y="113" font-family="Outfit,sans-serif" font-size="10.5" font-weight="600" fill="var(--bad)">One-way door</text>
+        <text x="203" y="126" font-family="Outfit,sans-serif" font-size="8.5" fill="var(--stone)">decide slow, wide input</text>
+        <text x="203" y="35" font-family="Outfit,sans-serif" font-size="9.5" font-style="italic" fill="var(--gold)">the trap: moving fast</text>
+        <text x="203" y="46" font-family="Outfit,sans-serif" font-size="9.5" font-style="italic" fill="var(--gold)">through this door</text>
+        <text x="46" y="105" font-family="Outfit,sans-serif" font-size="9.5" font-style="italic" fill="var(--gold)">the trap: stalling</text>
+        <text x="46" y="116" font-family="Outfit,sans-serif" font-size="9.5" font-style="italic" fill="var(--gold)">on this one</text>
+      </svg>
+    </div>
+  </section>
+
+  <section id="worked-example">
+    <div class="section-head"><span class="section-num">02</span><h2>Worked Example</h2></div>
+    <div class="worked">
+      <span class="tag">B2B SaaS Scenario</span>
+      <p>A B2B SaaS team ships two changes in the same sprint, and the team applies exactly the wrong amount of process to each.</p>
+      <blockquote>"Smart Send Time needs six weeks of review before GA — it touches deliverability, and deliverability is scary. The webhook payload change is just adding a field, we'll ship it Thursday."</blockquote>
+      <div class="data-table-scroll">
+      <table class="data-table">
+        <thead><tr><th>Change</th><th>If it's wrong</th><th>Cost to reverse</th><th>Actual door</th></tr></thead>
+        <tbody>
+          <tr><td>Smart Send Time (AI-picked send hour, opt-in beta, flag-gated)</td><td class="num">Some sends land at a worse hour for some customers</td><td class="num">Flip the flag off; affected sends resume old schedule next cycle</td><td class="win">Two-way</td></tr>
+          <tr><td>Webhook payload adds a required field, no deprecation window</td><td class="num">Partner integrations parsing strict schemas start failing silently</td><td class="num">Partners have already shipped code against it; fixing means a second breaking change plus support fires</td><td class="win">One-way</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="margin-bottom:0;"><b>The reframe:</b> "touches deliverability" made Smart Send Time <i>feel</i> dangerous, but it's gated behind a flag and scoped to opted-in beta customers — the reverse gear was built in from day one, so a six-week review board mostly just burns six weeks. The webhook field felt small because it's "just one field," but a webhook contract is a promise to code you don't control and can't instantly update — the moment a partner's production system parses it, you're through a door that locks behind you. Feeling big and being irreversible aren't the same property, and this team scored by the first one instead of the second.</p>
+    </div>
+  </section>
+
+  <section id="quiz">
+    <div class="section-head"><span class="section-num">03</span><h2>Quiz</h2></div>
+    <div id="quizContainer"></div>
+    <div class="scorebox" id="scorebox" hidden>
+      <div class="ring">
+        <svg width="64" height="64" viewBox="0 0 64 64">
+          <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+          <circle class="ring-fg" id="ringFg" cx="32" cy="32" r="26" stroke-dasharray="163.4" stroke-dashoffset="163.4"></circle>
+        </svg>
+        <div class="ring-text" id="ringText">0/3</div>
+      </div>
+      <div class="score-copy" id="scoreCopy">Answer all three to see how you did.</div>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="section-head"><span class="section-num">04</span><h2>Scenario Drill</h2></div>
+    <div class="drill-box">
+      <div class="drill-prompt">
+        <span class="role">The situation</span>
+        Finance wants to change how multi-touch campaign attribution windows work — from a 7-day lookback to a 30-day lookback — to better match the sales cycle customers report. Growth is pushing to ship it to every account by Friday: "it's just a config change, we can always flip it back." But the attribution window doesn't just drive a live dashboard — it's the basis for historical reports customers have already exported to their own BI tools, and several enterprise accounts tie internal commission payouts to the attribution numbers your platform reports each quarter. Is this a one-way door or a two-way door, and what do you tell Growth?
+      </div>
+      <button class="reveal-btn" id="revealBtn">Reveal senior PM analysis <span aria-hidden="true">&#8594;</span></button>
+      <div class="analysis" id="analysisBox">
+        <h4>Step 1 — Separate the config from the consequence</h4>
+        <ul>
+          <li>Growth is right that flipping a lookback-window setting is technically trivial — that part really is a two-way door. But the decision being evaluated isn't "can we change a config value," it's "can we change what a number has meant to every downstream system and human that already relied on the old meaning." Those are different doors, and the easy one is masking the hard one.</li>
+        </ul>
+        <h4>Step 2 — Trace who already treated the old number as ground truth</h4>
+        <ul>
+          <li>Customers exported historical reports under the 7-day definition and built their own calculations on top of it. Commission payouts were already calculated and, in some cases, already paid using that definition. Reverting the config next week doesn't un-pay a commission or un-export a spreadsheet — the moment the new numbers touch a customer's downstream process, you're through the door, flag or no flag.</li>
+        </ul>
+        <h4>Step 3 — Reframe the decision for Growth</h4>
+        <ul>
+          <li>"Technically this is a one-line config change, but it's a one-way door for anyone who already built on the old definition — which includes commission calculations we can't retroactively fix with an apology. I don't want to block the idea; I want to scope it as a new attribution model customers opt into going forward, with the 7-day number preserved and clearly labeled for anything already in flight, instead of silently redefining what 'attribution' has meant in every report that already shipped."</li>
+        </ul>
+        <h4>The trap this drill is testing</h4>
+        <ul>
+          <li>"We can always flip it back" is true of the switch and false of everything the switch touches. The senior move is asking not "can we technically reverse this setting" but "can we reverse every consequence that will have already happened by the time we notice it was wrong" — and sizing the process to that answer, not the first one.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="meeting" class="meeting-move">
+    <div class="eyebrow">MEETING MOVE</div>
+    <h2 style="margin-top:10px;">Use this before a decision gets its process level set</h2>
+    <p style="color:var(--chalk); margin-top:14px;">Next time a decision is about to get six weeks of review, or none at all, redirect with:</p>
+    <div class="move-script" id="moveScript">"If this turns out wrong, what does it actually cost to walk back — and who's already acted on it by the time we find out? Is this a door we can step back through, or one that locks behind us?"</div>
+    <button class="copy-btn" id="copyBtn">Copy this line <span aria-hidden="true">&#10697;</span></button>
+  </section>
+
+  <section id="glossary">
+    <div class="section-head"><span class="section-num">05</span><h2>Glossary</h2></div>
+    <dl class="glossary">
+      <div class="gloss-term">
+        <dt>One-Way Door (Type 1 Decision)</dt>
+        <dd>A decision that's irreversible, or reversible only at high cost in money, time, or trust. Warrants slower deliberation, wider input, and real data before committing.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Two-Way Door (Type 2 Decision)</dt>
+        <dd>A decision that can be reversed quickly and cheaply if it's wrong. Should be made fast, by a small group, with incomplete information — the reverse gear is the safety net.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Reversibility Cost</dt>
+        <dd>What it actually takes to undo a decision once made — not just the technical effort, but the money, time, and trust spent walking it back, including consequences others have already acted on.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Decision Velocity</dt>
+        <dd>How fast an organization can make and act on decisions. Usually throttled not by genuinely hard choices but by applying one-way-door process to decisions that were two-way doors all along.</dd>
+      </div>
+      <div class="gloss-term">
+        <dt>Blast Radius</dt>
+        <dd>The scope of who and what is affected if a decision turns out wrong — how many customers, systems, or downstream processes are exposed. A key input into whether a door is actually reversible in practice.</dd>
+      </div>
+    </dl>
+  </section>
+
+    <!-- Footer -->
+  <div class="lesson-footer">
+    <div class="footer-left">
+      <a class="footer-home" href="index.html">← Course home</a>
+      <span class="footer-day">Day 14 complete</span>
+    </div>
+    <div class="footer-next"><a href="day15.html">Next lesson → Technical Debt as Product Strategy</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // progress track
+  var track = document.getElementById('progressTrack');
+  for (var i=1;i<=30;i++){
+    var s = document.createElement('span');
+    if (i<14) s.className='done';
+    else if (i===14) s.className='today';
+    track.appendChild(s);
+  }
+
+  // Quiz
+  var QUESTIONS = [
+    {
+      q: "A PM is about to run a six-week stakeholder review before letting one enterprise customer trial a redesigned dashboard behind a per-account feature flag, with instant rollback. Using the one-way/two-way door heuristic, what's the right critique of that six-week review?",
+      opts: [
+        "None — any dashboard change deserves extensive review regardless of how it's deployed",
+        "The review is miscalibrated: a flagged, single-account, instantly-reversible trial is a two-way door, and should move fast with a small group rather than wait six weeks",
+        "The review should be even longer, since dashboards are customer-facing",
+        "The flag makes this irrelevant to the framework, since flags are only for engineering concerns"
+      ],
+      correct: 1,
+      why: "A per-account flag with instant rollback is close to the textbook definition of a two-way door — if it's wrong, you flip it off and the customer is back where they started with minimal cost. Applying one-way-door process (six weeks, broad sign-off) to a decision this reversible is exactly the decision-debt failure mode: it slows the org down for no safety benefit, since the safety was already built into the deployment mechanism."
+    },
+    {
+      q: "A team is debating whether to let customers permanently delete their own historical campaign data via a new self-service tool, versus soft-deleting it with a 30-day recovery window. Why does this framework say the choice between those two implementations matters more than how 'big' the feature looks on the roadmap?",
+      opts: [
+        "It doesn't matter — both options are equally safe since the customer initiated the action either way",
+        "Permanent deletion is a one-way door (no path back once data is gone) while soft-delete with a recovery window is a two-way door (reversible within the window) — the same feature idea can be built as either kind of door, and the implementation choice is the real decision",
+        "Soft-delete is always worse because it adds engineering complexity",
+        "This only applies to decisions made by the product team, not to what customers do with self-service tools"
+      ],
+      correct: 1,
+      why: "The feature-level idea ('let customers delete campaign data') doesn't determine the door type — the implementation does. Permanent, immediate deletion removes any reverse gear entirely; a soft-delete with a recovery window converts the same customer-facing capability into something reversible. Reversibility is often a design choice you can make, not a fixed property of the decision you're handed."
+    },
+    {
+      q: "Bezos's framework argues that most organizational slowness comes from a specific, avoidable mistake. Which mistake is it?",
+      opts: [
+        "Making too many two-way-door decisions without enough data",
+        "Applying heavyweight, one-way-door decision-making process to the large number of decisions that are actually two-way doors",
+        "Reversing decisions too often, which confuses customers",
+        "Giving junior team members too much authority over irreversible decisions"
+      ],
+      correct: 1,
+      why: "Bezos's core claim is that as organizations grow, they default to applying the careful, consensus-heavy process appropriate for irreversible decisions to everything — including the large majority of decisions that are genuinely reversible. That mismatch, not a shortage of caution, is what throttles decision velocity at scale."
+    }
+  ];
+
+  var score = 0, answered = 0;
+  var qc = document.getElementById('quizContainer');
+
+  QUESTIONS.forEach(function(item, qi){
+    var box = document.createElement('div');
+    box.className = 'quiz-q';
+    var qtext = document.createElement('div');
+    qtext.className = 'qtext';
+    qtext.textContent = (qi+1) + '. ' + item.q;
+    box.appendChild(qtext);
+
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+
+    item.opts.forEach(function(optText, oi){
+      var btn = document.createElement('button');
+      btn.className = 'opt';
+      btn.type = 'button';
+      btn.textContent = optText;
+      btn.addEventListener('click', function(){
+        if (btn.dataset.locked) return;
+        var allBtns = box.querySelectorAll('.opt');
+        allBtns.forEach(function(b){ b.dataset.locked = '1'; b.disabled = true; });
+        var isCorrect = oi === item.correct;
+        btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect){
+          allBtns[item.correct].classList.add('correct');
+        }
+        fb.innerHTML = '<div class="verdict ' + (isCorrect ? 'right':'wrong') + '">' + (isCorrect ? 'Correct.' : 'Not quite.') + '</div>' + item.why;
+        fb.classList.add('show');
+        answered++;
+        if (isCorrect) score++;
+        updateScore();
+      });
+      box.appendChild(btn);
+    });
+
+    box.appendChild(fb);
+    qc.appendChild(box);
+  });
+
+  function updateScore(){
+    var scorebox = document.getElementById('scorebox');
+    scorebox.hidden = false;
+    var ringFg = document.getElementById('ringFg');
+    var ringText = document.getElementById('ringText');
+    var scoreCopy = document.getElementById('scoreCopy');
+    var circumference = 163.4;
+    ringFg.style.strokeDashoffset = String(circumference * (1 - (answered ? score/3 : 0)));
+    ringText.textContent = score + '/3';
+    if (answered < 3){
+      scoreCopy.innerHTML = '<b>' + answered + ' of 3</b> answered so far.';
+    } else {
+      var msg = score === 3 ? 'Clean sweep — you\'re sorting decisions by reversibility, not by how big they feel.' :
+                score === 2 ? 'Solid. Revisit the one you missed above before moving on.' :
+                'Worth rereading the Big Idea section — the feeling of a decision and its reversibility are two different things.';
+      scoreCopy.innerHTML = '<b>' + score + '/3</b> — ' + msg;
+    }
+  }
+
+  // Scenario drill reveal
+  var revealBtn = document.getElementById('revealBtn');
+  var analysisBox = document.getElementById('analysisBox');
+  revealBtn.addEventListener('click', function(){
+    var isShown = analysisBox.classList.toggle('show');
+    revealBtn.innerHTML = isShown
+      ? 'Hide analysis <span aria-hidden="true">&#8593;</span>'
+      : 'Reveal senior PM analysis <span aria-hidden="true">&#8594;</span>';
+  });
+
+  // Copy meeting move
+  var copyBtn = document.getElementById('copyBtn');
+  var moveScript = document.getElementById('moveScript');
+  copyBtn.addEventListener('click', function(){
+    var text = moveScript.textContent;
+    function fallback(){
+      try{
+        var range = document.createRange();
+        range.selectNodeContents(moveScript);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(e){}
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.innerHTML = 'Copy this line <span aria-hidden="true">&#10697;</span>'; }, 1800);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+
+
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body></html>
